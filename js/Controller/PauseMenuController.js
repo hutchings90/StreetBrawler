@@ -1,7 +1,12 @@
 function PauseMenuController(view) {
 	// console.log('PauseMenuController');
-	Controller.call(this, view);
+	GamepadProcessingController.call(this, view);
+	this.gameMenu = this.view.getElement('#game-menu');
 }
 
-PauseMenuController.prototype = Controller.prototype;
+PauseMenuController.prototype = Object.create(GamepadProcessingController.prototype);
 PauseMenuController.constructor = PauseMenuController;
+
+PauseMenuController.prototype.start = function() {
+	// console.log('start');
+};

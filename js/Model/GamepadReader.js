@@ -1,12 +1,29 @@
 function GamepadReader(gamepad) {
 	// console.log('GamepadReader');
 	this.gamepad = gamepad;
+	this.mode = '';
 	this.resetAxes();
 	this.resetButtons();
 }
 
+GamepadReader.prototype.setMode = function(mode) {
+	// console.log('setMode');
+	this.mode = mode;
+	if (this.mode) this.mode += 'Read';
+};
+
 GamepadReader.prototype.read = function(ts) {
 	// console.log('read');
+	if (!this.mode) return;
+	this[this.mode](ts);
+};
+
+GamepadReader.prototype.menuRead = function(ts) {
+	console.log('menuRead');
+};
+
+GamepadReader.prototype.battleRead = function(ts) {
+	console.log('battleRead');
 };
 
 GamepadReader.prototype.resetAxes = function() {
