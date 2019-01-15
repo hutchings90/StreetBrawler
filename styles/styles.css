@@ -1,0 +1,41 @@
+body {
+	background: black;
+	text-align: center;
+	margin: 0;
+}
+
+#menus {
+	display: inline-block;
+	width: 150px;
+}
+
+.menu {
+	background: DarkGray;
+	padding: 10px 5px;
+}
+
+.menu-option {
+	background: AliceBlue;
+	padding: 7px;
+	margin: 5px;
+	border: 3px solid AliceBlue;
+}
+
+.menu-option.active {
+	animation: activeMenuOption .2s steps(2, start) infinite;
+}
+
+.menu-option.selected {
+	background: DarkGreen;
+	color: white;
+	border-color: DarkGreen;
+}
+
+.hide {
+	display: none;
+}
+
+@keyframes activeMenuOption {
+	from { border-color: DarkGreen; }
+	to { border-color: LightGreen; }
+}

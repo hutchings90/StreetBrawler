@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Street Brawler</title>
+	<!-- Style -->
+	<link rel='stylesheet' type='text/css' href='styles/styles.css'/>
+	<!-- View -->
+	<script src='js/View/View.js'></script>
+	<!-- Models -->
+	<script src='js/Model/GamepadReader.js'></script>
+	<script src='js/Model/Player.js'></script>
+	<script src='js/Model/StreetBrawler.js'></script>
+	<!-- Controllers -->
+	<script src='js/Controller/Controller.js'></script>
+	<script src='js/Controller/MainMenuController.js'></script>
+	<script src='js/Controller/CharacterSelectController.js'></script>
+	<script src='js/Controller/PauseMenuController.js'></script>
+	<script src='js/Controller/BattleController.js'></script>
+	<script src='js/Controller/StreetBrawlerController.js'></script>
+	<!-- Main -->
+	<script src='js/main.js'></script>
+</head>
+<body>
+	<div id='street-brawler'>
+		<div id='battle-area' class='hide'></div>
+		<div id='menus'>
+			<div id='main-menu' class='menu'>
+				<div class='menu-option active'>1-Player</div>
+				<div class='menu-option'>2-Player</div>
+				<div class='menu-option'>Characters</div>
+			</div>
+			<div id='game-menu' class='menu hide'>
+				<div class='menu-option'>Resume</div>
+				<div class='menu-option'>Moves</div>
+				<div class='menu-option'>Quit</div>
+			</div>
+		</div>
+		<div id='character-select' class='hide'>
+			<div class='character-option active'>
+				<img src='assets/visual/red.png'/>
+			</div>
+			<div class='character-option'>
+				<img src='assets/visual/purple.png'/>
+			</div>
+			<div class='character-option'>
+				<img src='assets/visual/green.png'/>
+			</div>
+		</div>
+		<div id='character-details' class='hide'></div>
+	</div>
+</body>
+</html>
