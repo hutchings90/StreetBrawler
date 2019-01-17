@@ -13,9 +13,9 @@ View.prototype.getMainMenu = function() {
 	return this.getElement('#main-menu');
 };
 
-View.prototype.getGameMenu = function() {
-	// console.log('getGameMenu');
-	return this.getElement('#game-menu');
+View.prototype.getPauseMenu = function() {
+	// console.log('getPauseMenu');
+	return this.getElement('#pause-menu');
 };
 
 View.prototype.getBattleArea = function() {

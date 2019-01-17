@@ -6,3 +6,7 @@ function Controller(view) {
 Controller.prototype.start = function() {
 	// console.log('start');
 };
+
+Controller.prototype.end = function() {
+	// console.log('end');
+};

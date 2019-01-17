@@ -8,7 +8,7 @@ function StreetBrawlerController(model, view) {
 	this.characterDetailsController = new CharacterDetailsController(view);
 	this.battleController = new BattleController(view);
 	this.pauseMenuController = new PauseMenuController(view);
-	this.activeController = this.mainMenuController;
+	this.activateMainMenu();
 }
 
 StreetBrawlerController.prototype = Object.create(Controller.prototype);
@@ -45,11 +45,48 @@ StreetBrawlerController.prototype.readGamepads = function(ts) {
 StreetBrawlerController.prototype.gamepadConnected = function(gamepad) {
 	// console.log('gamepadConnected');
 	if (gamepad.index > 1) return;
-	this.streetBrawler.players[gamepad.index].gamepadReader.resetInputs();
+	this.streetBrawler.players[gamepad.index].gamepadReader.reset();
 };
 
 StreetBrawlerController.prototype.gamepadDisconnected = function(gameapd) {
 	// console.log('gamepadDisconnected')
 	if (gamepad.index > 1) return;
 	this.streetBrawler.players[gamepad.index].gamepadReader.resetInputs();
+};
+
+StreetBrawlerController.prototype.activateMainMenu = function() {
+	// console.log('activateMainMenu');
+	this.activateMenu('mainMenu');
+};
+
+StreetBrawlerController.prototype.activateCharacterSelect = function() {
+	// console.log('activateCharacterSelect');
+	this.activateMenu('characterSelect');
+};
+
+StreetBrawlerController.prototype.activateCharacterDetails = function() {
+	// console.log('activateCharacterDetails');
+	this.activateMenu('characterDetails');
+};
+
+StreetBrawlerController.prototype.activateBattle = function() {
+	// console.log('activateBattle');
+	this.activateController('battle');
+};
+
+StreetBrawlerController.prototype.activatePauseMenu = function() {
+	// console.log('activatePauseMenu');
+	this.activateMenu('pauseMenu');
+};
+
+StreetBrawlerController.prototype.activateMenu = function(menu) {
+	// console.log('activateMenu');
+	this.streetBrawler.setGamepadMode('menu');
+	this.activateController(menu);
+};
+
+StreetBrawlerController.prototype.activateController = function(controller) {
+	// console.log('activeController');
+	if (this.activeController) this.activeController.end();
+	this.activeController = this[controller + 'Controller'];
 };

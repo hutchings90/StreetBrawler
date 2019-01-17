@@ -1,13 +1,21 @@
 function MainMenuController(view) {
 	// console.log('MainMenuController');
-	GamepadProcessingController.call(this, view);
-	this.mainMenu = this.view.getMainMenu();
+	MenuController.call(this, view, 'Main');
 }
 
-MainMenuController.prototype = Object.create(GamepadProcessingController.prototype);
+MainMenuController.prototype = Object.create(MenuController.prototype);
 MainMenuController.constructor = MainMenuController;
 
-MainMenuController.prototype.start = function() {
-	// console.log('start');
-	this.view.show(this.mainMenu);
+MainMenuController.prototype.processActions = function(actions) {
+	// console.log('processActions');
+	if (!actions) return;
+	if (this.buttonsPressed(actions.buttons, [ 0, 1, 2, 3 ])) {
+		return this.end();
+	}
+	return null;
+};
+
+MainMenuController.prototype.end = function() {
+	// console.log('end');
+	return this.REPORTS[this.index];
 };
