@@ -4,7 +4,8 @@ function GamepadReader(gamepad) {
 	this.RESTART = 8;
 	this.gamepad = gamepad;
 	this.mode = '';
-	this.status = new GamepadStatus(gamepad.axes.length, gamepad.buttons.length, this.RESTART);
+	if (gamepad) this.status = new GamepadStatus(gamepad.axes.length, gamepad.buttons.length, this.RESTART);
+	else this.status = new GamepadStatus();
 	this.read = EMPTY_FUNC;
 }
 
