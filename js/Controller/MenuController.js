@@ -17,3 +17,11 @@ MenuController.prototype.start = function() {
 MenuController.prototype.setIndex = function(index) {
 	// console.log('setIndex');
 };
+
+MenuController.prototype.moveVertical = function() {
+	// console.log('moveVertical');
+};
+
+MenuController.prototype.moveHorizontal = function() {
+	// console.log('moveHorizontal');
+};

@@ -10,7 +10,7 @@ GamepadStatus.prototype.resetAxes = function() {
 	// console.log('resetAxes');
 	this.axes = [];
 	for (var i = this.numAxes - 1; i >= 0; i--) {
-		this.axes.push(new MenuAxisStatus());
+		this.axes.push(new MenuAxisStatus(this.restart));
 	}
 };
 

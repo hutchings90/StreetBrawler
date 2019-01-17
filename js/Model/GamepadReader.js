@@ -1,12 +1,15 @@
 function GamepadReader(gamepad) {
 	// console.log('GamepadReader');
-	this.REPEAT = 16;
-	this.RESTART = 8;
-	this.gamepad = gamepad;
+	this.NUM_AXES = 2;
 	this.mode = '';
-	if (gamepad) this.status = new GamepadStatus(gamepad.axes.length, gamepad.buttons.length, this.RESTART);
-	else this.status = new GamepadStatus();
-	this.read = EMPTY_FUNC;
+	if (gamepad) {
+		this.setGamepad(gamepad);
+		this.status = new GamepadStatus(this.NUM_AXES, gamepad.buttons.length, this.RESTART);
+	}
+	else {
+		this.gamepad = null;
+		this.status = new GamepadStatus();
+	}
 }
 
 GamepadReader.prototype.setMode = function(mode) {
@@ -16,31 +19,29 @@ GamepadReader.prototype.setMode = function(mode) {
 	else this.read = this[this.mode + 'Read'];
 };
 
-GamepadReader.prototype.menuRead = function(ts) {
+GamepadReader.prototype.read = EMPTY_FUNC;
+
+GamepadReader.prototype.menuRead = function() {
 	// console.log('menuRead');
+	this.menuReadAxes();
+	this.menuReadButtons();
+	return Object.create(this.status);
+};
+
+GamepadReader.prototype.menuReadButtons = function() {
+	// console.log('menuReadButtons');
 	var gamepad = this.gamepad;
 	for (var i in gamepad.buttons) {
-		var button = gamepad.buttons[i];
-		var status = this.status.buttons[i];
-		if (!button.pressed) {
-			if (status.status == 'end') {
-				this.status.buttons[i].idle();
-			}
-			else if (status.status != 'idle') {
-				this.status.buttons[i].end();
-			}
-		}
-		else if (status.status == 'idle') {
-			this.status.buttons[i].start();
-		}
-		else {
-			status.frames++;
-			if (status.frames == this.REPEAT) {
-				this.status.buttons[i].repeat();
-			}
-		}
+		this.status.buttons[i].update(gamepad.buttons[i].pressed);
 	}
-	return Object.create(this.status);
+};
+
+GamepadReader.prototype.menuReadAxes = function() {
+	// console.log('menuReadAxes');
+	var gamepad = this.gamepad;
+	for (var i = this.NUM_AXES - 1; i >= 0; i--) {
+		this.status.axes[i].update(gamepad.axes[i]);
+	}
 };
 
 GamepadReader.prototype.battleRead = function(ts) {
@@ -49,5 +50,11 @@ GamepadReader.prototype.battleRead = function(ts) {
 
 GamepadReader.prototype.reset = function() {
 	// console.log('reset');
-	this.status = new GamepadStatus(this.gamepad.axes.length, this.gamepad.buttons.length);
+	this.status = new GamepadStatus(this.NUM_AXES, this.gamepad.buttons.length);
+};
+
+GamepadReader.prototype.setGamepad = function(gamepad) {
+	// console.log('setGamepad');
+	this.gamepad = gamepad;
+	this.reset();
 };
