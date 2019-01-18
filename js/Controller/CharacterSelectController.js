@@ -1,12 +1,7 @@
 function CharacterSelectController(view) {
 	// console.log('CharacterSelectController');
-	GamepadProcessingController.call(this, view);
-	this.characterSelect = this.view.getElement('#character-select');
+	MenuController.call(this, view, 'CharacterSelect');
 }
 
-CharacterSelectController.prototype = Object.create(GamepadProcessingController.prototype);
+CharacterSelectController.prototype = Object.create(MenuController.prototype);
 CharacterSelectController.constructor = CharacterSelectController;
-
-CharacterSelectController.prototype.start = function() {
-	// console.log('start');
-};

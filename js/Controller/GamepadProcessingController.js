@@ -10,8 +10,8 @@ function GamepadProcessingController(view) {
 GamepadProcessingController.prototype = Object.create(Controller.prototype);
 GamepadProcessingController.constructor = GamepadProcessingController;
 
-GamepadProcessingController.prototype.processActions = function(actions) {
-	// console.log('processActions');
+GamepadProcessingController.prototype.processInputs = function(actions) {
+	// console.log('processInputs');
 };
 
 GamepadProcessingController.prototype.menuButtonsPressed = function(buttons, checks) {

@@ -22,7 +22,7 @@
 	<script src='js/Controller/MenuController.js'></script>
 	<script src='js/Controller/MainMenuController.js'></script>
 	<script src='js/Controller/CharacterSelectController.js'></script>
-	<script src='js/Controller/CharacterDetailsController.js'></script>
+	<script src='js/Controller/CharacterDetailController.js'></script>
 	<script src='js/Controller/BattleController.js'></script>
 	<script src='js/Controller/PauseMenuController.js'></script>
 	<script src='js/Controller/StreetBrawlerController.js'></script>
@@ -32,28 +32,46 @@
 		<div id='battle-area' class='hide'></div>
 		<div id='menus'>
 			<div id='main-menu' class='menu hide'>
-				<div class='menu-option active'>1-Player</div>
-				<div class='menu-option'>2-Player</div>
-				<div class='menu-option'>Characters</div>
+				<div class='menu-option active' data-action='singlePlayer'>1-Player</div>
+				<div class='menu-option' data-action='twoPlayer'>2-Player</div>
+				<div class='menu-option' data-action='characterDetails'>Characters</div>
 			</div>
 			<div id='pause-menu' class='menu hide'>
 				<div class='menu-option'>Resume</div>
 				<div class='menu-option'>Moves</div>
-				<div class='menu-option'>Quit</div>
+				<div class='menu-option' data-action='quitBattle'>Quit</div>
 			</div>
 		</div>
 		<div id='character-select' class='hide'>
-			<div class='character-option active'>
+			<div class='character-option active' data-action='characterDetail' data-params='{ name: "red" }'>
 				<img src='assets/visual/red.png'/>
+				<div class='player-indicators-container'>
+					<div class='player-indicators'>
+						<p class='two active'>2</p>
+						<p class='one'>1</p>
+					</div>
+				</div>
 			</div>
-			<div class='character-option'>
+			<div class='character-option' data-action='characterDetail' data-params='{ name: "purple" }'>
 				<img src='assets/visual/purple.png'/>
+				<div class='player-indicators-container'>
+					<div class='player-indicators'>
+						<p class='two'>2</p>
+						<p class='one active'>1</p>
+					</div>
+				</div>
 			</div>
-			<div class='character-option'>
+			<div class='character-option' data-action='characterDetail' data-params='{ name: "green" }'>
 				<img src='assets/visual/green.png'/>
+				<div class='player-indicators-container'>
+					<div class='player-indicators'>
+						<p class='two'>2</p>
+						<p class='one'>1</p>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div id='character-details' class='hide'></div>
+		<div id='character-detail' class='hide'></div>
 	</div>
 </body>
 </html>

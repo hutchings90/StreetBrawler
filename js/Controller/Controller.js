@@ -1,6 +1,7 @@
 function Controller(view) {
 	// console.log('Controller');
 	this.view = view;
+	this.activator = null;
 }
 
 Controller.prototype.start = function() {

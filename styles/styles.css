@@ -27,8 +27,63 @@ body {
 
 .menu-option.selected {
 	background: DarkGreen;
-	color: white;
+	color: White;
 	border-color: DarkGreen;
+}
+
+#character-select {
+	font-size: 0;
+}
+
+.character-option {
+	display: inline-block;
+	position: relative;
+}
+
+.character-option img {
+	vertical-align: middle;
+	border: 1px solid white;
+}
+
+.character-option .player-indicators-container {
+	position: absolute;
+	top: 0;
+}
+
+.character-option .player-indicators-container .player-indicators {
+	position: relative;
+}
+
+.character-option .player-indicators p:not(.active) {
+	opacity: 0;
+}
+
+.character-option .player-indicators p {
+	position: absolute;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 86px;
+	width: 76px;
+	border-style: solid;
+	padding: 0 5px;
+	margin: 0;
+	border-width: 3px;
+}
+
+.character-option .player-indicators p.one {
+	text-align: left;
+}
+
+.character-option .player-indicators p.one.active {
+	animation: activeCharacterSelectOptionOne .2s steps(2, start) infinite;
+}
+
+.character-option .player-indicators p.two {
+	text-align: right;
+}
+
+.character-option .player-indicators p.two.active {
+	animation: activeCharacterSelectOptionTwo .2s steps(2, start) infinite;
 }
 
 .hide {
@@ -38,4 +93,14 @@ body {
 @keyframes activeMenuOption {
 	from { border-color: DarkGreen; }
 	to { border-color: LightGreen; }
+}
+
+@keyframes activeCharacterSelectOptionOne {
+	from { color: DarkGreen; }
+	to { color: LightGreen; }
+}
+
+@keyframes activeCharacterSelectOptionTwo {
+	from { color: DarkRed; }
+	to { color: #EE9090; }
 }

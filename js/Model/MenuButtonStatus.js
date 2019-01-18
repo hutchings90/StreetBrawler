@@ -1,6 +1,6 @@
-function MenuButtonStatus(restart) {
+function MenuButtonStatus() {
 	// console.log('MenuButtonStatus');
-	MenuStatus.call(this, restart);
+	MenuStatus.call(this);
 }
 
 MenuButtonStatus.prototype = Object.create(MenuStatus.prototype);

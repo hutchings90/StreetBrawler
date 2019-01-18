@@ -1,10 +1,9 @@
-function MenuStatus(restart) {
+function MenuStatus() {
 	// console.log('MenuStatus');
-	this.REPEAT = 16;
-	this.RESTART = 8;
+	this.REPEAT = 18;
+	this.RESTART = 10;
 	this.status = 'idle';
 	this.frames = 0;
-	this.restart = restart;
 }
 
 MenuStatus.prototype.idle = function() {
@@ -19,12 +18,17 @@ MenuStatus.prototype.end = function() {
 
 MenuStatus.prototype.repeat = function() {
 	// console.log('repeat');
-	this.updateStatus('repeat', this.restart);
+	this.updateStatus('repeat');
 };
 
 MenuStatus.prototype.prepeat = function() {
 	// console.log('prepeat');
-	this.updateStatus('prepeat', this.restart);
+	this.updateStatus('prepeat');
+};
+
+MenuStatus.prototype.postpeat = function() {
+	// console.log('postpeat');
+	this.updateStatus('postpeat', this.RESTART);
 };
 
 MenuStatus.prototype.start = function() {
@@ -49,5 +53,6 @@ MenuStatus.prototype.update = function(pressed) {
 	if (!pressed) this.processNoPress();
 	else if (this.status == 'idle') this.start();
 	else if (++this.frames == this.REPEAT) this.repeat();
-	else if (this.status != 'prepeat') this.prepeat();
+	else if (this.status == 'start') this.prepeat();
+	else if (this.status == 'repeat') this.postpeat();
 };

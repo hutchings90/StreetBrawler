@@ -14,12 +14,17 @@ MenuAxisStatus.prototype.start = function(direction) {
 
 MenuAxisStatus.prototype.repeat = function() {
 	// console.log('repeat');
-	this.updateStatus('repeat', this.restart, this.direction);
+	this.updateStatus('repeat', 0, this.direction);
 };
 
 MenuAxisStatus.prototype.prepeat = function() {
 	// console.log('prepeat');
-	this.updateStatus('prepeat', this.restart, this.direction);
+	this.updateStatus('prepeat', 0, this.direction);
+};
+
+MenuAxisStatus.prototype.postpeat = function() {
+	// console.log('postpeat');
+	this.updateStatus('postpeat', this.RESTART, this.direction);
 };
 
 MenuAxisStatus.prototype.updateStatus = function(status, frames, direction) {
@@ -34,5 +39,6 @@ MenuAxisStatus.prototype.update = function(direction) {
 	if (Math.abs(direction) != 1) this.processNoPress();
 	else if (this.status == 'idle' || this.direction != direction) this.start(direction);
 	else if (++this.frames == this.REPEAT) this.repeat();
-	else if (this.status != 'prepeat') this.prepeat();
+	else if (this.status == 'start') this.prepeat();
+	else if (this.status == 'repeat') this.postpeat();
 };

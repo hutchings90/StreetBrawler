@@ -23,14 +23,14 @@ View.prototype.getBattleArea = function() {
 	return this.getElement('#battle-area');
 };
 
-View.prototype.getCharacterSelect = function() {
+View.prototype.getCharacterSelectMenu = function() {
 	// console.log('getCharacterSelect');
 	return this.getElement('#character-select');
 };
 
-View.prototype.getCharacterDetails = function() {
-	// console.log('getCharacterDetails');
-	return this.getElement('#character-details');
+View.prototype.getCharacterDetail = function() {
+	// console.log('getCharacterDetail');
+	return this.getElement('#character-detail');
 };
 
 View.prototype.show = function(e) {
@@ -51,5 +51,31 @@ View.prototype.removeClassName = function(e, className) {
 
 View.prototype.addClassName = function(e, className) {
 	// console.log('addClassName');
-	if (!e.match(className)) e.className += className;
+	if (!e.className.match(className)) {
+		if (e.className.length > 0) e.className += ' ';
+		e.className += className;
+	}
+};
+
+View.prototype.getOptions = function(e) {
+	// console.log('getOptions');
+	return e.children;
+};
+
+View.prototype.clearOption = function(option) {
+	// console.log('clearOption');
+	if (option) this.removeClassName(option, 'active');
+};
+
+View.prototype.setOption = function(option) {
+	// console.log('setOption');
+	if (option) this.addClassName(option, 'active');
+};
+
+View.prototype.getOptionData = function(e) {
+	// console.log('getOptionData');
+	return {
+		action: e.dataset['action'] || e.innerHTML,
+		params: e.dataset['params'] || {}
+	};
 };

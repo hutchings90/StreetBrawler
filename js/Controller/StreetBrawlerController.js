@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Provides the controller for the Street Brawler game.
+ */
+
 function StreetBrawlerController(model, view) {
 	// console.log('StreetBrawlerController');
 	Controller.call(this, view);
@@ -7,7 +12,7 @@ function StreetBrawlerController(model, view) {
 	this.streetBrawler = model;
 	this.mainMenuController = new MainMenuController(view);
 	this.characterSelectController = new CharacterSelectController(view);
-	this.characterDetailsController = new CharacterDetailsController(view);
+	this.characterDetailController = new CharacterDetailController(view);
 	this.battleController = new BattleController(view);
 	this.pauseMenuController = new PauseMenuController(view);
 	this.activateMainMenu();
@@ -40,9 +45,11 @@ StreetBrawlerController.prototype.readGamepads = function(ts) {
 	for (var i in players) {
 		var player = players[i];
 		if (player.active) {
-			var gamepadReader = player.gamepadReader;
-			var actions = gamepadReader.read(ts);
-			this.activeController.processActions(actions);
+			var action = this.activeController.processInputs(player.gamepadReader.read(ts));
+			if (action) {
+				this[action.action](i, action.params);
+				return;
+			}
 		}
 	}
 };
@@ -66,40 +73,76 @@ StreetBrawlerController.prototype.activateMainMenu = function() {
 	this.activateMenu('mainMenu');
 };
 
-StreetBrawlerController.prototype.activateCharacterSelect = function() {
+StreetBrawlerController.prototype.activateCharacterSelect = function(i) {
 	// console.log('activateCharacterSelect');
-	this.activateMenu('characterSelect');
+	this.activateMenu('characterSelect', i);
 };
 
-StreetBrawlerController.prototype.activateCharacterDetails = function() {
-	// console.log('activateCharacterDetails');
-	this.activateMenu('characterDetails');
+StreetBrawlerController.prototype.activateCharacterDetail = function(i) {
+	// console.log('activateCharacterDetail');
+	this.activateMenu('characterDetail', i);
 };
 
-StreetBrawlerController.prototype.activateBattle = function() {
+StreetBrawlerController.prototype.activateBattle = function(i) {
 	// console.log('activateBattle');
-	this.activateController('battle', 'battle');
+	this.activateController('battle', 'battle', i);
 };
 
-StreetBrawlerController.prototype.activatePauseMenu = function() {
+StreetBrawlerController.prototype.activatePauseMenu = function(i) {
 	// console.log('activatePauseMenu');
-	this.activateMenu('pauseMenu');
+	this.activateMenu('pauseMenu', i);
 };
 
-StreetBrawlerController.prototype.activateMenu = function(menu) {
+StreetBrawlerController.prototype.activateMenu = function(menu, i) {
 	// console.log('activateMenu');
-	this.streetBrawler.setGamepadMode('menu');
-	this.activateController(menu, 'menu');
+	this.activateController(menu, 'menu', i);
 };
 
-StreetBrawlerController.prototype.activateController = function(controller, mode) {
-	// console.log('activeController');
+StreetBrawlerController.prototype.activateController = function(controller, mode, i) {
+	// console.log('activateController');
 	var me = this;
 	clearTimeout(me.timeout);
 	me.streetBrawler.setGamepadMode('');
 	if (me.activeController) me.activeController.end();
 	me.activeController = me[controller + 'Controller'];
+	me.activeController.activator = i;
+	me.activeController.start();
 	me.timeout = setTimeout(function() {
 		me.streetBrawler.setGamepadMode(mode);
 	}, 1000);
+};
+
+/**
+ * Begins the single player mode for the specified human player.
+ * @param {number} i
+ *   The index within this controller's streetBrawler model of the player who selected this option.
+ */
+StreetBrawlerController.prototype.singlePlayer = function(i, params) {
+	// console.log('singlePlayer');
+	this.activateBattle(i);
+};
+
+/**
+ * Begins the two player mode for the both human players.
+ * @param {number} i
+ *   The index within this controller's streetBrawler model of the player who selected this option.
+ */
+StreetBrawlerController.prototype.twoPlayer = function(i, params) {
+	// console.log('twoPlayer');
+	this.activateBattle(i);
+};
+
+/**
+ * Begins the character details process for the specified player.
+ * @param {number} i
+ *   The index within this controller's streetBrawler model of the player who selected this option.
+ */
+StreetBrawlerController.prototype.characterDetails = function(i, params) {
+	// console.log('characterDetail');
+	this.activateCharacterSelect(i);
+};
+
+StreetBrawlerController.prototype.quitBattle = function(i, params) {
+	// console.log('quitBattle');
+	this.activateMainMenu();
 };

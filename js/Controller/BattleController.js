@@ -10,3 +10,11 @@ BattleController.constructor = BattleController;
 BattleController.prototype.start = function() {
 	// console.log('start');
 };
+
+BattleController.prototype.processInputs = function() {
+	// console.log('processInputs');
+	return {
+		action: 'quitBattle',
+		params: {}
+	};
+};
