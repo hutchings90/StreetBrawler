@@ -25,10 +25,11 @@ StreetBrawlerController.constructor = StreetBrawlerController;
 StreetBrawlerController.prototype.start = function() {
 	// console.log('start');
 	var me = this;
-	this.activeController.start();
-	this.interval = setInterval(function() {
+	if (me.interval) me.clearInterval();
+	me.activeController.start();
+	me.interval = setInterval(function() {
 		me.gameLoop();
-	}, this.FRAME_MS);
+	}, me.FRAME_MS);
 };
 
 StreetBrawlerController.prototype.gameLoop = function() {
@@ -65,7 +66,13 @@ StreetBrawlerController.prototype.gamepadDisconnected = function(gamepad) {
 	// console.log('gamepadDisconnected')
 	if (gamepad.index > 1) return;
 	this.streetBrawler.gamepadDisconnected(gamepad);
-	if (this.streetBrawler.activePlayerCount() < 1) clearInterval(this.interval);
+	if (this.streetBrawler.activePlayerCount() < 1) this.clearInterval();
+};
+
+StreetBrawlerController.prototype.clearInterval = function() {
+	// console.log('clearInterval')
+	clearInterval(this.interval);
+	this.interval = null;
 };
 
 StreetBrawlerController.prototype.activateMainMenu = function() {

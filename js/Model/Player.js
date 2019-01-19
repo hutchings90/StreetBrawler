@@ -8,11 +8,11 @@ function Player(gamepad) {
 Player.prototype.gamepadConnected = function(gamepad) {
 	// console.log('gamepadConnected');
 	this.gamepadReader.setGamepad(gamepad);
-	this.active = false;
+	this.active = true;
 };
 
 Player.prototype.gamepadDisconnected = function() {
 	// console.log('gamepadDisconnected');
 	this.gamepadReader.reset();
-	this.active = true;
+	this.active = false;
 };
