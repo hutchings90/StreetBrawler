@@ -11,7 +11,7 @@ BattleController.prototype.start = function() {
 	// console.log('start');
 };
 
-BattleController.prototype.processInputs = function() {
+BattleController.prototype.processInputs = function(status, pi) {
 	// console.log('processInputs');
 	return {
 		action: 'quitBattle',

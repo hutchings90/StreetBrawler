@@ -26,7 +26,6 @@ StreetBrawlerController.prototype.start = function() {
 	// console.log('start');
 	var me = this;
 	if (me.interval) me.clearInterval();
-	me.activeController.start();
 	me.interval = setInterval(function() {
 		me.gameLoop();
 	}, me.FRAME_MS);
@@ -43,10 +42,10 @@ StreetBrawlerController.prototype.readGamepads = function(ts) {
 	navigator.getGamepads();
 	var model = this.streetBrawler;
 	var players = model.players;
-	for (var i in players) {
+	for (var i = 0; i < players.length; i++) {
 		var player = players[i];
-		if (player.active) {
-			var action = this.activeController.processInputs(player.gamepadReader.read(ts));
+		if (player.isActive()) {
+			var action = this.activeController.processInputs(player.gamepadReader.read(ts), i);
 			if (action) {
 				this[action.action](i, action.params);
 				return;
@@ -59,7 +58,7 @@ StreetBrawlerController.prototype.gamepadConnected = function(gamepad) {
 	// console.log('gamepadConnected');
 	if (gamepad.index > 1) return;
 	this.streetBrawler.gamepadConnected(gamepad);
-	if (!this.interval) this.start();
+	if (!this.interval) this.start(gamepad.index);
 };
 
 StreetBrawlerController.prototype.gamepadDisconnected = function(gamepad) {
@@ -75,81 +74,101 @@ StreetBrawlerController.prototype.clearInterval = function() {
 	this.interval = null;
 };
 
-StreetBrawlerController.prototype.activateMainMenu = function() {
+StreetBrawlerController.prototype.activateMainMenu = function(pi) {
 	// console.log('activateMainMenu');
-	this.activateMenu('mainMenu');
+	this.activateMenu('mainMenu', pi);
+	this.streetBrawler.allPlaying();
 };
 
-StreetBrawlerController.prototype.activateCharacterSelect = function(i) {
+StreetBrawlerController.prototype.activateCharacterSelect = function(pi, mode) {
 	// console.log('activateCharacterSelect');
-	this.activateMenu('characterSelect', i);
+	this.characterSelectController.mode = mode;
+	this.activateMenu('characterSelect', pi);
 };
 
-StreetBrawlerController.prototype.activateCharacterDetail = function(i) {
+StreetBrawlerController.prototype.activateCharacterDetail = function(pi) {
 	// console.log('activateCharacterDetail');
-	this.activateMenu('characterDetail', i);
+	this.activateMenu('characterDetail', pi);
 };
 
-StreetBrawlerController.prototype.activateBattle = function(i) {
+StreetBrawlerController.prototype.activateBattle = function(pi) {
 	// console.log('activateBattle');
-	this.activateController('battle', 'battle', i);
+	this.activateController('battle', 'battle', pi);
 };
 
-StreetBrawlerController.prototype.activatePauseMenu = function(i) {
+StreetBrawlerController.prototype.activatePauseMenu = function(pi) {
 	// console.log('activatePauseMenu');
-	this.activateMenu('pauseMenu', i);
+	this.activateMenu('pauseMenu', pi);
 };
 
-StreetBrawlerController.prototype.activateMenu = function(menu, i) {
+StreetBrawlerController.prototype.activateMenu = function(menu, pi) {
 	// console.log('activateMenu');
-	this.activateController(menu, 'menu', i);
+	this.activateController(menu, 'menu', pi);
 };
 
-StreetBrawlerController.prototype.activateController = function(controller, mode, i) {
+StreetBrawlerController.prototype.activateController = function(controller, mode, pi) {
 	// console.log('activateController');
 	var me = this;
 	clearTimeout(me.timeout);
 	me.streetBrawler.setGamepadMode('');
-	if (me.activeController) me.activeController.end();
+	if (me.activeController) me.activeController.end(pi);
 	me.activeController = me[controller + 'Controller'];
-	me.activeController.activator = i;
-	me.activeController.start();
+	me.activeController.activator = pi;
+	me.activeController.show();
 	me.timeout = setTimeout(function() {
+		me.activeController.start();
 		me.streetBrawler.setGamepadMode(mode);
 	}, 1000);
 };
 
+StreetBrawlerController.prototype.mainMenu = function(pi, params) {
+	// console.log('mainMenu');
+	this.activateMainMenu(pi);
+};
+
 /**
- * Begins the single player mode for the specified human player.
+ * Begins the character selection process for single player mode for the specified human player.
  * @param {number} i
  *   The index within this controller's streetBrawler model of the player who selected this option.
  */
-StreetBrawlerController.prototype.singlePlayer = function(i, params) {
+StreetBrawlerController.prototype.singlePlayer = function(pi, params) {
 	// console.log('singlePlayer');
-	this.activateBattle(i);
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
+	this.activateCharacterSelect(pi, 'onePlayerBattle');
 };
 
 /**
- * Begins the two player mode for the both human players.
+ * Begins the character selection process for two player mode for the both human players.
  * @param {number} i
  *   The index within this controller's streetBrawler model of the player who selected this option.
  */
-StreetBrawlerController.prototype.twoPlayer = function(i, params) {
+StreetBrawlerController.prototype.twoPlayer = function(pi, params) {
 	// console.log('twoPlayer');
-	this.activateBattle(i);
+	this.activateCharacterSelect(pi, 'twoPlayerBattle');
 };
 
 /**
- * Begins the character details process for the specified player.
+ * Begins the character selection process for character details for the specified player.
  * @param {number} i
  *   The index within this controller's streetBrawler model of the player who selected this option.
  */
-StreetBrawlerController.prototype.characterDetails = function(i, params) {
-	// console.log('characterDetail');
-	this.activateCharacterSelect(i);
+StreetBrawlerController.prototype.characterDetails = function(pi, params) {
+	// console.log('characterDetails');
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
+	this.activateCharacterSelect(pi, 'characterDetail');
 };
 
-StreetBrawlerController.prototype.quitBattle = function(i, params) {
+/**
+ * Begins the character detail for the specified player.
+ * @param {number} i
+ *   The index within this controller's streetBrawler model of the player who selected this option.
+ */
+StreetBrawlerController.prototype.characterDetail = function(pi, params) {
+	// console.log('characterDetail');
+	this.activateCharacterDetail(pi);
+};
+
+StreetBrawlerController.prototype.quitBattle = function(pi, params) {
 	// console.log('quitBattle');
-	this.activateMainMenu();
+	this.activateMainMenu(pi);
 };

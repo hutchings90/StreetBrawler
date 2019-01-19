@@ -43,18 +43,29 @@ View.prototype.hide = function(e) {
 	this.addClassName(e, this.HIDE_CLASS);
 };
 
+View.prototype.hasClassName = function(e, className) {
+	// console.log('hasClassName');
+	// console.log(e.className.includes(className), e, className);
+	return e.className.includes(className);
+};
+
 View.prototype.removeClassName = function(e, className) {
 	// console.log('removeClassName');
-	var re = new RegExp(className, 'g');
-	e.className = e.className.replace(re, '').replace(/\s+/g, ' ').trim();
+	this.replaceClassName(e, className, '');
 };
 
 View.prototype.addClassName = function(e, className) {
 	// console.log('addClassName');
-	if (!e.className.match(className)) {
+	if (!this.hasClassName(e, className)) {
 		if (e.className.length > 0) e.className += ' ';
 		e.className += className;
 	}
+};
+
+View.prototype.replaceClassName = function(e, oldClassName, newClassName) {
+	// console.log('replaceClassName');
+	var re = new RegExp(oldClassName, 'g');
+	e.className = e.className.replace(re, newClassName).replace(/\s+/g, ' ').trim();
 };
 
 View.prototype.getOptions = function(e) {
@@ -64,12 +75,19 @@ View.prototype.getOptions = function(e) {
 
 View.prototype.clearOption = function(option) {
 	// console.log('clearOption');
-	if (option) this.removeClassName(option, 'active');
+	if (option) {
+		this.removeClassName(option, 'active');
+		this.removeClassName(option, 'selected');
+	}
 };
 
-View.prototype.setOption = function(option) {
-	// console.log('setOption');
+View.prototype.activateOption = function(option) {
+	// console.log('activateOption');
 	if (option) this.addClassName(option, 'active');
+};
+
+View.prototype.selectOption = function(option) {
+	if (option) this.addClassName(option, 'selected');
 };
 
 View.prototype.getOptionData = function(e) {
@@ -78,4 +96,47 @@ View.prototype.getOptionData = function(e) {
 		action: e.dataset['action'] || e.innerHTML,
 		params: e.dataset['params'] || {}
 	};
+};
+
+View.prototype.selectPlayerCharacter = function(options, oi, pi) {
+	// console.log('selectPlayerCharacter');
+	if (oi < 0 || oi >= options.length) return;
+	var indicator = this.getPlayerCharacterIndicator(options, oi, pi);
+	this.clearOption(indicator);
+	this.selectOption(indicator);
+};
+
+View.prototype.activatePlayerCharacter = function(options, oi, pi) {
+	// console.log('activatePlayerCharacter');
+	if (oi < 0 || oi >= options.length) return;
+	var indicator = this.getPlayerCharacterIndicator(options, oi, pi);
+	this.clearOption(indicator);
+	this.activateOption(indicator);
+};
+
+View.prototype.deactivatePlayerCharacter = function(options, oi, pi) {
+	// console.log('deactivatePlayerCharacter');
+	if (oi < 0 || oi >= options.length) return;
+	this.clearOption(this.getPlayerCharacterIndicator(options, oi, pi));
+};
+
+View.prototype.isPlayerCharacterSelected = function(options, oi, pi) {
+	// console.log('isPlayerCharacterSelected');
+	return oi >= 0 && oi < options.length && this.hasClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'selected');
+};
+
+View.prototype.getPlayerCharacterIndicator = function(options, oi, pi) {
+	// console.log('getPlayerCharacterIndicator');
+	if (oi < 0 || pi >= options.length) return null;
+	return options[oi].children[1].children[0].children[pi];
+};
+
+View.prototype.isPlayerCharacterActive = function(options, oi, pi) {
+	// console.log('isPlayerCharacterSelected');
+	return oi >= 0 && oi < options.length && this.hasClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'active');
+};
+
+View.prototype.clearPlayerCharacter = function(options, oi, pi) {
+	// console.log('clearPlayerCharacter');
+	if (oi >= 0 && oi < options.length) this.replaceClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'selected', 'active');
 };

@@ -6,20 +6,10 @@ function MainMenuController(view) {
 MainMenuController.prototype = Object.create(MenuController.prototype);
 MainMenuController.constructor = MainMenuController;
 
-MainMenuController.prototype.processInputs = function(status) {
+MainMenuController.prototype.processInputs = function(status, pi) {
 	// console.log('processInputs');
 	if (!status) return null;
-	if (this.menuButtonsPressed(status.buttons, [ 0, 1, 2, 3 ])) return this.end();
-	this.moveVertical(this.verticalDirection(status.axes));
+	if (this.menuButtonsPressed(status.buttons, [ 1 ], pi)) return this.end(pi);
+	this.moveVertical(this.verticalDirection(status.axes), pi);
 	return null;
-};
-
-MainMenuController.prototype.moveUp = function() {
-	// console.log('moveUp');
-	this.setIndex(this.i - 1);
-};
-
-MainMenuController.prototype.moveDown = function() {
-	// console.log('moveDown');
-	this.setIndex(this.i + 1);
 };

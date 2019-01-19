@@ -3,7 +3,6 @@ function MenuController(view, menu) {
 	GamepadProcessingController.call(this, view);
 	this.menu = this.view['get' + menu + 'Menu']();
 	this.options = this.view.getOptions(this.menu);
-	this.setIndex(0);
 }
 
 MenuController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -12,54 +11,97 @@ MenuController.constructor = MenuController;
 MenuController.prototype.start = function(activator) {
 	// console.log('start');
 	if (activator) this.activator = activator;
+	this.move(this.i || 0);
 	this.view.show(this.menu);
 };
 
 MenuController.prototype.end = function() {
 	// console.log('end');
-	this.view.hide(this.menu);
+	this.hide();
+	this.clearAllOptions();
 	return this.view.getOptionData(this.options[this.i]);
 };
 
-MenuController.prototype.processInputs = function(status) {
-	// console.log('processInputs');
-}
-
-MenuController.prototype.moveVertical = function(direction) {
-	// console.log('moveVertical');
-	if (direction < 0) this.moveUp();
-	else if (direction > 0) this.moveDown();
-};
-
-MenuController.prototype.moveHorizontal = function() {
-	// console.log('moveHorizontal');
-	if (direction < 0) this.moveLeft();
-	else if (direction > 0) this.moveRight();
-};
-
-MenuController.prototype.setIndex = function(i) {
-	// console.log('setIndex');
-	if (i < 0) i = this.options.length - 1;
-	if (i >= this.options.length) i = 0;
-	if (i != this.i) {
-		this.view.clearOption(this.options[this.i]);
-		this.view.setOption(this.options[i]);
-		this.i = i;
+MenuController.prototype.clearAllOptions = function(pi) {
+	// console.log('clearAllOptions');
+	for (var i = this.options.length - 1; i >= 0; i--) {
+		this.clearOption(i, pi);
 	}
 };
 
-MenuController.prototype.moveUp = function() {
+MenuController.prototype.hide = function() {
+	// console.log('hide');
+	this.view.hide(this.menu);
+};
+
+MenuController.prototype.show = function() {
+	// console.log('show');
+	this.view.show(this.menu);
+};
+
+MenuController.prototype.moveVertical = function(direction, pi) {
+	// console.log('moveVertical');
+	if (direction < 0) this.moveUp(pi);
+	else if (direction > 0) this.moveDown(pi);
+};
+
+MenuController.prototype.moveHorizontal = function(direction, pi) {
+	// console.log('moveHorizontal');
+	if (direction < 0) this.moveLeft(pi);
+	else if (direction > 0) this.moveRight(pi);
+};
+
+MenuController.prototype.setIndex = function(i, pi) {
+	// console.log('setIndex');
+	this.i = this.validI(i);
+}
+
+MenuController.prototype.validI = function(i) {
+	// console.log('validI');
+	if (i < 0) i = this.options.length - 1;
+	if (i >= this.options.length) i = 0;
+	return i;
+};
+
+MenuController.prototype.replaceOption = function(oldi, newi, pi) {
+	// console.log('replaceOption');
+	this.clearOption(oldi, pi);
+	this.activateOption(newi, pi);
+};
+
+MenuController.prototype.clearOption = function(i, pi) {
+	// console.log('clearOption');
+	this.view.clearOption(this.options[i]);
+};
+
+MenuController.prototype.activateOption = function(i, pi) {
+	// console.log('activateOption');
+	this.view.activateOption(this.options[i]);
+};
+
+MenuController.prototype.moveUp = function(pi) {
 	// console.log('moveUp');
+	this.move(this.i - 1, pi);
 };
 
-MenuController.prototype.moveDown = function() {
+MenuController.prototype.moveDown = function(pi) {
 	// console.log('moveDown');
+	this.move(this.i + 1, pi);
 };
 
-MenuController.prototype.moveLeft = function() {
+MenuController.prototype.moveLeft = function(pi) {
 	// console.log('moveLeft');
+	this.move(this.i - 1, pi);
 };
 
-MenuController.prototype.moveRight = function() {
+MenuController.prototype.moveRight = function(pi) {
 	// console.log('moveRight');
+	this.move(this.i + 1, pi);
+};
+
+MenuController.prototype.move = function(i, pi) {
+	// console.log('move');
+	var oldi = this.i;
+	this.setIndex(i, pi);
+	this.replaceOption(oldi, this.i, pi);
 };

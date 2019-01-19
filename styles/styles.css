@@ -54,7 +54,7 @@ body {
 	position: relative;
 }
 
-.character-option .player-indicators p:not(.active) {
+.character-option .player-indicators p:not(.active):not(.selected) {
 	opacity: 0;
 }
 
@@ -78,12 +78,22 @@ body {
 	animation: activeCharacterSelectOptionOne .2s steps(2, start) infinite;
 }
 
+.character-option .player-indicators p.one.selected {
+	color: Gray;
+	animation: 0;
+}
+
 .character-option .player-indicators p.two {
 	text-align: right;
 }
 
 .character-option .player-indicators p.two.active {
 	animation: activeCharacterSelectOptionTwo .2s steps(2, start) infinite;
+}
+
+.character-option .player-indicators p.two.selected {
+	color: Gray;
+	animation: 0;
 }
 
 .hide {

@@ -1,18 +1,24 @@
 function Player(gamepad) {
 	// console.log('Player');
 	this.gamepadReader = new GamepadReader(gamepad);
-	if (!gamepad) this.active = false;
-	else this.active = true;
+	this.playing = true;
+	if (!gamepad) this.activeGamepad = false;
+	else this.activeGamepad = true;
 }
 
 Player.prototype.gamepadConnected = function(gamepad) {
 	// console.log('gamepadConnected');
 	this.gamepadReader.setGamepad(gamepad);
-	this.active = true;
+	this.activeGamepad = true;
 };
 
 Player.prototype.gamepadDisconnected = function() {
 	// console.log('gamepadDisconnected');
 	this.gamepadReader.reset();
-	this.active = false;
+	this.activeGamepad = false;
+};
+
+Player.prototype.isActive = function() {
+	// console.log('isActive');
+	return this.activeGamepad && this.playing;
 };

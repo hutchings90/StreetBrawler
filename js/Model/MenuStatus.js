@@ -36,7 +36,7 @@ MenuStatus.prototype.start = function() {
 	this.updateStatus('start');
 };
 
-MenuStatus.prototype.processNoPress = function() {
+MenuStatus.prototype.processNoPress = function(pi) {
 	// console.log('processNoPress');
 	if (this.status == 'end') this.idle();
 	else if (this.status != 'idle') this.end();

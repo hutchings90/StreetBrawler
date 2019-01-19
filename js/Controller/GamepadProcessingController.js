@@ -10,20 +10,20 @@ function GamepadProcessingController(view) {
 GamepadProcessingController.prototype = Object.create(Controller.prototype);
 GamepadProcessingController.constructor = GamepadProcessingController;
 
-GamepadProcessingController.prototype.processInputs = function(actions) {
+GamepadProcessingController.prototype.processInputs = function(status, pi) {
 	// console.log('processInputs');
 };
 
-GamepadProcessingController.prototype.menuButtonsPressed = function(buttons, checks) {
+GamepadProcessingController.prototype.menuButtonsPressed = function(buttons, checks, pi) {
 	// console.log('menuButtonsPressed');
 	for (var i in checks) {
-		var status = buttons[i].status;
+		var status = buttons[checks[i]].status;
 		if (status == 'start' || status == 'repeat') return true;
 	}
 	return false;
 };
 
-GamepadProcessingController.prototype.axisPressed = function(axis) {
+GamepadProcessingController.prototype.axisPressed = function(axis, pi) {
 	// console.log('axisPressed');
 	return axis.status == 'start' || axis.status == 'repeat';
 };

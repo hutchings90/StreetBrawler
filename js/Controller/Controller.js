@@ -11,3 +11,13 @@ Controller.prototype.start = function() {
 Controller.prototype.end = function() {
 	// console.log('end');
 };
+
+Controller.prototype.getOtherPlayer = function(i) {
+	// console.log('getOtherPlayer');
+	return (i + 1) & 1;
+};
+
+Controller.prototype.getNonActivator = function(i) {
+	// console.log('getNonActivator');
+	return this.getOtherPlayer(this.activator);
+};

@@ -24,7 +24,18 @@ StreetBrawler.prototype.activePlayerCount = function() {
 	// console.log('gamepadCount');
 	var count = 0;
 	for (var i in this.players) {
-		if (this.players[i].active) count++;
+		if (this.players[i].isActive()) count++;
 	}
 	return count;
+};
+
+StreetBrawler.prototype.playerNotPlaying = function(pi) {
+	// console.log('playerNotPlaying');
+	this.players[pi].playing = false;
+};
+
+StreetBrawler.prototype.allPlaying = function() {
+	for (var i in this.players) {
+		this.players[i].playing = true;
+	}
 };
