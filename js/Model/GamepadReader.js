@@ -45,7 +45,10 @@ GamepadReader.prototype.menuReadAxes = function() {
 };
 
 GamepadReader.prototype.battleRead = function(ts) {
-	console.log('battleRead');
+	// console.log('battleRead');
+	this.menuReadAxes();
+	this.menuReadButtons();
+	return Object.create(this.status);
 };
 
 GamepadReader.prototype.reset = function() {

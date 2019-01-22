@@ -1,8 +1,10 @@
 function MenuController(view, menu) {
 	// console.log('MenuController');
 	GamepadProcessingController.call(this, view);
+	this.TRANSITION_DELAY = 40;
 	this.menu = this.view['get' + menu + 'Menu']();
 	this.options = this.view.getOptions(this.menu);
+	this.endFrames = 0;
 }
 
 MenuController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -15,7 +17,21 @@ MenuController.prototype.start = function(activator) {
 	this.view.show(this.menu);
 };
 
-MenuController.prototype.end = function() {
+MenuController.prototype.startEnd = function() {
+	// console.log('startEnd');
+	if (this.endFrames) return;
+	this.endFrames = 1;
+	this.view.selectOption(this.options[this.i]);
+};
+
+MenuController.prototype.trackEndFrames = function() {
+	// console.log('trackEndFrames');
+	if (this.endFrames == 0 || ++this.endFrames <= this.TRANSITION_DELAY) return false;
+	this.endFrames = 0;
+	return true;
+};
+
+MenuController.prototype.end = function(pi) {
 	// console.log('end');
 	this.hide();
 	this.clearAllOptions();

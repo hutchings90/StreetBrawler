@@ -4,6 +4,37 @@ body {
 	margin: 0;
 }
 
+#battle-area {
+	display: inline-block;
+	background: white;
+	height: 600px;
+	width: 600px;
+	overflow: hidden;
+}
+
+#battle-area #status-container * {
+	display: inline-block;
+}
+
+#battle-area .player-health {
+	background: red;
+	height: 30px;
+	width: 200px;
+}
+
+#battle-area #battle-time {
+	text-align: center;
+	width: 50px;
+}
+
+#battle-area #battle-time p {
+	line-height: 40px;
+}
+
+#battle-area .one {
+	text-align: right;
+}
+
 #menus {
 	display: inline-block;
 	width: 150px;
@@ -29,6 +60,7 @@ body {
 	background: DarkGreen;
 	color: White;
 	border-color: DarkGreen;
+	animation: 0;
 }
 
 #character-select {
@@ -43,6 +75,7 @@ body {
 .character-option img {
 	vertical-align: middle;
 	border: 1px solid white;
+	height: 90px;
 }
 
 .character-option .player-indicators-container {
@@ -93,6 +126,25 @@ body {
 
 .character-option .player-indicators p.two.selected {
 	color: Gray;
+	animation: 0;
+}
+
+#battle-start {
+	display: inline-block;
+	background: AliceBlue;
+	padding: 7px;
+	margin: 5px;
+	border: 3px solid AliceBlue;
+}
+
+#battle-start.active {
+	animation: activeMenuOption .2s steps(2, start) infinite;
+}
+
+#battle-start.selected {
+	background: DarkGreen;
+	color: White;
+	border-color: DarkGreen;
 	animation: 0;
 }
 

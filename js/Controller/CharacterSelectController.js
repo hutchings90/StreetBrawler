@@ -5,6 +5,8 @@ function CharacterSelectController(view) {
 	this.CHARACTER_DETAIL = 'characterDetail';
 	this.mode = '';
 	this.i = [ 0, 0 ];
+	this.startButton = this.view.getBattleStartButton();
+	this.startButtonFrames = 0;
 }
 
 CharacterSelectController.prototype = Object.create(MenuController.prototype);
@@ -20,15 +22,17 @@ CharacterSelectController.prototype.start = function(activator) {
 
 CharacterSelectController.prototype.processInputs = function(status, pi) {
 	// console.log('processInputs');
+	this.trackStartButtonFrames();
+	if (this.trackEndFrames()) return this.end(pi);
 	if (!status) return null;
 	if (this.menuButtonsPressed(status.buttons, [ 2 ], pi)) {
 		if (!this.isPlayerSelected(pi)) return this.end(pi);
 		this.activatePlayer(pi);
 	}
-	if (this.menuButtonsPressed(status.buttons, [ 1 ], pi)) {
-		if (this.allCharactersSelected()) return this.end(pi);
-		if (this.mode == this.CHARACTER_DETAIL) return this.end(pi);
-		if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
+	if (this.mode != this.CHARACTER_DETAIL && this.menuButtonsPressed(status.buttons, [ 1 ], pi)) {
+		if (this.canProceed()) this.startEnd(pi);
+		else if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
+		if (this.allCharactersSelected()) this.showStartButton(pi);
 	}
 	if (!this.isPlayerSelected(pi)) this.moveHorizontal(this.horizontalDirection(status.axes), pi);
 };
@@ -67,11 +71,40 @@ CharacterSelectController.prototype.isPlayerActive = function(pi) {
 CharacterSelectController.prototype.activatePlayer = function(pi) {
 	// console.log('activatePlayer');
 	this.view.activatePlayerCharacter(this.options, this.i[pi], pi);
+	this.hideStartButton();
 };
 
 CharacterSelectController.prototype.deactivatePlayer = function(pi) {
 	// console.log('deactivatePlayer');
 	this.view.deactivatePlayerCharacter(this.options, this.i[pi], pi);
+};
+
+CharacterSelectController.prototype.showStartButton = function(pi) {
+	// console.log('showStartButton');
+	if (this.startButtonFrames == 0) {
+		this.view.show(this.startButton.parentNode);
+		this.startButtonFrames = 1;
+	}
+};
+
+CharacterSelectController.prototype.hideStartButton = function(pi) {
+	// console.log('hideStartButton');
+	this.view.hide(this.startButton.parentNode);
+	this.startButtonFrames = 0;
+	this.view.clearOption(this.startButton);
+};
+
+CharacterSelectController.prototype.trackStartButtonFrames = function() {
+	// console.log('trackStartButtonFrames');
+	if (this.startButtonFrames != 0 && ++this.startButtonFrames > this.TRANSITION_DELAY) {
+		this.startButtonFrames = 0;
+		this.view.activateOption(this.startButton);
+	}
+};
+
+CharacterSelectController.prototype.canProceed = function(pi) {
+	// console.log('canProceed');
+	return this.startButtonFrames == 0 && this.allCharactersSelected();
 };
 
 CharacterSelectController.prototype.clearAllOptions = function(pi) {
@@ -88,25 +121,34 @@ CharacterSelectController.prototype.setIndex = function(i, pi) {
 	this.activatePlayer(pi);
 };
 
+CharacterSelectController.prototype.startEnd = function() {
+	// console.log('startEnd');
+	if (this.endFrames) return;
+	this.endFrames = 1;
+	this.view.selectOption(this.startButton);
+};
+
 CharacterSelectController.prototype.end = function(pi) {
 	// console.log('end');
-	this.mode = '';
-	this.hide();
-	this.clearAllOptions(pi);
-	if (this.allCharactersSelected()) {
-		if (this.mode == this.TWO_PLAYER) return {
-			action: 'twoPlayerBattle',
-			params: []
-		};
-		return {
-			action: 'onePlayerBattle',
-			params: []
-		};
-	}
-	return {
+	var ret = {
 		action: 'mainMenu',
 		params: []
 	};
+	if (this.allCharactersSelected()) {
+		if (this.mode == this.TWO_PLAYER) ret = {
+			action: 'twoPlayerBattle',
+			params: [ this.getPlayerCharacter(0), this.getPlayerCharacter(1) ]
+		};
+		else ret = {
+			action: 'onePlayerBattle',
+			params: [ this.getPlayerCharacter(pi) ]
+		};
+	}
+	this.hide();
+	this.hideStartButton();
+	this.mode = '';
+	this.clearAllOptions(pi);
+	return ret;
 };
 
 CharacterSelectController.prototype.moveUp = function(pi) {
@@ -127,4 +169,9 @@ CharacterSelectController.prototype.moveLeft = function(pi) {
 CharacterSelectController.prototype.moveRight = function(pi) {
 	// console.log('moveRight');
 	this.move(this.i[pi] + 1, pi);
+};
+
+CharacterSelectController.prototype.getPlayerCharacter = function(pi) {
+	// console.log('getPlayerCharacter');
+	return new window[this.view.getCharacterName(this.options, this.i[pi], pi)];
 };

@@ -111,7 +111,6 @@ StreetBrawlerController.prototype.activateController = function(controller, mode
 	var me = this;
 	clearTimeout(me.timeout);
 	me.streetBrawler.setGamepadMode('');
-	if (me.activeController) me.activeController.end(pi);
 	me.activeController = me[controller + 'Controller'];
 	me.activeController.activator = pi;
 	me.activeController.show();
@@ -171,4 +170,14 @@ StreetBrawlerController.prototype.characterDetail = function(pi, params) {
 StreetBrawlerController.prototype.quitBattle = function(pi, params) {
 	// console.log('quitBattle');
 	this.activateMainMenu(pi);
+};
+
+StreetBrawlerController.prototype.onePlayerBattle = function() {
+	// console.log('onePlayerBattle');
+	this.activateBattle();
+};
+
+StreetBrawlerController.prototype.twoPlayerBattle = function() {
+	// console.log('twoPlayerBattle');
+	this.activateBattle();
 };

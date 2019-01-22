@@ -9,6 +9,7 @@
 	<!-- View -->
 	<script src='js/View/View.js'></script>
 	<!-- Models -->
+	<script src='js/Model/Golems.js'></script>
 	<script src='js/Model/MenuStatus.js'></script>
 	<script src='js/Model/MenuAxisStatus.js'></script>
 	<script src='js/Model/MenuButtonStatus.js'></script>
@@ -29,7 +30,24 @@
 </head>
 <body>
 	<div id='street-brawler'>
-		<div id='battle-area' class='hide'></div>
+		<div id='battle-area-container' class='hide'>
+			<div id='status-container'>
+				<div class='player-health one'>
+					<div class='health-meter'></div>
+				</div>
+				<div id='battle-timer' class='one'>
+					<p></p>
+				</div>
+				<div class='player-health two'>
+					<div class='health-meter'></div>
+				</div>
+			</div>
+			<div id='battle-menu' class='menu hide'>
+				<div class='menu-option' data-action='resume'>Resume</div>
+				<div class='menu-option' data-action='end'>Quit</div>
+			</div>
+			<div id='battle-area'></div>
+		</div>
 		<div id='menus'>
 			<div id='main-menu' class='menu hide'>
 				<div class='menu-option' data-action='singlePlayer'>1-Player</div>
@@ -43,8 +61,8 @@
 			</div>
 		</div>
 		<div id='character-select' class='hide'>
-			<div class='character-option active' data-action='characterDetail' data-params='{ name: "red" }'>
-				<img src='assets/visual/red.png'/>
+			<div class='character-option' data-action='characterDetail' data-name='FireGolem'>
+				<img src='assets/visual/busts/FireGolem.png'/>
 				<div class='player-indicators-container'>
 					<div class='player-indicators'>
 						<p class='two'>2</p>
@@ -52,8 +70,8 @@
 					</div>
 				</div>
 			</div>
-			<div class='character-option' data-action='characterDetail' data-params='{ name: "purple" }'>
-				<img src='assets/visual/purple.png'/>
+			<div class='character-option' data-action='characterDetail' data-name='IceGolem'>
+				<img src='assets/visual/busts/IceGolem.png'/>
 				<div class='player-indicators-container'>
 					<div class='player-indicators'>
 						<p class='two'>2</p>
@@ -61,8 +79,8 @@
 					</div>
 				</div>
 			</div>
-			<div class='character-option' data-action='characterDetail' data-params='{ name: "green" }'>
-				<img src='assets/visual/green.png'/>
+			<div class='character-option' data-action='characterDetail' data-name='LavaGolem'>
+				<img src='assets/visual/busts/LavaGolem.png'/>
 				<div class='player-indicators-container'>
 					<div class='player-indicators'>
 						<p class='two'>2</p>
@@ -70,6 +88,36 @@
 					</div>
 				</div>
 			</div>
+			<div class='character-option' data-action='characterDetail' data-name='PlantGolem'>
+				<img src='assets/visual/busts/PlantGolem.png'/>
+				<div class='player-indicators-container'>
+					<div class='player-indicators'>
+						<p class='two'>2</p>
+						<p class='one'>1</p>
+					</div>
+				</div>
+			</div>
+			<div class='character-option' data-action='characterDetail' data-name='SandGolem'>
+				<img src='assets/visual/busts/SandGolem.png'/>
+				<div class='player-indicators-container'>
+					<div class='player-indicators'>
+						<p class='two'>2</p>
+						<p class='one'>1</p>
+					</div>
+				</div>
+			</div>
+			<div class='character-option' data-action='characterDetail' data-name='WindGolem'>
+				<img src='assets/visual/busts/WindGolem.png'/>
+				<div class='player-indicators-container'>
+					<div class='player-indicators'>
+						<p class='two'>2</p>
+						<p class='one'>1</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id='battle-start-container' class='hide'>
+			<div id='battle-start'>START</div>
 		</div>
 		<div id='character-detail' class='hide'></div>
 	</div>

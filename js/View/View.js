@@ -18,6 +18,11 @@ View.prototype.getPauseMenu = function() {
 	return this.getElement('#pause-menu');
 };
 
+View.prototype.getBattleAreaContainer = function() {
+	// console.log('getBattleAreaContainer');
+	return this.getElement('#battle-area-container');
+};
+
 View.prototype.getBattleArea = function() {
 	// console.log('getBattleArea');
 	return this.getElement('#battle-area');
@@ -26,6 +31,11 @@ View.prototype.getBattleArea = function() {
 View.prototype.getCharacterSelectMenu = function() {
 	// console.log('getCharacterSelect');
 	return this.getElement('#character-select');
+};
+
+View.prototype.getBattleStartButton = function() {
+	// console.log('getBattleStartButton');
+	return this.getElement('#battle-start');
 };
 
 View.prototype.getCharacterDetail = function() {
@@ -43,9 +53,13 @@ View.prototype.hide = function(e) {
 	this.addClassName(e, this.HIDE_CLASS);
 };
 
+View.prototype.isHidden = function(e) {
+	// console.log('isHidden');
+	return this.hasClassName(e, 'hide');
+};
+
 View.prototype.hasClassName = function(e, className) {
 	// console.log('hasClassName');
-	// console.log(e.className.includes(className), e, className);
 	return e.className.includes(className);
 };
 
@@ -100,7 +114,6 @@ View.prototype.getOptionData = function(e) {
 
 View.prototype.selectPlayerCharacter = function(options, oi, pi) {
 	// console.log('selectPlayerCharacter');
-	if (oi < 0 || oi >= options.length) return;
 	var indicator = this.getPlayerCharacterIndicator(options, oi, pi);
 	this.clearOption(indicator);
 	this.selectOption(indicator);
@@ -108,7 +121,6 @@ View.prototype.selectPlayerCharacter = function(options, oi, pi) {
 
 View.prototype.activatePlayerCharacter = function(options, oi, pi) {
 	// console.log('activatePlayerCharacter');
-	if (oi < 0 || oi >= options.length) return;
 	var indicator = this.getPlayerCharacterIndicator(options, oi, pi);
 	this.clearOption(indicator);
 	this.activateOption(indicator);
@@ -116,27 +128,30 @@ View.prototype.activatePlayerCharacter = function(options, oi, pi) {
 
 View.prototype.deactivatePlayerCharacter = function(options, oi, pi) {
 	// console.log('deactivatePlayerCharacter');
-	if (oi < 0 || oi >= options.length) return;
 	this.clearOption(this.getPlayerCharacterIndicator(options, oi, pi));
 };
 
 View.prototype.isPlayerCharacterSelected = function(options, oi, pi) {
 	// console.log('isPlayerCharacterSelected');
-	return oi >= 0 && oi < options.length && this.hasClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'selected');
+	return this.hasClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'selected');
 };
 
 View.prototype.getPlayerCharacterIndicator = function(options, oi, pi) {
 	// console.log('getPlayerCharacterIndicator');
-	if (oi < 0 || pi >= options.length) return null;
 	return options[oi].children[1].children[0].children[pi];
 };
 
 View.prototype.isPlayerCharacterActive = function(options, oi, pi) {
 	// console.log('isPlayerCharacterSelected');
-	return oi >= 0 && oi < options.length && this.hasClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'active');
+	return this.hasClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'active');
 };
 
 View.prototype.clearPlayerCharacter = function(options, oi, pi) {
 	// console.log('clearPlayerCharacter');
-	if (oi >= 0 && oi < options.length) this.replaceClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'selected', 'active');
+	this.replaceClassName(this.getPlayerCharacterIndicator(options, oi, pi), 'selected', 'active');
+};
+
+View.prototype.getCharacterName = function(options, oi) {
+	// console.log('getCharacterName');
+	return options[oi].dataset['name'];
 };
