@@ -1,0 +1,31 @@
+The base image is red. The LavaGolem is a copy of the base image. All other Golem files are modified versions of the base image. Modifications were made using GIMP's Hue-Saturation feature.
+
+SandGolem modifications:
+	Hue: 
+		Red: 48
+		Yellow: 48
+
+IceGolem modifications:
+	Hue: 
+		Red: -180
+		Yellow: -180
+		Magenta: -180
+
+PlantGolem modifications:
+	Hue: 
+		Red: 120
+		Yellow: 120
+		Magenta: 120
+
+WindGolem modifications:
+	Hue: 
+		Red: -105
+		Yellow: -105
+	Lightness:
+		Red: 100
+		Yellow: 100
+
+FireGolem modifications:
+	Hue: 
+		Red: 18
+		Yellow: 18
