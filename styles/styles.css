@@ -27,6 +27,7 @@ body {
 }
 
 #battle-area {
+	position: relative;
 	display: inline-block;
 	background: White;
 	height: 600px;
@@ -59,11 +60,19 @@ body {
 
 #battle-area #battle-timer p.urgent {
 	color: DarkRed;
-	animation: urgentTimer .5s steps(1, start) infinite;
+	animation: urgentTimer .6s steps(1, start) infinite;
+}
+
+#battle-area #battle-timer p.done {
+	color: DarkRed;
 }
 
 #battle-area .player-health.one {
 	text-align: right;
+}
+
+#battle-area #battle-objects * {
+	position: absolute;
 }
 
 #menus {

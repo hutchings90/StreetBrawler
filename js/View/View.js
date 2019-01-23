@@ -53,6 +53,11 @@ View.prototype.getOverworld = function() {
 	return this.getElement('#overworld');
 };
 
+View.prototype.getBattleObjects = function() {
+	// console.log('getBattleObjects');
+	return this.getElement('#battle-objects');
+};
+
 View.prototype.show = function(e) {
 	// console.log('show');
 	this.removeClassName(e, this.HIDE_CLASS);
@@ -114,12 +119,9 @@ View.prototype.selectOption = function(option) {
 	if (option) this.addClassName(option, 'selected');
 };
 
-View.prototype.getOptionData = function(e) {
-	// console.log('getOptionData');
-	return {
-		action: e.dataset['action'] || e.innerHTML,
-		params: e.dataset['params'] || {}
-	};
+View.prototype.getOptionAction = function(e) {
+	// console.log('getOptionAction');
+	return e.dataset['action'] || e.innerHTML;
 };
 
 View.prototype.selectPlayerCharacter = function(options, oi, pi) {
@@ -174,4 +176,25 @@ View.prototype.setContents = function(e, contents) {
 View.prototype.clearTimer = function(e) {
 	// console.log('clearTimer')
 	this.removeClassName(e, e.className);
+};
+
+View.prototype.updateTimer = function(e, className) {
+	// console.log('updateTimer');
+	this.clearTimer(e);
+	this.addClassName(e, className);
+};
+
+View.prototype.steadyTimer = function(e) {
+	// console.log('steadyTimer');
+	this.updateTimer(e, 'steady');
+};
+
+View.prototype.urgentTimer = function(e) {
+	// console.log('urgentTimer');
+	this.updateTimer(e, 'urgent');
+};
+
+View.prototype.doneTimer = function(e) {
+	// console.log('doneTimer');
+	this.updateTimer(e, 'done');
 };

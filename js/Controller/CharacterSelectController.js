@@ -20,21 +20,26 @@ CharacterSelectController.prototype.start = function(activator) {
 	this.view.show(this.menu);
 };
 
-CharacterSelectController.prototype.processInputs = function(status, pi) {
-	// console.log('processInputs');
+CharacterSelectController.prototype.nextFrame = function(inputs) {
+	// console.log('nextFrame');
 	this.trackStartButtonFrames();
-	if (this.trackEndFrames()) return this.end(pi);
-	if (!status) return null;
-	if (this.menuButtonsPressed(status.buttons, [ 2 ], pi)) {
-		if (!this.isPlayerSelected(pi)) return this.end(pi);
-		this.activatePlayer(pi);
+	for (var i = inputs.length - 1; i >= 0; i--) {
+		var input = inputs[i];
+		var status = input.status;
+		var pi = input.pi;
+		if (!status) continue;
+		if (this.trackEndFrames()) return this.end(pi);
+		if (this.menuButtonsPressed(status.buttons, [ 2 ], pi)) {
+			if (!this.isPlayerSelected(pi)) return this.end(pi);
+			this.activatePlayer(pi);
+		}
+		if (this.mode != this.CHARACTER_DETAIL && this.menuButtonsPressed(status.buttons, [ 1 ], pi)) {
+			if (this.canProceed()) this.startEnd(pi);
+			else if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
+			if (this.allCharactersSelected()) this.showStartButton(pi);
+		}
+		if (!this.isPlayerSelected(pi)) this.moveHorizontal(this.horizontalDirection(status.axes), pi);
 	}
-	if (this.mode != this.CHARACTER_DETAIL && this.menuButtonsPressed(status.buttons, [ 1 ], pi)) {
-		if (this.canProceed()) this.startEnd(pi);
-		else if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
-		if (this.allCharactersSelected()) this.showStartButton(pi);
-	}
-	if (!this.isPlayerSelected(pi)) this.moveHorizontal(this.horizontalDirection(status.axes), pi);
 };
 
 CharacterSelectController.prototype.allCharactersSelected = function() {
@@ -132,17 +137,18 @@ CharacterSelectController.prototype.end = function(pi) {
 	// console.log('end');
 	var ret = {
 		action: 'mainMenu',
+		pi: pi,
 		params: []
 	};
 	if (this.allCharactersSelected()) {
-		if (this.mode == this.TWO_PLAYER) ret = {
-			action: 'twoPlayerBattle',
-			params: [ this.getPlayerCharacter(0), this.getPlayerCharacter(1) ]
-		};
-		else ret = {
-			action: 'onePlayerBattle',
-			params: [ this.getPlayerCharacter(pi) ]
-		};
+		if (this.mode == this.TWO_PLAYER) {
+			ret.action = 'twoPlayerBattle';
+			ret.params = [ this.getPlayerCharacter(0), this.getPlayerCharacter(1) ];
+		}
+		else {
+			ret.action = 'onePlayerBattle';
+			ret.params = [ this.getPlayerCharacter(pi) ];
+		}
 	}
 	this.hide();
 	this.hideStartButton();

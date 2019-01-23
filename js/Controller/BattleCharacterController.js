@@ -6,10 +6,15 @@ function BattleCharacterController(view) {
 BattleCharacterController.prototype = Object.create(GamepadProcessingController.prototype);
 BattleCharacterController.constructor = BattleCharacterController;
 
-BattleCharacterController.prototype.processInputs = function(status, pi) {
-	// console.log('processInputs');
-	if (!status) return null;
-	if (this.menuButtonsPressed(status.buttons, [ 9 ])) {
-		console.log(9);
+BattleCharacterController.prototype.nextFrame = function(inputs) {
+	// console.log('nextFrame');
+	for (var i = inputs.length - 1; i >= 0; i--) {
+		var input = inputs[i];
+		var status = input.status;
+		var pi = input.pi;
+		if (!status) continue;
+		if (this.menuButtonsPressed(status.buttons, [ 9 ])) {
+			console.log(9);
+		}
 	}
 };

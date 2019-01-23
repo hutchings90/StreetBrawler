@@ -1,3 +1,6 @@
+const FRAME_MS = 20;
+const FRAMES_PER_SECOND = 1000 / FRAME_MS;
+
 window.onload = function() {
 	// console.log('onload');
 	document.getElementById('development-menu-container').className = '';

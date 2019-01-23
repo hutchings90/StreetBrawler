@@ -10,6 +10,11 @@ Controller.prototype.start = function() {
 
 Controller.prototype.end = function() {
 	// console.log('end');
+	return {
+		action: 'mainMenu',
+		pi: pi,
+		params: {}
+	}
 };
 
 Controller.prototype.getOtherPlayer = function(i) {

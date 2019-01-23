@@ -35,7 +35,11 @@ MenuController.prototype.end = function(pi) {
 	// console.log('end');
 	this.hide();
 	this.clearAllOptions();
-	return this.view.getOptionData(this.options[this.i]);
+	return {
+		action: this.view.getOptionAction(this.options[this.i]),
+		pi: pi,
+		params: {}
+	};
 };
 
 MenuController.prototype.clearAllOptions = function(pi) {

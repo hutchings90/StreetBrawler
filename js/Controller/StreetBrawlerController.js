@@ -6,7 +6,6 @@
 function StreetBrawlerController(model, view) {
 	// console.log('StreetBrawlerController');
 	Controller.call(this, view);
-	this.FRAME_MS = 20;
 	this.interval = null;
 	this.timeout = null;
 	this.streetBrawler = model;
@@ -28,7 +27,7 @@ StreetBrawlerController.prototype.start = function() {
 	if (me.interval) me.clearInterval();
 	me.interval = setInterval(function() {
 		me.gameLoop();
-	}, me.FRAME_MS);
+	}, FRAME_MS);
 };
 
 StreetBrawlerController.prototype.gameLoop = function() {
@@ -39,19 +38,24 @@ StreetBrawlerController.prototype.gameLoop = function() {
 
 StreetBrawlerController.prototype.readGamepads = function(ts) {
 	// console.log('readGamepads');
+	if (!this.activeController) return;
 	navigator.getGamepads();
-	var model = this.streetBrawler;
-	var players = model.players;
+	var report = this.activeController.nextFrame(this.getInputs(ts));
+	if (report) this[report.action](report.pi, report.params);
+};
+
+StreetBrawlerController.prototype.getInputs = function(ts) {
+	// console.log('getInputs');
+	var inputs = [];
+	var players = this.streetBrawler.players;
 	for (var i = 0; i < players.length; i++) {
 		var player = players[i];
-		if (player.isActive()) {
-			var action = this.activeController.processInputs(player.gamepadReader.read(ts), i);
-			if (action) {
-				this[action.action](i, action.params);
-				return;
-			}
-		}
+		if (player.isActive()) inputs.push({
+			status: player.gamepadReader.read(ts),
+			pi: i
+		});
 	}
+	return inputs;
 };
 
 StreetBrawlerController.prototype.gamepadConnected = function(gamepad) {
@@ -115,12 +119,13 @@ StreetBrawlerController.prototype.activateMenu = function(menu, pi) {
 StreetBrawlerController.prototype.activateController = function(controller, mode, pi) {
 	// console.log('activateController');
 	var me = this;
-	clearTimeout(me.timeout);
+	var nextController = me[controller + 'Controller'];
 	me.streetBrawler.setGamepadMode('');
-	me.activeController = me[controller + 'Controller'];
-	me.activeController.activator = pi;
-	me.activeController.show();
+	nextController.show();
+	clearTimeout(me.timeout);
 	me.timeout = setTimeout(function() {
+		me.activeController = nextController;
+		me.activeController.activator = pi;
 		me.activeController.start();
 		me.streetBrawler.setGamepadMode(mode);
 	}, 1000);
