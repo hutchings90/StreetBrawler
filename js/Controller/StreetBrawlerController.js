@@ -14,7 +14,7 @@ function StreetBrawlerController(model, view) {
 	this.characterSelectController = new CharacterSelectController(view);
 	this.characterDetailController = new CharacterDetailController(view);
 	this.battleController = new BattleController(view);
-	this.pauseMenuController = new PauseMenuController(view);
+	this.campaignController = new CampaignController(view, this.battleController);
 	this.activateMainMenu();
 	if (this.streetBrawler.activePlayerCount() > 0) this.start();
 }
@@ -86,6 +86,12 @@ StreetBrawlerController.prototype.activateCharacterSelect = function(pi, mode) {
 	this.activateMenu('characterSelect', pi);
 };
 
+StreetBrawlerController.prototype.activateCampaign = function(pi, mode) {
+	// console.log('activateCampaign');
+	this.characterSelectController.mode = mode;
+	this.activateMenu('campaign', 'menu', pi);
+};
+
 StreetBrawlerController.prototype.activateCharacterDetail = function(pi) {
 	// console.log('activateCharacterDetail');
 	this.activateMenu('characterDetail', pi);
@@ -134,6 +140,17 @@ StreetBrawlerController.prototype.singlePlayer = function(pi, params) {
 	// console.log('singlePlayer');
 	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
 	this.activateCharacterSelect(pi, 'onePlayerBattle');
+};
+
+/**
+ * Begins the campaign for the specified human player.
+ * @param {number} i
+ *   The index within this controller's streetBrawler model of the player who selected this option.
+ */
+StreetBrawlerController.prototype.campaign = function(pi, params) {
+	// console.log('campaign');
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
+	this.activateCampaign(pi, 'campaign');
 };
 
 /**

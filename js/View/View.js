@@ -13,9 +13,9 @@ View.prototype.getMainMenu = function() {
 	return this.getElement('#main-menu');
 };
 
-View.prototype.getPauseMenu = function() {
-	// console.log('getPauseMenu');
-	return this.getElement('#pause-menu');
+View.prototype.getBattleMenu = function() {
+	// console.log('getBattleMenu');
+	return this.getElement('#battle-menu');
 };
 
 View.prototype.getBattleAreaContainer = function() {
@@ -26,6 +26,11 @@ View.prototype.getBattleAreaContainer = function() {
 View.prototype.getBattleArea = function() {
 	// console.log('getBattleArea');
 	return this.getElement('#battle-area');
+};
+
+View.prototype.getBattleTimer = function() {
+	// console.log('getBattleTimer');
+	return this.getElement('#battle-timer p');
 };
 
 View.prototype.getCharacterSelectMenu = function() {
@@ -41,6 +46,11 @@ View.prototype.getBattleStartButton = function() {
 View.prototype.getCharacterDetail = function() {
 	// console.log('getCharacterDetail');
 	return this.getElement('#character-detail');
+};
+
+View.prototype.getOverworld = function() {
+	// console.log('getOverworld');
+	return this.getElement('#overworld');
 };
 
 View.prototype.show = function(e) {
@@ -154,4 +164,14 @@ View.prototype.clearPlayerCharacter = function(options, oi, pi) {
 View.prototype.getCharacterName = function(options, oi) {
 	// console.log('getCharacterName');
 	return options[oi].dataset['name'];
+};
+
+View.prototype.setContents = function(e, contents) {
+	// console.log('setContents');
+	e.innerHTML = contents;
+};
+
+View.prototype.clearTimer = function(e) {
+	// console.log('clearTimer')
+	this.removeClassName(e, e.className);
 };

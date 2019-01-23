@@ -24,34 +24,58 @@
 	<script src='js/Controller/MainMenuController.js'></script>
 	<script src='js/Controller/CharacterSelectController.js'></script>
 	<script src='js/Controller/CharacterDetailController.js'></script>
+	<script src='js/Controller/BattleCharacterController.js'></script>
+	<script src='js/Controller/BattleMenuController.js'></script>
 	<script src='js/Controller/BattleController.js'></script>
-	<script src='js/Controller/PauseMenuController.js'></script>
+	<script src='js/Controller/OverworldController.js'></script>
+	<script src='js/Controller/CampaignController.js'></script>
 	<script src='js/Controller/StreetBrawlerController.js'></script>
+	<!-- Development -->
+	<script src='js/development/GamepadSimulator.js'></script>
+	<script src='js/development/GamepadSimulatorController.js'></script>
+	<!-- Testing -->
+	<script src='js/development/Testing/Testing.js'></script>
+	<script src='js/development/Testing/TestingController.js'></script>
+	<!-- AI -->
+	<script src='js/development/AI/AI.js'></script>
+	<script src='js/development/AI/AIController.js'></script>
 </head>
 <body>
-	<div id='street-brawler'>
+	<div id='development-menu-container' class='hide'>
+		<div id='development-menu'>
+			<h1>Choose your environment</h1>
+			<div><button id='testing-button' onclick='start("startTesting")'>Testing</button></div>
+			<div><button id='ai-button' onclick='start("startAI")'>AI</button></div>
+			<div><button id='regular-button' onclick='start("startProduction")'>Production</button></div>
+		</div>
+	</div>
+	<div id='street-brawler' class='hide'>
+		<div id='overworld' class='hide'></div>
 		<div id='battle-area-container' class='hide'>
-			<div id='status-container'>
-				<div class='player-health one'>
-					<div class='health-meter'></div>
-				</div>
+			<div id='battle-area'>
 				<div id='battle-timer' class='one'>
-					<p></p>
+					<p>99</p>
 				</div>
-				<div class='player-health two'>
-					<div class='health-meter'></div>
+				<div id='status-container'>
+					<div class='player-health one'>
+						<div class='health-meter'></div>
+					</div>
+					<div class='player-health two'>
+						<div class='health-meter'></div>
+					</div>
 				</div>
+				<div id='battle-menu' class='menu hide'>
+					<div class='menu-option' data-action='resume'>Resume</div>
+					<div class='menu-option' data-action='end'>Quit</div>
+				</div>
+				<div id='battle-objects'></div>
 			</div>
-			<div id='battle-menu' class='menu hide'>
-				<div class='menu-option' data-action='resume'>Resume</div>
-				<div class='menu-option' data-action='end'>Quit</div>
-			</div>
-			<div id='battle-area'></div>
 		</div>
 		<div id='menus'>
 			<div id='main-menu' class='menu hide'>
 				<div class='menu-option' data-action='singlePlayer'>1-Player</div>
 				<div class='menu-option' data-action='twoPlayer'>2-Player</div>
+				<div class='menu-option' data-action='campaign'>Campaign</div>
 				<div class='menu-option' data-action='characterDetails'>Characters</div>
 			</div>
 			<div id='pause-menu' class='menu hide'>

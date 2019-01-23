@@ -6,8 +6,8 @@ function IceGolem() {
 	// console.log('IceGolem');
 }
 
-function LavalGolem() {
-	// console.log('LavalGolem');
+function LavaGolem() {
+	// console.log('LavaGolem');
 }
 
 function PlantGolem() {
