@@ -1,6 +1,6 @@
-function GamepadProcessingController(view) {
+function GamepadProcessingController(view, utils) {
 	// console.log('GamepadProcessingController');
-	Controller.call(this, view);
+	Controller.call(this, view, utils);
 	this.UP = -1;
 	this.DOWN = 1;
 	this.LEFT = -1;

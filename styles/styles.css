@@ -35,6 +35,14 @@ body {
 	overflow: hidden;
 }
 
+#battle-area #status-container {
+	font-size: 0;
+}
+
+#battle-area #status-container div {
+	font-size: initial;
+}
+
 #battle-area #status-container * {
 	display: inline-block;
 	vertical-align: middle;
@@ -44,31 +52,60 @@ body {
 	background: Red;
 	height: 20px;
 	width: 350px;
+	border: 1px solid Black;
+}
+
+#battle-area .player-health.one {
+	text-align: left;
+	border-right: 0;
+}
+
+#battle-area .player-health.two {
+	text-align: right;
+	border-left: 0;
+}
+
+#battle-area .player-health .player-name {
+	margin: 0 5px;
+	text-transform: uppercase;
+}
+
+#battle-area .player-health .health-meter {
+	height: 100%;
+	background: Blue;
+}
+
+#battle-area .player-health.one .health-meter {
+	float: right;
+}
+
+#battle-area .player-health.two .health-meter {
+	float: left;
 }
 
 #battle-area #battle-timer p {
+	background: DarkRed;
+	display: inline-block;
+	color: white;
 	line-height: 30px;
 	font-family: monospace;
 	font-weight: 900;
 	font-size: 25px;
+	padding: 0 5px;
 	margin: 0;
+	border: 1px solid Black;
 }
 
 #battle-area #battle-timer p.steady {
-	color: Green;
+	background: Green;
 }
 
 #battle-area #battle-timer p.urgent {
-	color: DarkRed;
+	background: DarkRed;
+}
+
+#battle-area #battle-timer p.urgent {
 	animation: urgentTimer .6s steps(1, start) infinite;
-}
-
-#battle-area #battle-timer p.done {
-	color: DarkRed;
-}
-
-#battle-area .player-health.one {
-	text-align: right;
 }
 
 #battle-area #battle-objects * {
@@ -193,8 +230,8 @@ body {
 }
 
 @keyframes urgentTimer {
-	75% { opacity: 1; }
-	100% { opacity: 0; }
+	75% { color: White; }
+	100% { color: DarkRed; }
 }
 
 @keyframes activeMenuOption {

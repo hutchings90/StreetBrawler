@@ -1,11 +1,12 @@
-function BattleController(view) {
+function BattleController(model, view, utils) {
 	// console.log('BattleController');
-	GamepadProcessingController.call(this, view);
+	GamepadProcessingController.call(this, view, utils);
+	utils.makeControllerVariableInput(this, model);
 	this.URGENT_TIME = 15;
 	this.ROUNDS = 3;
 	this.PRE_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
 	this.END_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
-	this.FULL_TIME = 10;
+	this.FULL_TIME = 20;
 	this.battleCharacterController = new BattleCharacterController(view);
 	this.battleMenuController = new BattleMenuController(view);
 	this.battleAreaContainer = this.view.getBattleAreaContainer();
@@ -47,7 +48,8 @@ BattleController.prototype.preRoundFrame = function(inputs) {
 BattleController.prototype.roundFrame = function(inputs) {
 	// console.log('roundFrame');
 	this.trackTimer();
-	this.activeController.nextFrame(inputs);
+	var report = this.activeController.nextFrame(inputs);
+	if (report) this[report.action](report.pi, report.params);
 };
 
 BattleController.prototype.endRoundFrame = function(inputs) {
@@ -99,7 +101,12 @@ BattleController.prototype.clearTimer = function() {
 	this.time = this.FULL_TIME;
 	this.timerFrames = 0;
 	this.view.clearTimer(this.battleTimer);
-	this.view.setContents(this.battleTimer, this.time);
+	this.setTimerContents(this.time);
+};
+
+BattleController.prototype.setTimerContents = function(time) {
+	// console.log('setTimerContents');
+	this.view.setContents(this.battleTimer, time.toString().padStart(2, 0));
 };
 
 BattleController.prototype.trackTimer = function() {
@@ -110,7 +117,7 @@ BattleController.prototype.trackTimer = function() {
 BattleController.prototype.decrementTimer = function() {
 	// console.log('decrementTimer');
 	this.timerFrames = 0;
-	this.view.setContents(this.battleTimer, --this.time)
+	this.setTimerContents(--this.time);
 	if (this.time == this.URGENT_TIME) this.view.urgentTimer(this.battleTimer);
 	else if (this.time == 0) this.endRound();
 };

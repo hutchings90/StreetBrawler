@@ -1,7 +1,8 @@
-function CampaignController(view, battleController) {
+function CampaignController(model, view, utils, battleController) {
 	// console.log('CampaignController');
-	GamepadProcessingController.call(this, view);
-	this.overworldController = new OverworldController(this.view);
+	GamepadProcessingController.call(this, view, utils);
+	utils.makeControllerVariableInput(this, model);
+	this.overworldController = new OverworldController(model, view, utils);
 	this.battleController = battleController;
 	this.character = new LavaGolem();
 }

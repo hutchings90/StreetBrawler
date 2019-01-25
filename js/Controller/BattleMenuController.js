@@ -1,6 +1,6 @@
-function BattleMenuController(view) {
+function BattleMenuController(view, utils) {
 	// console.log('BattleMenuController');
-	MenuController.call(this, view, 'Battle');
+	MenuController.call(this, view, utils, 'Battle');
 }
 
 BattleMenuController.prototype = Object.create(MenuController.prototype);

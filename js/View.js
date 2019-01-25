@@ -196,5 +196,5 @@ View.prototype.urgentTimer = function(e) {
 
 View.prototype.doneTimer = function(e) {
 	// console.log('doneTimer');
-	this.updateTimer(e, 'done');
+	this.updateTimer(e, '');
 };

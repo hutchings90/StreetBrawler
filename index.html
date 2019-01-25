@@ -6,8 +6,10 @@
 	<link rel='stylesheet' type='text/css' href='styles/styles.css'/>
 	<!-- Main -->
 	<script src='js/main.js'></script>
+	<!-- Utils -->
+	<script src='js/Utils.js'></script>
 	<!-- View -->
-	<script src='js/View/View.js'></script>
+	<script src='js/View.js'></script>
 	<!-- Models -->
 	<script src='js/Model/Golems.js'></script>
 	<script src='js/Model/MenuStatus.js'></script>
@@ -53,14 +55,16 @@
 		<div id='overworld' class='hide'></div>
 		<div id='battle-area-container' class='hide'>
 			<div id='battle-area'>
-				<div id='battle-timer' class='one'>
-					<p>99</p>
-				</div>
 				<div id='status-container'>
 					<div class='player-health one'>
+						<div class='player-name'>Player 1</div>
 						<div class='health-meter'></div>
 					</div>
+					<div id='battle-timer'>
+						<p>99</p>
+					</div>
 					<div class='player-health two'>
+						<div class='player-name'>Player 2</div>
 						<div class='health-meter'></div>
 					</div>
 				</div>

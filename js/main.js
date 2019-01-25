@@ -4,7 +4,7 @@ const FRAMES_PER_SECOND = 1000 / FRAME_MS;
 window.onload = function() {
 	// console.log('onload');
 	document.getElementById('development-menu-container').className = '';
-}
+};
 
 function start(enviro) {
 	// console.log('start');
@@ -36,7 +36,7 @@ function startProduction() {
 
 function startGame(gamepads) {
 	// console.log('startGame');
-	var game = new StreetBrawlerController(new StreetBrawler(gamepads), new View());
+	var game = new StreetBrawlerController(new StreetBrawler(gamepads), new View(), new Utils());
 	window.addEventListener('gamepadconnected', function(e) {
 		navigator.getGamepads();
 		game.gamepadConnected(e.gamepad);
@@ -46,7 +46,7 @@ function startGame(gamepads) {
 		game.gamepadDisconnected(e.gamepad);
 	});
 	return game;
-};
+}
 
 function EMPTY_FUNC(){
 	// console.log('EMPTY_FUNC');

@@ -1,6 +1,6 @@
-function CharacterSelectController(view) {
+function CharacterSelectController(view, utils) {
 	// console.log('CharacterSelectController');
-	MenuController.call(this, view, 'CharacterSelect');
+	MenuController.call(this, view, utils, 'CharacterSelect');
 	this.TWO_PLAYER = 'twoPlayerBattle';
 	this.CHARACTER_DETAIL = 'characterDetail';
 	this.mode = '';

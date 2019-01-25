@@ -3,17 +3,16 @@
  * Provides the controller for the Street Brawler game.
  */
 
-function StreetBrawlerController(model, view) {
+function StreetBrawlerController(model, view, utils) {
 	// console.log('StreetBrawlerController');
-	Controller.call(this, view);
+	Controller.call(this, view, utils);
+	utils.makeControllerVariableInput(this, model);
 	this.interval = null;
-	this.timeout = null;
-	this.streetBrawler = model;
-	this.mainMenuController = new MainMenuController(view);
-	this.characterSelectController = new CharacterSelectController(view);
-	this.characterDetailController = new CharacterDetailController(view);
-	this.battleController = new BattleController(view);
-	this.campaignController = new CampaignController(view, this.battleController);
+	this.mainMenuController = new MainMenuController(view, utils);
+	this.characterSelectController = new CharacterSelectController(view, utils);
+	this.characterDetailController = new CharacterDetailController(view, utils);
+	this.battleController = new BattleController(model, view, utils);
+	this.campaignController = new CampaignController(model, view, utils, this.battleController);
 	this.activateMainMenu();
 	if (this.streetBrawler.activePlayerCount() > 0) this.start();
 }
@@ -114,21 +113,6 @@ StreetBrawlerController.prototype.activatePauseMenu = function(pi) {
 StreetBrawlerController.prototype.activateMenu = function(menu, pi) {
 	// console.log('activateMenu');
 	this.activateController(menu, 'menu', pi);
-};
-
-StreetBrawlerController.prototype.activateController = function(controller, mode, pi) {
-	// console.log('activateController');
-	var me = this;
-	var nextController = me[controller + 'Controller'];
-	me.streetBrawler.setGamepadMode('');
-	nextController.show();
-	clearTimeout(me.timeout);
-	me.timeout = setTimeout(function() {
-		me.activeController = nextController;
-		me.activeController.activator = pi;
-		me.activeController.start();
-		me.streetBrawler.setGamepadMode(mode);
-	}, 1000);
 };
 
 StreetBrawlerController.prototype.mainMenu = function(pi, params) {
