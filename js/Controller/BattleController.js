@@ -19,6 +19,7 @@ function BattleController(model, view, utils) {
 	this.preRoundFrames = 0;
 	this.endRoundFrames = 0;
 	this.round = 0;
+	this.characters = [];
 	this.clearTimer();
 }
 
@@ -79,6 +80,7 @@ BattleController.prototype.end = function(pi) {
 	// console.log('end');
 	this.hide();
 	this.clearTimer();
+	this.characters = [];
 	return {
 		action: 'quitBattle',
 		pi: pi,
@@ -89,11 +91,13 @@ BattleController.prototype.end = function(pi) {
 BattleController.prototype.show = function() {
 	// console.log('show');
 	this.view.show(this.battleAreaContainer);
+	this.showCharacters();
 };
 
 BattleController.prototype.hide = function() {
 	// console.log('hide');
 	this.view.hide(this.battleAreaContainer);
+	this.hideCharacters();
 };
 
 BattleController.prototype.clearTimer = function() {
@@ -127,4 +131,27 @@ BattleController.prototype.endRound = function() {
 	this.view.doneTimer(this.battleTimer);
 	this.nextFrame = this.endRoundFrame;
 	this.endRoundFrames = 0;
+};
+
+BattleController.prototype.setCharacters = function(characters) {
+	// console.log('setCharacters');
+	this.characters = characters;
+};
+
+BattleController.prototype.showCharacters = function() {
+	// console.log('showCharacters');
+	var players = this.streetBrawler.players;
+	var characters = this.characters;
+	for (var i in characters) {
+		var character = characters[i];
+		var player = players[character.pi];
+		if (player.isActive()) {
+			console.log(player);
+			console.log(character);
+		}
+	}
+};
+
+BattleController.prototype.hideCharacters = function() {
+	// console.log('hideCharacters');
 };

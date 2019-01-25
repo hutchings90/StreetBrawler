@@ -1,6 +1,6 @@
 function StreetBrawler(gamepads) {
 	// console.log('StreetBrawler');
-	this.players = [ new Player(gamepads[0]), new Player(gamepads[1]) ];
+	this.players = [ new Player(gamepads[0]), new Player(gamepads[1]), new AIPlayer() ];
 }
 
 StreetBrawler.prototype.setGamepadMode = function(mode) {
@@ -34,8 +34,20 @@ StreetBrawler.prototype.playerNotPlaying = function(pi) {
 	this.players[pi].playing = false;
 };
 
-StreetBrawler.prototype.allPlaying = function() {
-	for (var i in this.players) {
+StreetBrawler.prototype.allHumansPlaying = function() {
+	// console.log('allHumansPlaying');
+	for (var i = this.players.length - 2; i >= 0; i--) {
 		this.players[i].playing = true;
 	}
+	this.deactivateAI();
+};
+
+StreetBrawler.prototype.activateAI = function() {
+	// console.log('activateAI');
+	this.players[this.players.length - 1].playing = true;
+};
+
+StreetBrawler.prototype.deactivateAI = function() {
+	// console.log('deactivateAI');
+	this.players[this.players.length - 1].playing = false;
 };

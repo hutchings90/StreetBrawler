@@ -138,16 +138,31 @@ CharacterSelectController.prototype.end = function(pi) {
 	var ret = {
 		action: 'mainMenu',
 		pi: pi,
-		params: []
+		params: {
+			characters: []
+		}
 	};
 	if (this.allCharactersSelected()) {
 		if (this.mode == this.TWO_PLAYER) {
 			ret.action = 'twoPlayerBattle';
-			ret.params = [ this.getPlayerCharacter(0), this.getPlayerCharacter(1) ];
+			ret.params = {
+				characters: [{
+					pi: 0,
+					character: this.getPlayerCharacter(0)
+				}, {
+					pi: 1,
+					character: this.getPlayerCharacter(1)
+				}]
+			};
 		}
 		else {
 			ret.action = 'onePlayerBattle';
-			ret.params = [ this.getPlayerCharacter(pi) ];
+			ret.params = {
+				characters: [{
+					pi: pi,
+					character: this.getPlayerCharacter(pi)
+				}]
+			};
 		}
 	}
 	this.hide();
@@ -179,5 +194,5 @@ CharacterSelectController.prototype.moveRight = function(pi) {
 
 CharacterSelectController.prototype.getPlayerCharacter = function(pi) {
 	// console.log('getPlayerCharacter');
-	return new window[this.view.getCharacterName(this.options, this.i[pi], pi)];
+	return new window[this.view.getCharacterName(this.options, this.i[pi], pi)]();
 };

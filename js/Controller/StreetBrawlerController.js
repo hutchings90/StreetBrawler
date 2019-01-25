@@ -80,7 +80,7 @@ StreetBrawlerController.prototype.clearInterval = function() {
 StreetBrawlerController.prototype.activateMainMenu = function(pi) {
 	// console.log('activateMainMenu');
 	this.activateMenu('mainMenu', pi);
-	this.streetBrawler.allPlaying();
+	this.streetBrawler.allHumansPlaying();
 };
 
 StreetBrawlerController.prototype.activateCharacterSelect = function(pi, mode) {
@@ -100,8 +100,14 @@ StreetBrawlerController.prototype.activateCharacterDetail = function(pi) {
 	this.activateMenu('characterDetail', pi);
 };
 
-StreetBrawlerController.prototype.activateBattle = function(pi) {
+StreetBrawlerController.prototype.activateBattle = function(pi, params) {
 	// console.log('activateBattle');
+	var characters = params.characters;
+	if (characters.length == 1) characters.push({
+		pi: this.streetBrawler.players.length - 1,
+		character: new window[this.view.getRandomCharacter()]()
+	});
+	this.battleController.setCharacters(characters);
 	this.activateController('battle', 'battle', pi);
 };
 
@@ -176,14 +182,16 @@ StreetBrawlerController.prototype.characterDetail = function(pi, params) {
 StreetBrawlerController.prototype.quitBattle = function(pi, params) {
 	// console.log('quitBattle');
 	this.activateMainMenu(pi);
+	this.streetBrawler.deactivateAI();
 };
 
-StreetBrawlerController.prototype.onePlayerBattle = function() {
+StreetBrawlerController.prototype.onePlayerBattle = function(pi, params) {
 	// console.log('onePlayerBattle');
-	this.activateBattle();
+	this.streetBrawler.activateAI();
+	this.activateBattle(pi, params);
 };
 
-StreetBrawlerController.prototype.twoPlayerBattle = function() {
+StreetBrawlerController.prototype.twoPlayerBattle = function(pi, params) {
 	// console.log('twoPlayerBattle');
-	this.activateBattle();
+	this.activateBattle(pi, params);
 };

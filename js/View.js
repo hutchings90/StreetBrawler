@@ -8,6 +8,11 @@ View.prototype.getElement = function(selector) {
 	return document.querySelector(selector);
 };
 
+View.prototype.getElements = function(selector) {
+	// console.log('selector');
+	return document.querySelectorAll(selector);
+};
+
 View.prototype.getMainMenu = function() {
 	// console.log('getMainMenu');
 	return this.getElement('#main-menu');
@@ -197,4 +202,10 @@ View.prototype.urgentTimer = function(e) {
 View.prototype.doneTimer = function(e) {
 	// console.log('doneTimer');
 	this.updateTimer(e, '');
+};
+
+View.prototype.getRandomCharacter = function() {
+	// console.log('getRandomCharacter');
+	var options = this.getElements('.character-option');
+	return options[Math.floor(Math.random() * options.length)].dataset['name'];
 };
