@@ -13,6 +13,8 @@
 	<!-- ContentManager -->
 	<script src='js/ContentManager.js'></script>
 	<!-- Models -->
+	<script src='js/Model/Character.js'></script>
+	<script src='js/Model/Golem.js'></script>
 	<script src='js/Model/Golems.js'></script>
 	<script src='js/Model/MenuStatus.js'></script>
 	<script src='js/Model/MenuAxisStatus.js'></script>
@@ -60,15 +62,15 @@
 			<div id='battle-area'>
 				<div id='status-container'>
 					<div class='player-health one'>
-						<div class='player-name'>Player 1</div>
 						<div class='health-meter'></div>
+						<div class='player-name'></div>
 					</div>
 					<div id='battle-timer'>
 						<p>99</p>
 					</div>
 					<div class='player-health two'>
-						<div class='player-name'>Player 2</div>
 						<div class='health-meter'></div>
+						<div class='player-name'></div>
 					</div>
 				</div>
 				<div id='battle-menu' class='menu hide'>
@@ -148,7 +150,7 @@
 			</div>
 		</div>
 		<div id='battle-start-container' class='hide'>
-			<div id='battle-start'>START</div>
+			<div id='battle-start' class='menu-option'>START</div>
 		</div>
 		<div id='character-detail' class='hide'></div>
 	</div>

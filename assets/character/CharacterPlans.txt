@@ -1,0 +1,29 @@
+Character have special moves detailed in their own files.
+
+	Button			Action
+Standing--------------------------------------------
+	1		Haymaker
+	2		Jab
+	3		Roundhouse Kick
+	4		Special
+	L1/R1		Block
+	LT/RT		Grab
+Crouching-------------------------------------------
+	1		Uppercut
+	2		High Kick
+	3		Low Kick
+	4		Special
+	L1/R1		Block
+	LT/RT		Grab
+Jumping---------------------------------------------
+	1		High Backward Punch
+	2		High Forward Kick
+	3		Low Forward Kick
+	4		Low Backward Punch
+	L1/R1		Block
+	LT/RT		Slam
+Grab------------------------------------------------
+	1/2/3/4		Pummel
+	Left/Right	Foward Throw
+	Left/Right	Backward Throw
+	LT/RT (End)	Release

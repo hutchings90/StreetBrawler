@@ -3,10 +3,10 @@ function StreetBrawler(gamepads) {
 	this.players = [ new Player(gamepads[0]), new Player(gamepads[1]), new AIPlayer() ];
 }
 
-StreetBrawler.prototype.setGamepadMode = function(mode) {
-	// console.log('setGamepadMode');
+StreetBrawler.prototype.setGamepadHalted = function(halted) {
+	// console.log('setGamepadHalted');
 	for (var i in this.players) {
-		this.players[i].gamepadReader.setMode(mode);
+		this.players[i].gamepadReader.halted = halted;
 	}
 };
 

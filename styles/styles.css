@@ -1,6 +1,7 @@
 body {
 	background: black;
 	text-align: center;
+	font-family: monospace;
 	margin: 0;
 }
 
@@ -39,16 +40,13 @@ body {
 	font-size: 0;
 }
 
-#battle-area #status-container div {
-	font-size: initial;
-}
-
 #battle-area #status-container * {
 	display: inline-block;
 	vertical-align: middle;
 }
 
 #battle-area .player-health {
+	position: relative;
 	background: Red;
 	height: 20px;
 	width: 350px;
@@ -56,18 +54,28 @@ body {
 }
 
 #battle-area .player-health.one {
-	text-align: left;
 	border-right: 0;
 }
 
 #battle-area .player-health.two {
-	text-align: right;
 	border-left: 0;
 }
 
 #battle-area .player-health .player-name {
+	position: absolute;
+	font-size: 17px;
+	font-weight: 900;
+	color: White;
 	margin: 0 5px;
 	text-transform: uppercase;
+}
+
+#battle-area .player-health.one .player-name {
+	left: 0;
+}
+
+#battle-area .player-health.two .player-name {
+	right: 0;
 }
 
 #battle-area .player-health .health-meter {
@@ -76,11 +84,13 @@ body {
 }
 
 #battle-area .player-health.one .health-meter {
-	float: right;
+	position: absolute;
+	right: 0;
 }
 
 #battle-area .player-health.two .health-meter {
-	float: left;
+	position: absolute;
+	left: 0;
 }
 
 #battle-area #battle-timer p {
@@ -88,7 +98,6 @@ body {
 	display: inline-block;
 	color: white;
 	line-height: 30px;
-	font-family: monospace;
 	font-weight: 900;
 	font-size: 25px;
 	padding: 0 5px;
@@ -118,7 +127,6 @@ body {
 
 #menus {
 	display: inline-block;
-	width: 150px;
 }
 
 .menu {
@@ -128,6 +136,7 @@ body {
 
 .menu-option {
 	background: AliceBlue;
+	font-size: 20px;
 	padding: 7px;
 	margin: 5px;
 	border: 3px solid AliceBlue;

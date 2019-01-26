@@ -14,6 +14,7 @@ function BattleController(model, view, utils, contentManager) {
 	this.battleTimer = this.view.getBattleTimer();
 	this.activeController = this.battleCharacterController;
 	this.battleObjects = this.view.getBattleObjects();
+	this.healthBars = this.view.getBattleHealthBars();
 	this.time = this.FULL_TIME;
 	this.timerFrames = 0;
 	this.preRoundFrames = 0;
@@ -140,17 +141,21 @@ BattleController.prototype.setCharacters = function(characters) {
 
 BattleController.prototype.showCharacters = function() {
 	// console.log('showCharacters');
-	var players = this.streetBrawler.players;
+	var ci = 1;
 	var characters = this.characters;
+	var players = this.streetBrawler.players;
 	for (var i = characters.length - 1; i >= 0; i--) {
 		var character = characters[i];
-		if (players[character.pi].isActive()) this.showCharacter(character);
+		if (players[character.pi].isActive()) this.showCharacter(character, ci--);
 	}
 };
 
-BattleController.prototype.showCharacter = function(character) {
+BattleController.prototype.showCharacter = function(character, pi) {
 	// console.log('showCharacter');
+	var healthBar = this.healthBars[pi];
 	this.view.addBattleImage(this.battleObjects, character.visual.idle, character.pi);
+	this.view.setBattleNametag(healthBar, character.character.name);
+	this.view.setBattleHealth(healthBar, character.character.health);
 };
 
 BattleController.prototype.clearBattleObjects = function() {

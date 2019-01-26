@@ -48,7 +48,3 @@ function startGame(gamepads) {
 	});
 	return game;
 }
-
-function EMPTY_FUNC(){
-	// console.log('EMPTY_FUNC');
-}

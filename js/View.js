@@ -83,6 +83,11 @@ View.prototype.getBattleObjects = function() {
 	return this.getElement('#battle-objects');
 };
 
+View.prototype.getBattleHealthBars = function() {
+	// console.log('getBattleHealthBars');
+	return this.getElements('#battle-area .player-health');
+};
+
 View.prototype.show = function(e) {
 	// console.log('show');
 	this.removeClassName(e, this.HIDE_CLASS);
@@ -254,4 +259,19 @@ View.prototype.clearBattleObjects = function(e) {
 View.prototype.clearElement = function(e) {
 	// console.log('clearElement');
 	while (e.lastChild) e.removeChild(e.lastChild);
+};
+
+View.prototype.setBattleNametag = function(e, nametag) {
+	// console.log('setBattleNametag');
+	this.setContents(e.children[1], nametag);
+};
+
+View.prototype.setBattleHealth = function(e, health) {
+	// console.log('setBattleHealth');
+	this.setStyleAttr(e.children[0], health + '%', 'width');
+};
+
+View.prototype.setStyleAttr = function(e, val, attr) {
+	// console.log('setStyleAttr');
+	e.style[attr] = val;
 };

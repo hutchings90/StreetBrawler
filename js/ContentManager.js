@@ -79,7 +79,7 @@ ContentManager.prototype.getBattleCharacterAudioFromAsset = function(asset) {
 
 ContentManager.prototype.getBattleCharacterVisuals = function(character) {
 	// console.log('getBattleCharacterVisuals');
-	return this.getBattleCharacterVisualsFromAsset(this.visuals[character.constructor.name]);
+	return this.getBattleCharacterVisualsFromAsset(this.visuals[character.name.replace(/ /g, '')]);
 };
 
 ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {

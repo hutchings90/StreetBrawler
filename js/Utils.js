@@ -10,14 +10,14 @@ Utils.prototype.makeControllerVariableInput = function(controller, model) {
 		// console.log('activateController');
 		var me = this;
 		var nextController = me[controllerName + 'Controller'];
-		me.streetBrawler.setGamepadMode('');
+		me.streetBrawler.setGamepadHalted(true);
 		nextController.show();
 		clearTimeout(me.timeout);
 		me.timeout = setTimeout(function() {
 			me.activeController = nextController;
 			me.activeController.activator = pi;
 			me.activeController.start();
-			me.streetBrawler.setGamepadMode(mode);
+			me.streetBrawler.setGamepadHalted(false);
 		}, 1000);
 	};
 };
