@@ -3,16 +3,16 @@
  * Provides the controller for the Street Brawler game.
  */
 
-function StreetBrawlerController(model, view, utils) {
+function StreetBrawlerController(model, view, utils, contentManager) {
 	// console.log('StreetBrawlerController');
-	Controller.call(this, view, utils);
+	Controller.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.interval = null;
-	this.mainMenuController = new MainMenuController(view, utils);
-	this.characterSelectController = new CharacterSelectController(view, utils);
-	this.characterDetailController = new CharacterDetailController(view, utils);
-	this.battleController = new BattleController(model, view, utils);
-	this.campaignController = new CampaignController(model, view, utils, this.battleController);
+	this.mainMenuController = new MainMenuController(view, utils, contentManager);
+	this.characterSelectController = new CharacterSelectController(view, utils, contentManager);
+	this.characterDetailController = new CharacterDetailController(view, utils, contentManager);
+	this.battleController = new BattleController(model, view, utils, contentManager);
+	this.campaignController = new CampaignController(model, view, utils, contentManager, this.battleController);
 	this.activateMainMenu();
 	if (this.streetBrawler.activePlayerCount() > 0) this.start();
 }
@@ -102,12 +102,7 @@ StreetBrawlerController.prototype.activateCharacterDetail = function(pi) {
 
 StreetBrawlerController.prototype.activateBattle = function(pi, params) {
 	// console.log('activateBattle');
-	var characters = params.characters;
-	if (characters.length == 1) characters.push({
-		pi: this.streetBrawler.players.length - 1,
-		character: new window[this.view.getRandomCharacter()]()
-	});
-	this.battleController.setCharacters(characters);
+	this.battleController.setCharacters(params.characters);
 	this.activateController('battle', 'battle', pi);
 };
 

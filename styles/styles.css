@@ -30,7 +30,7 @@ body {
 	position: relative;
 	display: inline-block;
 	background: White;
-	height: 600px;
+	height: 500px;
 	width: 900px;
 	overflow: hidden;
 }
@@ -110,6 +110,10 @@ body {
 
 #battle-area #battle-objects * {
 	position: absolute;
+}
+
+#battle-area #battle-objects .battle-character-0 {
+	transform: scaleX(-1);
 }
 
 #menus {

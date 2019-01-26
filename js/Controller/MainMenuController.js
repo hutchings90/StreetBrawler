@@ -1,6 +1,6 @@
-function MainMenuController(view, utils) {
+function MainMenuController(view, utils, contentManager) {
 	// console.log('MainMenuController');
-	MenuController.call(this, view, utils, 'Main');
+	MenuController.call(this, view, utils, contentManager, 'Main');
 }
 
 MainMenuController.prototype = Object.create(MenuController.prototype);

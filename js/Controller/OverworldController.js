@@ -1,6 +1,6 @@
-function OverworldController(model, view, utils) {
+function OverworldController(model, view, utils, contentManager) {
 	// console.log('OverworldController');
-	GamepadProcessingController.call(this, view, utils);
+	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.overworld = this.view.getOverworld();
 }

@@ -1,6 +1,6 @@
-function CharacterSelectController(view, utils) {
+function CharacterSelectController(view, utils, contentManager) {
 	// console.log('CharacterSelectController');
-	MenuController.call(this, view, utils, 'CharacterSelect');
+	MenuController.call(this, view, utils, contentManager, 'CharacterSelect');
 	this.TWO_PLAYER = 'twoPlayerBattle';
 	this.CHARACTER_DETAIL = 'characterDetail';
 	this.mode = '';
@@ -146,22 +146,20 @@ CharacterSelectController.prototype.end = function(pi) {
 		if (this.mode == this.TWO_PLAYER) {
 			ret.action = 'twoPlayerBattle';
 			ret.params = {
-				characters: [{
-					pi: 0,
-					character: this.getPlayerCharacter(0)
-				}, {
-					pi: 1,
-					character: this.getPlayerCharacter(1)
-				}]
+				characters: [
+					this.getBattleCharacter(0, this.getPlayerCharacter(0)),
+					this.getBattleCharacter(1, this.getPlayerCharacter(1))
+				]
 			};
 		}
 		else {
 			ret.action = 'onePlayerBattle';
+			var character = 
 			ret.params = {
-				characters: [{
-					pi: pi,
-					character: this.getPlayerCharacter(pi)
-				}]
+				characters: [
+					this.getBattleCharacter(pi, this.getPlayerCharacter(pi)),
+					this.getBattleCharacter(2, this.view.getRandomCharacter())
+				]
 			};
 		}
 	}
@@ -194,5 +192,15 @@ CharacterSelectController.prototype.moveRight = function(pi) {
 
 CharacterSelectController.prototype.getPlayerCharacter = function(pi) {
 	// console.log('getPlayerCharacter');
-	return new window[this.view.getCharacterName(this.options, this.i[pi], pi)]();
+	return this.view.createCharacter(this.view.getCharacterName(this.options, this.i[pi], pi));
+};
+
+CharacterSelectController.prototype.getBattleCharacter = function(pi, character) {
+	// console.log('getBattleCharacter');
+	return {
+		pi: pi,
+		character: character,
+		audio: this.contentManager.getBattleCharacterAudio(character),
+		visual: this.contentManager.getBattleCharacterVisuals(character)
+	}
 };

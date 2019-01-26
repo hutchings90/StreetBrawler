@@ -1,6 +1,6 @@
-function BattleCharacterController(view, utils) {
+function BattleCharacterController(view, utils, contentManager) {
 	// console.log('BattleCharacterController');
-	GamepadProcessingController.call(this, view, utils);
+	GamepadProcessingController.call(this, view, utils, contentManager);
 }
 
 BattleCharacterController.prototype = Object.create(GamepadProcessingController.prototype);

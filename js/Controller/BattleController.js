@@ -1,14 +1,14 @@
-function BattleController(model, view, utils) {
+function BattleController(model, view, utils, contentManager) {
 	// console.log('BattleController');
-	GamepadProcessingController.call(this, view, utils);
+	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.URGENT_TIME = 15;
 	this.ROUNDS = 3;
 	this.PRE_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
 	this.END_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
 	this.FULL_TIME = 20;
-	this.battleCharacterController = new BattleCharacterController(view);
-	this.battleMenuController = new BattleMenuController(view);
+	this.battleCharacterController = new BattleCharacterController(view, utils, contentManager);
+	this.battleMenuController = new BattleMenuController(view, utils, contentManager);
 	this.battleAreaContainer = this.view.getBattleAreaContainer();
 	this.battleArea = this.view.getBattleArea();
 	this.battleTimer = this.view.getBattleTimer();
@@ -79,6 +79,7 @@ BattleController.prototype.preEndFrame = function(inputs) {
 BattleController.prototype.end = function(pi) {
 	// console.log('end');
 	this.hide();
+	this.clearBattleObjects();
 	this.clearTimer();
 	this.characters = [];
 	return {
@@ -97,7 +98,6 @@ BattleController.prototype.show = function() {
 BattleController.prototype.hide = function() {
 	// console.log('hide');
 	this.view.hide(this.battleAreaContainer);
-	this.hideCharacters();
 };
 
 BattleController.prototype.clearTimer = function() {
@@ -142,16 +142,18 @@ BattleController.prototype.showCharacters = function() {
 	// console.log('showCharacters');
 	var players = this.streetBrawler.players;
 	var characters = this.characters;
-	for (var i in characters) {
+	for (var i = characters.length - 1; i >= 0; i--) {
 		var character = characters[i];
-		var player = players[character.pi];
-		if (player.isActive()) {
-			console.log(player);
-			console.log(character);
-		}
+		if (players[character.pi].isActive()) this.showCharacter(character);
 	}
 };
 
-BattleController.prototype.hideCharacters = function() {
-	// console.log('hideCharacters');
+BattleController.prototype.showCharacter = function(character) {
+	// console.log('showCharacter');
+	this.view.addBattleImage(this.battleObjects, character.visual.idle, character.pi);
+};
+
+BattleController.prototype.clearBattleObjects = function() {
+	// console.log('clearBattleObjects');
+	this.view.clearBattleObjects(this.battleObjects);
 };

@@ -3,6 +3,26 @@ function View() {
 	this.HIDE_CLASS = 'hide';
 }
 
+View.prototype.createImage = function(src, w) {
+	// console.log('createImage');
+	var e = this.createElement('img');
+	e.src = src;
+	e.width = w;
+	return e;
+};
+
+View.prototype.createAudio = function(src) {
+	// console.log('createAudio');
+	var e = this.createElement('audio');
+	e.src = src;
+	return e;
+};
+
+View.prototype.createElement = function(tag) {
+	// console.log('createElement');
+	return document.createElement(tag);
+};
+
 View.prototype.getElement = function(selector) {
 	// console.log('selector');
 	return document.querySelector(selector);
@@ -207,5 +227,31 @@ View.prototype.doneTimer = function(e) {
 View.prototype.getRandomCharacter = function() {
 	// console.log('getRandomCharacter');
 	var options = this.getElements('.character-option');
-	return options[Math.floor(Math.random() * options.length)].dataset['name'];
+	return this.createCharacter(options[Math.floor(Math.random() * options.length)].dataset['name']);
+};
+
+View.prototype.createCharacter = function(characterName) {
+	// console.log('createCharacter');
+	return new window[characterName]();
+};
+
+View.prototype.addBattleImage = function(e, img, pi) {
+	// console.log('addBattleImage');
+	this.addClassName(img, 'battle-character-' + pi);
+	this.appendChild(e, img);
+};
+
+View.prototype.appendChild = function(e, c) {
+	// console.log('appendChild');
+	e.appendChild(c);
+};
+
+View.prototype.clearBattleObjects = function(e) {
+	// console.log('clearBattleObjects');
+	this.clearElement(e);
+};
+
+View.prototype.clearElement = function(e) {
+	// console.log('clearElement');
+	while (e.lastChild) e.removeChild(e.lastChild);
 };

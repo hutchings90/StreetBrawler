@@ -1,7 +1,8 @@
-function Controller(view, utils) {
+function Controller(view, utils, contentManager) {
 	// console.log('Controller');
 	this.view = view;
 	this.utils = utils;
+	this.contentManager = contentManager;
 	this.activator = null;
 }
 

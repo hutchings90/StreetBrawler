@@ -36,7 +36,8 @@ function startProduction() {
 
 function startGame(gamepads) {
 	// console.log('startGame');
-	var game = new StreetBrawlerController(new StreetBrawler(gamepads), new View(), new Utils());
+	var view = new View();
+	var game = new StreetBrawlerController(new StreetBrawler(gamepads), view, new Utils(), new ContentManager(view));
 	window.addEventListener('gamepadconnected', function(e) {
 		navigator.getGamepads();
 		game.gamepadConnected(e.gamepad);

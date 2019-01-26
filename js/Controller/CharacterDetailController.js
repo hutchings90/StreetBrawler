@@ -1,6 +1,6 @@
-function CharacterDetailController(view, utils) {
+function CharacterDetailController(view, utils, contentManager) {
 	// console.log('CharacterDetailController');
-	GamepadProcessingController.call(this, view, utils);
+	GamepadProcessingController.call(this, view, utils, contentManager);
 	this.characterDetail = this.view.getElement('#character-detail');
 }
 

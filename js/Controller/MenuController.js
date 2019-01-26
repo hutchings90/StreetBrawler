@@ -1,6 +1,6 @@
-function MenuController(view, utils, menu) {
+function MenuController(view, utils, contentManager, menu) {
 	// console.log('MenuController');
-	GamepadProcessingController.call(this, view, utils);
+	GamepadProcessingController.call(this, view, utils, contentManager);
 	this.TRANSITION_DELAY = 40;
 	this.menu = this.view['get' + menu + 'Menu']();
 	this.options = this.view.getOptions(this.menu);
