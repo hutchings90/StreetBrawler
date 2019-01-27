@@ -121,7 +121,7 @@ body {
 	position: absolute;
 }
 
-#battle-area #battle-objects .battle-character-0 {
+#battle-area #battle-objects .battle-character.left {
 	transform: scaleX(-1);
 }
 

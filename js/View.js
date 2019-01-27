@@ -240,9 +240,9 @@ View.prototype.createCharacter = function(characterName) {
 	return new window[characterName]();
 };
 
-View.prototype.addBattleImage = function(e, img, pi) {
+View.prototype.addBattleImage = function(e, img, side) {
 	// console.log('addBattleImage');
-	this.addClassName(img, 'battle-character-' + pi);
+	this.addClassName(img, 'battle-character ' + side);
 	this.appendChild(e, img);
 };
 

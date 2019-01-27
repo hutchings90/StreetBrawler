@@ -71,9 +71,8 @@ BattleController.prototype.preEndFrame = function(inputs) {
 	for (var i = inputs.length - 1; i >= 0; i--) {
 		var input = inputs[i];
 		var status = input.status;
-		var pi = input.pi;
 		if (!status) continue;
-		if (this.menuButtonsPressed(status.buttons, [ 1 ], pi)) return this.end();
+		if (this.menuButtonsPressed(status.buttons, [ 1 ], input.pi)) return this.end();
 	}
 };
 
@@ -142,18 +141,19 @@ BattleController.prototype.setCharacters = function(characters) {
 BattleController.prototype.showCharacters = function() {
 	// console.log('showCharacters');
 	var ci = 1;
+	var sides = [ 'left', 'right' ];
 	var characters = this.characters;
 	var players = this.streetBrawler.players;
 	for (var i = characters.length - 1; i >= 0; i--) {
 		var character = characters[i];
-		if (players[character.pi].isActive()) this.showCharacter(character, ci--);
+		if (players[character.pi].isActive()) this.showCharacter(character, ci, sides[ci--]);
 	}
 };
 
-BattleController.prototype.showCharacter = function(character, pi) {
+BattleController.prototype.showCharacter = function(character, ci, side) {
 	// console.log('showCharacter');
-	var healthBar = this.healthBars[pi];
-	this.view.addBattleImage(this.battleObjects, character.visual.idle, character.pi);
+	var healthBar = this.healthBars[ci];
+	this.view.addBattleImage(this.battleObjects, character.visual.idle, side);
 	this.view.setBattleNametag(healthBar, character.character.name);
 	this.view.setBattleHealth(healthBar, character.character.health);
 };

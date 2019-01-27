@@ -145,22 +145,17 @@ CharacterSelectController.prototype.end = function(pi) {
 	if (this.allCharactersSelected()) {
 		if (this.mode == this.TWO_PLAYER) {
 			ret.action = 'twoPlayerBattle';
-			ret.params = {
-				characters: [
-					this.getBattleCharacter(0, this.getPlayerCharacter(0)),
-					this.getBattleCharacter(1, this.getPlayerCharacter(1))
-				]
-			};
+			ret.params.characters = [
+				this.getBattleCharacter(0, this.getPlayerCharacter(0)),
+				this.getBattleCharacter(1, this.getPlayerCharacter(1))
+			];
 		}
 		else {
 			ret.action = 'onePlayerBattle';
-			var character = 
-			ret.params = {
-				characters: [
-					this.getBattleCharacter(pi, this.getPlayerCharacter(pi)),
-					this.getBattleCharacter(2, this.view.getRandomCharacter())
-				]
-			};
+			ret.params.characters = [
+				this.getBattleCharacter(pi, this.getPlayerCharacter(pi)),
+				this.getBattleCharacter(2, this.view.getRandomCharacter())
+			];
 		}
 	}
 	this.hide();

@@ -1,6 +1,6 @@
-Character have special moves detailed in their own files.
+Characters have special moves detailed in their own files.
 
-	Button			Action
+	Button		Action
 Standing--------------------------------------------
 	1		Haymaker
 	2		Jab
