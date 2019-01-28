@@ -6,6 +6,29 @@ function BattleMenuController(view, utils, contentManager) {
 BattleMenuController.prototype = Object.create(MenuController.prototype);
 BattleMenuController.constructor = BattleMenuController;
 
-BattleMenuController.prototype.start = function() {
-	// console.log('start');
+BattleMenuController.prototype.nextFrame = function(inputs) {
+	// console.log('nextFrame');
+	for (var i = inputs.length - 1; i >= 0; i--) {
+		var input = inputs[i];
+		var status = input.status;
+		var pi = input.pi;
+		if (!status) continue;
+		if (this.trackEndFrames()) return this.end(pi);
+		if (this.buttonPressed(status.buttons[1])) this.startEnd(pi);
+		if (this.buttonPressed(status.buttons[2])) return this.end(pi);
+		this.moveVertical(this.verticalDirection(status.axes));
+	}
+};
+
+BattleMenuController.prototype.end = function(pi) {
+	// console.log('end');
+	var ret = {
+		action: 'resume',
+		pi: pi,
+		params: {}
+	};
+	if (this.view.hasSelectedOption(this.options)) ret.action = this.view.getOptionAction(this.options[this.i]);
+	this.hide();
+	this.clearAllOptions();
+	return ret;
 };

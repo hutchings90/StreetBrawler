@@ -12,6 +12,7 @@ Utils.prototype.makeControllerVariableInput = function(controller, model) {
 		var nextController = me[controllerName + 'Controller'];
 		me.streetBrawler.setGamepadHalted(true);
 		nextController.show();
+		me.activeController = null;
 		clearTimeout(me.timeout);
 		me.timeout = setTimeout(function() {
 			me.activeController = nextController;

@@ -130,6 +130,7 @@ body {
 }
 
 .menu {
+	display: inline-block;
 	background: DarkGray;
 	padding: 10px 5px;
 }
@@ -195,6 +196,7 @@ body {
 
 .character-option .player-indicators p.one {
 	text-align: left;
+	z-index: 1;
 }
 
 .character-option .player-indicators p.one.active {

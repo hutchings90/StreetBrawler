@@ -6,6 +6,10 @@ function Controller(view, utils, contentManager) {
 	this.activator = null;
 }
 
+Controller.prototype.show = function() {
+	// console.log('show');
+};
+
 Controller.prototype.start = function() {
 	// console.log('start');
 };
@@ -19,12 +23,12 @@ Controller.prototype.end = function() {
 	}
 };
 
-Controller.prototype.getOtherPlayer = function(i) {
-	// console.log('getOtherPlayer');
+Controller.prototype.getOtherPlayerIndex = function(i) {
+	// console.log('getOtherPlayerIndex');
 	return (i + 1) & 1;
 };
 
 Controller.prototype.getNonActivator = function(i) {
 	// console.log('getNonActivator');
-	return this.getOtherPlayer(this.activator);
+	return this.getOtherPlayerIndex(this.activator);
 };

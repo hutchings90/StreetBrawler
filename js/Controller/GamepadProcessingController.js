@@ -14,16 +14,20 @@ GamepadProcessingController.prototype.nextFrame = function(inputs) {
 	// console.log('nextFrame');
 };
 
-GamepadProcessingController.prototype.menuButtonsPressed = function(buttons, checks, pi) {
-	// console.log('menuButtonsPressed');
+GamepadProcessingController.prototype.buttonsPressed = function(buttons, checks) {
+	// console.log('buttonsPressed');
 	for (var i in checks) {
-		var status = buttons[checks[i]].status;
-		if (status == 'start' || status == 'repeat') return true;
+		if (this.buttonPressed(buttons[checks[i]])) return true;
 	}
 	return false;
 };
 
-GamepadProcessingController.prototype.axisPressed = function(axis, pi) {
+GamepadProcessingController.prototype.buttonPressed = function(button) {
+	// console.log('buttonPressed');
+	return button.status == 'start' || button.status == 'repeat';
+};
+
+GamepadProcessingController.prototype.axisPressed = function(axis) {
 	// console.log('axisPressed');
 	return axis.status == 'start' || axis.status == 'repeat';
 };
@@ -36,7 +40,7 @@ GamepadProcessingController.prototype.verticalDirection = function(axes) {
 };
 
 GamepadProcessingController.prototype.horizontalDirection = function(axes) {
-	// console.log('verticalDirection');
+	// console.log('horizontalDirection');
 	var axis = axes[0];
 	if (this.axisPressed(axis)) return axis.direction;
 	return 0;

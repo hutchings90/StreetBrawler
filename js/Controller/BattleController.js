@@ -14,13 +14,13 @@ function BattleController(model, view, utils, contentManager) {
 	this.battleTimer = this.view.getBattleTimer();
 	this.activeController = this.battleCharacterController;
 	this.battleObjects = this.view.getBattleObjects();
-	this.healthBars = this.view.getBattleHealthBars();
 	this.time = this.FULL_TIME;
 	this.timerFrames = 0;
 	this.preRoundFrames = 0;
 	this.endRoundFrames = 0;
 	this.round = 0;
-	this.characters = [];
+	this.quitter = -1;
+	this.setCharacters([]);
 	this.clearTimer();
 }
 
@@ -49,7 +49,8 @@ BattleController.prototype.preRoundFrame = function(inputs) {
 
 BattleController.prototype.roundFrame = function(inputs) {
 	// console.log('roundFrame');
-	this.trackTimer();
+	if (!this.activeController) return;
+	// this.trackTimer();
 	var report = this.activeController.nextFrame(inputs);
 	if (report) this[report.action](report.pi, report.params);
 };
@@ -72,8 +73,13 @@ BattleController.prototype.preEndFrame = function(inputs) {
 		var input = inputs[i];
 		var status = input.status;
 		if (!status) continue;
-		if (this.menuButtonsPressed(status.buttons, [ 1 ], input.pi)) return this.end();
+		if (this.buttonPressed(status.buttons[1])) return this.end();
 	}
+};
+
+BattleController.prototype.endFrame = function(inputs) {
+	// console.log('endFrame');
+	return this.end(this.quitter);
 };
 
 BattleController.prototype.end = function(pi) {
@@ -81,7 +87,7 @@ BattleController.prototype.end = function(pi) {
 	this.hide();
 	this.clearBattleObjects();
 	this.clearTimer();
-	this.characters = [];
+	this.setCharacters([]);
 	return {
 		action: 'quitBattle',
 		pi: pi,
@@ -136,29 +142,50 @@ BattleController.prototype.endRound = function() {
 BattleController.prototype.setCharacters = function(characters) {
 	// console.log('setCharacters');
 	this.characters = characters;
+	this.battleCharacterController.setCharacters(characters);
 };
 
 BattleController.prototype.showCharacters = function() {
 	// console.log('showCharacters');
 	var ci = 1;
-	var sides = [ 'left', 'right' ];
 	var characters = this.characters;
 	var players = this.streetBrawler.players;
 	for (var i = characters.length - 1; i >= 0; i--) {
 		var character = characters[i];
-		if (players[character.pi].isActive()) this.showCharacter(character, ci, sides[ci--]);
+		if (players[character.pi].isActive()) this.showCharacter(character, ci--);
 	}
 };
 
-BattleController.prototype.showCharacter = function(character, ci, side) {
+BattleController.prototype.showCharacter = function(character, ci) {
 	// console.log('showCharacter');
-	var healthBar = this.healthBars[ci];
-	this.view.addBattleImage(this.battleObjects, character.visual.idle, side);
-	this.view.setBattleNametag(healthBar, character.character.name);
-	this.view.setBattleHealth(healthBar, character.character.health);
+	this.view.addBattleImage(this.battleObjects, character.visual.idle);
+	character.e = character.visual.idle;
+	this.resetCharacter(character, ci);
+};
+
+BattleController.prototype.resetCharacter = function(character, ci) {
+	// console.log('resetCharacter');
+	character.character.reset();
+	this.view.resetCharacter(character, ci);
 };
 
 BattleController.prototype.clearBattleObjects = function() {
 	// console.log('clearBattleObjects');
 	this.view.clearBattleObjects(this.battleObjects);
+};
+
+BattleController.prototype.showBattleMenu = function(pi, params) {
+	// console.log('showBattleMenu');
+	this.activateController('battleMenu', 'menu', pi);
+};
+
+BattleController.prototype.resume = function(pi, params) {
+	// console.log('resume');
+	this.activateController('battleCharacter', 'battle', pi);
+};
+
+BattleController.prototype.quit = function(pi, params) {
+	// console.log('quit');
+	this.quitter = pi;
+	this.nextFrame = this.endFrame;
 };

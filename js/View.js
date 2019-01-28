@@ -1,7 +1,14 @@
 function View() {
 	// console.log('View');
 	this.HIDE_CLASS = 'hide';
+	this.CHARACTER_SIDES = [ 'left', 'right' ];
+	this.healthBars = this.getBattleHealthBars();
 }
+
+View.prototype.getOtherPlayerIndex = function(i) {
+	// console.log('getOtherPlayerIndex');
+	return (i + 1) & 1;
+};
 
 View.prototype.createImage = function(src, w) {
 	// console.log('createImage');
@@ -240,9 +247,9 @@ View.prototype.createCharacter = function(characterName) {
 	return new window[characterName]();
 };
 
-View.prototype.addBattleImage = function(e, img, side) {
+View.prototype.addBattleImage = function(e, img) {
 	// console.log('addBattleImage');
-	this.addClassName(img, 'battle-character ' + side);
+	this.addClassName(img, 'battle-character ');
 	this.appendChild(e, img);
 };
 
@@ -261,6 +268,22 @@ View.prototype.clearElement = function(e) {
 	while (e.lastChild) e.removeChild(e.lastChild);
 };
 
+View.prototype.resetCharacter = function(character, ci) {
+	// console.log('resetCharacter');
+	var healthBar = this.healthBars[ci];
+	character.e.style[this.CHARACTER_SIDES[this.getOtherPlayerIndex(ci)]] = '';
+	this.setCharacterPosition(character, ci);
+	this.addClassName(character.e, this.CHARACTER_SIDES[ci]);
+	this.setBattleNametag(healthBar, character.character.name);
+	this.setBattleHealth(healthBar, character.character.health);
+};
+
+View.prototype.setCharacterPosition = function(character, ci) {
+	// console.log('setCharacterPosition');
+	character.e.style[this.CHARACTER_SIDES[ci]] = character.character.x + 'px';
+	character.e.style.bottom = character.character.y + 'px';
+};
+
 View.prototype.setBattleNametag = function(e, nametag) {
 	// console.log('setBattleNametag');
 	this.setContents(e.children[1], nametag);
@@ -274,4 +297,12 @@ View.prototype.setBattleHealth = function(e, health) {
 View.prototype.setStyleAttr = function(e, val, attr) {
 	// console.log('setStyleAttr');
 	e.style[attr] = val;
+};
+
+View.prototype.hasSelectedOption = function(options) {
+	// console.log('hasSelectedOption');
+	for (var i = options.length - 1; i >= 0; i--) {
+		if (this.hasClassName(options[i], 'selected')) return true;
+	}
+	return false;
 };

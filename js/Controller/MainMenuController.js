@@ -14,7 +14,7 @@ MainMenuController.prototype.nextFrame = function(inputs) {
 		var pi = input.pi;
 		if (!status) continue;
 		if (this.trackEndFrames()) return this.end(pi);
-		if (this.menuButtonsPressed(status.buttons, [ 1 ], pi)) this.startEnd(pi);
-		this.moveVertical(this.verticalDirection(status.axes), pi);
+		if (this.buttonPressed(status.buttons[1])) this.startEnd(pi);
+		this.moveVertical(this.verticalDirection(status.axes));
 	}
 };

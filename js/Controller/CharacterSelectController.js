@@ -29,11 +29,11 @@ CharacterSelectController.prototype.nextFrame = function(inputs) {
 		var pi = input.pi;
 		if (!status) continue;
 		if (this.trackEndFrames()) return this.end(pi);
-		if (this.menuButtonsPressed(status.buttons, [ 2 ], pi)) {
+		if (this.buttonPressed(status.buttons[2])) {
 			if (!this.isPlayerSelected(pi)) return this.end(pi);
 			this.activatePlayer(pi);
 		}
-		if (this.mode != this.CHARACTER_DETAIL && this.menuButtonsPressed(status.buttons, [ 1 ], pi)) {
+		if (this.mode != this.CHARACTER_DETAIL && this.buttonPressed(status.buttons[1])) {
 			if (this.canProceed()) this.startEnd(pi);
 			else if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
 			if (this.allCharactersSelected()) this.showStartButton(pi);
@@ -114,7 +114,7 @@ CharacterSelectController.prototype.canProceed = function(pi) {
 
 CharacterSelectController.prototype.clearAllOptions = function(pi) {
 	// console.log('clearAllOptions');
-	for (var i = 0; i < this.i.length; i++) {
+	for (var i in this.i) {
 		this.deactivatePlayer(i);
 	}
 };

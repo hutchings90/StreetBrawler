@@ -128,7 +128,7 @@ StreetBrawlerController.prototype.mainMenu = function(pi, params) {
  */
 StreetBrawlerController.prototype.singlePlayer = function(pi, params) {
 	// console.log('singlePlayer');
-	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
 	this.activateCharacterSelect(pi, 'onePlayerBattle');
 };
 
@@ -139,7 +139,7 @@ StreetBrawlerController.prototype.singlePlayer = function(pi, params) {
  */
 StreetBrawlerController.prototype.campaign = function(pi, params) {
 	// console.log('campaign');
-	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
 	this.activateCampaign(pi, 'campaign');
 };
 
@@ -160,7 +160,7 @@ StreetBrawlerController.prototype.twoPlayer = function(pi, params) {
  */
 StreetBrawlerController.prototype.characterDetails = function(pi, params) {
 	// console.log('characterDetails');
-	this.streetBrawler.playerNotPlaying(this.getOtherPlayer(pi));
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
 	this.activateCharacterSelect(pi, 'characterDetail');
 };
 
