@@ -1,7 +1,8 @@
-function Player(gamepad) {
+function Player(gamepad, isAI) {
 	// console.log('Player');
 	this.gamepadReader = new GamepadReader(gamepad);
 	this.playing = true;
+	this.isAI = isAI;
 	if (!gamepad) this.activeGamepad = false;
 	else this.activeGamepad = true;
 }
