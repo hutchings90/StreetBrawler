@@ -1,7 +1,4 @@
 function TestingController(model) {
 	// console.log('TestingController');
-	GamepadSimulatorController.call(this, model);
+	this.model = model;
 }
-
-TestingController.prototype = Object.create(GamepadSimulatorController);
-TestingController.constructor = TestingController;

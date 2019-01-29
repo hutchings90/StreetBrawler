@@ -15,17 +15,7 @@ function start(enviro) {
 
 function startTesting() {
 	// console.log('startTesting');
-	new TestingController(new Testing(startSimulatedGame()));
-}
-
-function startAI() {
-	// console.log('startAI');
-	new AIController(new AI(startSimulatedGame()));
-}
-
-function startSimulatedGame() {
-	// console.log('startSimulatedGame');
-	return startGame([ new GamepadSimulator(), new GamepadSimulator() ]);
+	new TestingController(new Testing(startGame([ new GamepadSimulator(), new GamepadSimulator() ])));
 }
 
 function startProduction() {

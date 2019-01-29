@@ -14,6 +14,7 @@ function BattleController(model, view, utils, contentManager) {
 	this.battleTimer = this.view.getBattleTimer();
 	this.activeController = this.battleCharacterController;
 	this.battleObjects = this.view.getBattleObjects();
+	this.aiControllers = [];
 	this.time = this.FULL_TIME;
 	this.timerFrames = 0;
 	this.preRoundFrames = 0;
@@ -32,6 +33,7 @@ BattleController.prototype.start = function() {
 	this.round = 0;
 	this.activeController = this.battleCharacterController;
 	this.nextFrame = this.preRoundFrame;
+	this.initAIControllers();
 	this.startRound();
 };
 
@@ -40,6 +42,7 @@ BattleController.prototype.startRound = function() {
 	this.round++;
 	this.view.steadyTimer(this.battleTimer);
 	this.nextFrame = this.roundFrame;
+	this.activateAI();
 };
 
 BattleController.prototype.preRoundFrame = function(inputs) {
@@ -137,6 +140,7 @@ BattleController.prototype.endRound = function() {
 	this.view.doneTimer(this.battleTimer);
 	this.nextFrame = this.endRoundFrame;
 	this.endRoundFrames = 0;
+	this.deactivateAI();
 };
 
 BattleController.prototype.setCharacters = function(characters) {
@@ -188,4 +192,26 @@ BattleController.prototype.quit = function(pi, params) {
 	// console.log('quit');
 	this.quitter = pi;
 	this.nextFrame = this.endFrame;
+};
+
+BattleController.prototype.initAIControllers = function() {
+	// console.log('initAIControllers');
+	var players = this.streetBrawler.players;
+	for (var i in players) {
+		if (players[i].isAI) this.aiControllers.push(new AIController(players[i]));
+	}
+};
+
+BattleMenuController.prototype.activateAI = function() {
+	// console.log('activateAI');
+	for (var i in this.aiControllers) {
+		this.aiControllers[i].activate();
+	}
+};
+
+BattleMenuController.prototype.deactivateAI = function() {
+	// console.log('deactivateAI');
+	for (var i in this.aiControllers) {
+		this.aiControllers[i].deactivate();
+	}
 };

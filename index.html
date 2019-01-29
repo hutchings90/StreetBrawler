@@ -24,7 +24,6 @@
 	<script src='js/Model/Player.js'></script>
 	<script src='js/Model/GamepadSimulator.js'></script>
 	<script src='js/Model/AIPlayer.js'></script>
-	<script src='js/Model/AI.js'></script>
 	<script src='js/Model/StreetBrawler.js'></script>
 	<!-- Controllers -->
 	<script src='js/Controller/Controller.js'></script>
@@ -38,8 +37,7 @@
 	<script src='js/Controller/BattleController.js'></script>
 	<script src='js/Controller/OverworldController.js'></script>
 	<script src='js/Controller/CampaignController.js'></script>
-	<script src='js/Controller/GamepadSimulatorController.js'></script>
-	<script src='js/Controller/AIController.js'></script>
+	<script src='js/Controller/AIPlayerController.js'></script>
 	<script src='js/Controller/StreetBrawlerController.js'></script>
 	<!-- Testing -->
 	<script src='js/Testing/Testing.js'></script>
@@ -49,9 +47,8 @@
 	<div id='development-menu-container' class='hide'>
 		<div id='development-menu'>
 			<h1>Choose your environment</h1>
-			<div><button id='testing-button' onclick='start("startTesting")'>Testing</button></div>
-			<div><button id='ai-button' onclick='start("startAI")'>AI</button></div>
 			<div><button id='regular-button' onclick='start("startProduction")'>Production</button></div>
+			<div><button id='testing-button' onclick='start("startTesting")'>Testing</button></div>
 		</div>
 	</div>
 	<div id='street-brawler' class='hide'>
