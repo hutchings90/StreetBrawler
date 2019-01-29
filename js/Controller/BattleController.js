@@ -1,12 +1,12 @@
 function BattleController(model, view, utils, contentManager) {
 	// console.log('BattleController');
 	GamepadProcessingController.call(this, view, utils, contentManager);
-	utils.makeControllerVariableInput(this, model);
+	utils.makeControllerVariableInput(this, model, this.controllerActivated);
 	this.URGENT_TIME = 15;
 	this.ROUNDS = 3;
 	this.PRE_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
 	this.END_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
-	this.FULL_TIME = 20;
+	this.FULL_TIME = 99;
 	this.battleCharacterController = new BattleCharacterController(view, utils, contentManager);
 	this.battleMenuController = new BattleMenuController(view, utils, contentManager);
 	this.battleAreaContainer = this.view.getBattleAreaContainer();
@@ -53,7 +53,7 @@ BattleController.prototype.preRoundFrame = function(inputs) {
 BattleController.prototype.roundFrame = function(inputs) {
 	// console.log('roundFrame');
 	if (!this.activeController) return;
-	// this.trackTimer();
+	if (this.activeController == this.battleCharacterController) this.trackTimer();
 	var report = this.activeController.nextFrame(inputs);
 	if (report) this[report.action](report.pi, report.params);
 };
@@ -91,11 +91,7 @@ BattleController.prototype.end = function(pi) {
 	this.clearBattleObjects();
 	this.clearTimer();
 	this.setCharacters([]);
-	return {
-		action: 'quitBattle',
-		pi: pi,
-		params: {}
-	};
+	return this.createReport('quitBattle', {}, pi);
 };
 
 BattleController.prototype.show = function() {
@@ -180,11 +176,15 @@ BattleController.prototype.clearBattleObjects = function() {
 
 BattleController.prototype.showBattleMenu = function(pi, params) {
 	// console.log('showBattleMenu');
+	this.streetBrawler.players[this.getOtherPlayerIndex(pi)].playing = false;
+	this.deactivateAI();
 	this.activateController('battleMenu', 'menu', pi);
+	this.view.clearTimer(this.battleTimer);
 };
 
 BattleController.prototype.resume = function(pi, params) {
 	// console.log('resume');
+	if (this.aiControllers.length < 1) this.streetBrawler.players[this.getOtherPlayerIndex(pi)].playing = true;
 	this.activateController('battleCharacter', 'battle', pi);
 };
 
@@ -197,21 +197,31 @@ BattleController.prototype.quit = function(pi, params) {
 BattleController.prototype.initAIControllers = function() {
 	// console.log('initAIControllers');
 	var players = this.streetBrawler.players;
+	this.aiControllers = [];
 	for (var i in players) {
-		if (players[i].isAI) this.aiControllers.push(new AIController(players[i]));
+		var player = players[i];
+		if (player.isAI && player.playing) this.aiControllers.push(new AIController(player));
 	}
 };
 
-BattleMenuController.prototype.activateAI = function() {
+BattleController.prototype.activateAI = function() {
 	// console.log('activateAI');
 	for (var i in this.aiControllers) {
 		this.aiControllers[i].activate();
 	}
 };
 
-BattleMenuController.prototype.deactivateAI = function() {
+BattleController.prototype.deactivateAI = function() {
 	// console.log('deactivateAI');
 	for (var i in this.aiControllers) {
 		this.aiControllers[i].deactivate();
+	}
+};
+
+BattleController.prototype.controllerActivated = function() {
+	// console.log('controllerActivated');
+	if (this.activeController == this.battleCharacterController) {
+		this.view.steadyTimer(this.battleTimer);
+		this.activateAI();
 	}
 };

@@ -16,11 +16,7 @@ Controller.prototype.start = function() {
 
 Controller.prototype.end = function() {
 	// console.log('end');
-	return {
-		action: 'mainMenu',
-		pi: pi,
-		params: {}
-	}
+	return this.createReport('mainMenu', {}, pi);
 };
 
 Controller.prototype.getOtherPlayerIndex = function(i) {

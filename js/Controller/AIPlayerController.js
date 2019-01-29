@@ -17,12 +17,12 @@ function AIController(ai) {
 /**
  * private
  * Starts an interval for deciding how to control the AIPlayer
- * TODO: Implement AIPlayer decision making.
  */
 AIController.prototype.activate = function() {
 	// console.log('activate');
+	this.ai.playing = true;
 	this.interval = setInterval(function() {
-		;
+		// TODO: Implement AIPlayer decision making.
 	}, this.ai.getDifficultyFrequency());
 };
 
@@ -32,6 +32,7 @@ AIController.prototype.activate = function() {
  */
 AIController.prototype.deactivate = function() {
 	// console.log('deactivate');
+	this.ai.playing = false;
 	clearInterval(this.interval);
 	this.interval = null;
 };

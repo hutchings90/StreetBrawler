@@ -2,7 +2,7 @@ function Utils() {
 	// console.log('Utils');
 }
 
-Utils.prototype.makeControllerVariableInput = function(controller, model) {
+Utils.prototype.makeControllerVariableInput = function(controller, model, controllerActivated) {
 	// console.log('makeControllerVariableInput');
 	controller.timeout = null;
 	controller.streetBrawler = model;
@@ -19,6 +19,10 @@ Utils.prototype.makeControllerVariableInput = function(controller, model) {
 			me.activeController.activator = pi;
 			me.activeController.start();
 			me.streetBrawler.setGamepadHalted(false);
+			me.controllerActivated();
 		}, 1000);
+	};
+	controller.controllerActivated = controllerActivated || function() {
+		// console.log('controllerActivated');
 	};
 };

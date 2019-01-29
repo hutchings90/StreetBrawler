@@ -44,10 +44,16 @@ StreetBrawler.prototype.allHumansPlaying = function() {
 
 StreetBrawler.prototype.activateAI = function() {
 	// console.log('activateAI');
-	this.players[this.players.length - 1].playing = true;
+	for (var i in this.players) {
+		var player = this.players[i];
+		if (player.isAI) player.playing = true;
+	}
 };
 
 StreetBrawler.prototype.deactivateAI = function() {
 	// console.log('deactivateAI');
-	this.players[this.players.length - 1].playing = false;
+	for (var i in this.players) {
+		var player = this.players[i];
+		if (player.isAI) player.playing = false;
+	}
 };

@@ -22,11 +22,7 @@ BattleMenuController.prototype.nextFrame = function(inputs) {
 
 BattleMenuController.prototype.end = function(pi) {
 	// console.log('end');
-	var ret = {
-		action: 'resume',
-		pi: pi,
-		params: {}
-	};
+	var ret = this.createReport('resume', {}, pi);
 	if (this.view.hasSelectedOption(this.options)) ret.action = this.view.getOptionAction(this.options[this.i]);
 	this.hide();
 	this.clearAllOptions();

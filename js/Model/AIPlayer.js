@@ -9,7 +9,7 @@
 function AIPlayer() {
 	// console.log('AIPlayer');
 	Player.call(this, new GamepadSimulator(), true);
-	this.DIFFICULTY_FREQUENCIES = [ 250, 350, 500 ];
+	this.DIFFICULTY_FREQUENCIES = [ 500, 350, 250 ];
 	this.playing = false;
 	this.difficulty = 0;
 }

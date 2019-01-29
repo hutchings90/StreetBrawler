@@ -135,13 +135,7 @@ CharacterSelectController.prototype.startEnd = function() {
 
 CharacterSelectController.prototype.end = function(pi) {
 	// console.log('end');
-	var ret = {
-		action: 'mainMenu',
-		pi: pi,
-		params: {
-			characters: []
-		}
-	};
+	var ret = this.createReport('mainMenu', { characters: [] }, pi);
 	if (this.allCharactersSelected()) {
 		if (this.mode == this.TWO_PLAYER) {
 			ret.action = 'twoPlayerBattle';

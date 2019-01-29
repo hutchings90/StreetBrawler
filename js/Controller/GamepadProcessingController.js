@@ -10,6 +10,15 @@ function GamepadProcessingController(view, utils, contentManager) {
 GamepadProcessingController.prototype = Object.create(Controller.prototype);
 GamepadProcessingController.constructor = GamepadProcessingController;
 
+GamepadProcessingController.prototype.createReport = function(action, params, pi) {
+	// console.log('createReport');
+	return {
+		action: action,
+		params: params,
+		pi: pi
+	}
+};
+
 GamepadProcessingController.prototype.nextFrame = function(inputs) {
 	// console.log('nextFrame');
 };
