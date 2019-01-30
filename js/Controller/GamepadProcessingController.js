@@ -13,8 +13,8 @@ GamepadProcessingController.constructor = GamepadProcessingController;
 GamepadProcessingController.prototype.createReport = function(action, params, pi) {
 	// console.log('createReport');
 	return {
-		action: action,
-		params: params,
+		action: action || '',
+		params: params || {},
 		pi: pi
 	}
 };

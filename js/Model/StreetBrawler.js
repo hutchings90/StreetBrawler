@@ -57,3 +57,10 @@ StreetBrawler.prototype.deactivateAI = function() {
 		if (player.isAI) player.playing = false;
 	}
 };
+
+StreetBrawler.prototype.setGamepadMode = function(mode) {
+	// console.log('setGamepadMode');
+	for (var i in this.players) {
+		this.players[i].gamepadReader.status.setGamepadMode(mode);
+	}
+};

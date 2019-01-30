@@ -56,8 +56,8 @@ ContentManager.prototype.loadGolemVisuals = function(golemType) {
 	// console.log('loadGolemVisuals');
 	var path = this.golemVisualPath(golemType);
 	return {
-		bust: this.view.createImage(path + 'bust.png', 60),
-		idle: this.view.createImage(path + 'idle.png', 60)
+		bust: this.view.createBattleCharacterImage(path + 'bust.png'),
+		idle: this.view.createBattleCharacterImage(path + 'idle.png')
 	};
 };
 

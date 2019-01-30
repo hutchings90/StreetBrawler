@@ -16,9 +16,9 @@
 	<script src='js/Model/Character.js'></script>
 	<script src='js/Model/Golem.js'></script>
 	<script src='js/Model/Golems.js'></script>
-	<script src='js/Model/MenuStatus.js'></script>
-	<script src='js/Model/MenuAxisStatus.js'></script>
-	<script src='js/Model/MenuButtonStatus.js'></script>
+	<script src='js/Model/GamepadItemStatus.js'></script>
+	<script src='js/Model/GamepadAxisStatus.js'></script>
+	<script src='js/Model/GamepadButtonStatus.js'></script>
 	<script src='js/Model/GamepadStatus.js'></script>
 	<script src='js/Model/GamepadReader.js'></script>
 	<script src='js/Model/Player.js'></script>
@@ -47,7 +47,7 @@
 	<div id='development-menu-container' class='hide'>
 		<div id='development-menu'>
 			<h1>Choose your environment</h1>
-			<div><button id='regular-button' onclick='start("startProduction")'>Production</button></div>
+			<div><button autofocus id='regular-button' onclick='start("startProduction")'>Production</button></div>
 			<div><button id='testing-button' onclick='start("startTesting")'>Testing</button></div>
 		</div>
 	</div>

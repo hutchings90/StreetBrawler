@@ -19,6 +19,7 @@ Utils.prototype.makeControllerVariableInput = function(controller, model, contro
 			me.activeController.activator = pi;
 			me.activeController.start();
 			me.streetBrawler.setGamepadHalted(false);
+			me.streetBrawler.setGamepadMode(mode);
 			me.controllerActivated();
 		}, 1000);
 	};

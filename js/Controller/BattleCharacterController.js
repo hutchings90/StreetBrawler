@@ -29,7 +29,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 	for (var i = this.characters.length - 1; i >= 0; i--) {
 		var character = this.characters[i];
 		character.character.move();
-		this.view.setCharacterPosition(character, i);
+		this.view.setCharacterPosition(character);
 	}
 };
 
@@ -82,26 +82,25 @@ BattleCharacterController.prototype.idleAxes = function(axes) {
 	// console.log('idleAxes');
 	var v = this.verticalDirection(axes);
 	var h = this.horizontalDirection(axes);
-	if (v == 1) return this.createReport('crouch', {});
-	else if (v == -1) return this.createReport('jump', {
+	if (v == 1) return this.createReport('crouch');
+	if (v == -1) return this.createReport('jump', {
 		direction: h
 	});
-	if (h == 1) return this.createReport('right', {});
-	else if (h == -1) return this.createReport('left', {});
-	return this.createReport('resetState', {});
+	if (h == 1) return this.createReport('right');
+	if (h == -1) return this.createReport('left');
 };
 
 BattleCharacterController.prototype.walkAxes = function(axes) {
 	// console.log('walkAxes');
 	var v = this.verticalDirection(axes);
 	var h = this.horizontalDirection(axes);
-	if (v == 1) return this.createReport('crouch', {});
-	else if (v == -1) return this.createReport('jump', {
+	if (v == 1) return this.createReport('crouch');
+	if (v == -1) return this.createReport('jump', {
 		direction: h
 	});
-	if (h == 1) return this.createReport('right', {});
-	else if (h == -1) return this.createReport('left', {});
-	return this.createReport('resetState', {});
+	if (h == 1) return this.createReport('right');
+	if (h == -1) return this.createReport('left');
+	return this.createReport('resetState');
 };
 
 BattleCharacterController.prototype.jumpAxes = function(axes) {
@@ -110,6 +109,11 @@ BattleCharacterController.prototype.jumpAxes = function(axes) {
 
 BattleCharacterController.prototype.crouchAxes = function(axes) {
 	// console.log('crouchAxes');
+	var v = this.verticalDirection(axes);
+	if (v == -1) return this.createReport('jump', {
+		direction: this.horizontalDirection(axes)
+	});
+	if (v == 0) return this.createReport('resetState');
 };
 
 BattleCharacterController.prototype.attackAxes = function(axes) {
@@ -143,8 +147,8 @@ BattleCharacterController.prototype.processButtons = function(character, buttons
 
 BattleCharacterController.prototype.idleButtons = function(buttons) {
 	// console.log('idleButtons');
-	if (this.buttonsPressed(buttons, [ 4, 5 ])) return this.createReport('block', {});
-	if (this.buttonsPressed(buttons, [ 6, 7 ])) return this.createReport('grab', {});
+	if (this.buttonsPressed(buttons, [ 4, 5 ])) return this.createReport('block');
+	if (this.buttonsPressed(buttons, [ 6, 7 ])) return this.createReport('grab');
 };
 
 BattleCharacterController.prototype.walkButtons = function(buttons) {

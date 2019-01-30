@@ -165,7 +165,7 @@ BattleController.prototype.showCharacter = function(character, ci) {
 
 BattleController.prototype.resetCharacter = function(character, ci) {
 	// console.log('resetCharacter');
-	character.character.reset();
+	character.character.reset(ci == 1 ? this.view.MAX_BATTLE_X : 0);
 	this.view.resetCharacter(character, ci);
 };
 

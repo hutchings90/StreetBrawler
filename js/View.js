@@ -2,6 +2,9 @@ function View() {
 	// console.log('View');
 	this.HIDE_CLASS = 'hide';
 	this.CHARACTER_SIDES = [ 'left', 'right' ];
+	this.BATTLE_CHARACTER_W = 90;
+	this.BATTLE_AREA_W = 900;
+	this.MAX_BATTLE_X = this.BATTLE_AREA_W - this.BATTLE_CHARACTER_W;
 	this.healthBars = this.getBattleHealthBars();
 }
 
@@ -16,6 +19,11 @@ View.prototype.createImage = function(src, w) {
 	e.src = src;
 	e.width = w;
 	return e;
+};
+
+View.prototype.createBattleCharacterImage = function(src) {
+	// console.log('createBattleCharacterImage');
+	return this.createImage(src, this.BATTLE_CHARACTER_W);
 };
 
 View.prototype.createAudio = function(src) {
@@ -272,15 +280,15 @@ View.prototype.resetCharacter = function(character, ci) {
 	// console.log('resetCharacter');
 	var healthBar = this.healthBars[ci];
 	character.e.style[this.CHARACTER_SIDES[this.getOtherPlayerIndex(ci)]] = '';
-	this.setCharacterPosition(character, ci);
+	this.setCharacterPosition(character);
 	this.addClassName(character.e, this.CHARACTER_SIDES[ci]);
 	this.setBattleNametag(healthBar, character.character.name);
 	this.setBattleHealth(healthBar, character.character.health);
 };
 
-View.prototype.setCharacterPosition = function(character, ci) {
+View.prototype.setCharacterPosition = function(character) {
 	// console.log('setCharacterPosition');
-	character.e.style[this.CHARACTER_SIDES[ci]] = character.character.x + 'px';
+	character.e.style.left = character.character.x + 'px';
 	character.e.style.bottom = character.character.y + 'px';
 };
 
