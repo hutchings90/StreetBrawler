@@ -17,6 +17,7 @@ function GamepadSimulator() {
 }
 
 GamepadSimulator.prototype.button = function() {
+	// console.log('button');
 	return {
 		pressed: false
 	};
