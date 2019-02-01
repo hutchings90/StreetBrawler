@@ -1,3 +1,4 @@
+//constructor function as defined below
 function BattleController(model, view, utils, contentManager) {
 	// console.log('BattleController');
 	GamepadProcessingController.call(this, view, utils, contentManager);
@@ -26,8 +27,13 @@ function BattleController(model, view, utils, contentManager) {
 }
 
 BattleController.prototype = Object.create(GamepadProcessingController.prototype);
+//defines constructor funtion?
 BattleController.constructor = BattleController;
 
+/*
+Called externally?
+starts a new battle
+*/
 BattleController.prototype.start = function() {
 	// console.log('start');
 	this.round = 0;
@@ -37,6 +43,13 @@ BattleController.prototype.start = function() {
 	this.startRound();
 };
 
+/*
+Called by start, preRoundFrame
+increments round count
+sets view.steadyTimer to battleTimer, which is gotten from view?
+sets nextFrame to roundFrame
+activates AI's
+*/
 BattleController.prototype.startRound = function() {
 	// console.log('startRound');
 	this.round++;
@@ -45,11 +58,17 @@ BattleController.prototype.startRound = function() {
 	this.activateAI();
 };
 
+/*
+Starts rounds when preRoundFrames are met
+*/
 BattleController.prototype.preRoundFrame = function(inputs) {
 	// console.log('preRoundFrame');
 	if (++this.preRoundFrames >= this.PRE_ROUND_FRAMES) this.startRound();
 };
 
+/*
+I think this is the default nextFrame function. Calls nextFrame?
+*/
 BattleController.prototype.roundFrame = function(inputs) {
 	// console.log('roundFrame');
 	if (!this.activeController) return;
@@ -58,6 +77,10 @@ BattleController.prototype.roundFrame = function(inputs) {
 	if (report) this[report.action](report.pi, report.params);
 };
 
+/*
+plays out end-round-frame count. if this is the last round, sets nextFrame tp preEndFrame
+else, starts new round? With not much fanfare it seems
+*/
 BattleController.prototype.endRoundFrame = function(inputs) {
 	// console.log('endRoundFrame');
 	if (++this.endRoundFrames >= this.END_ROUND_FRAMES) {
@@ -70,6 +93,9 @@ BattleController.prototype.endRoundFrame = function(inputs) {
 	}
 };
 
+/*
+apparently there's a buton, and if it's pressed we progress to end? but end is given no parameter?
+*/
 BattleController.prototype.preEndFrame = function(inputs) {
 	// console.log('preEndFrame');
 	for (var i = inputs.length - 1; i >= 0; i--) {
@@ -80,11 +106,20 @@ BattleController.prototype.preEndFrame = function(inputs) {
 	}
 };
 
+/*
+returns end
+*/
 BattleController.prototype.endFrame = function(inputs) {
 	// console.log('endFrame');
 	return this.end(this.quitter);
 };
 
+/*
+Called by preEndFrame and endFrame
+@param pi = this.quitter, or null?
+clears screen, resets characters, and calls createReport
+Where is createReport defined?
+*/
 BattleController.prototype.end = function(pi) {
 	// console.log('end');
 	this.hide();
@@ -94,17 +129,30 @@ BattleController.prototype.end = function(pi) {
 	return this.createReport('quitBattle', {}, pi);
 };
 
+/*
+Called externally?
+shows battleAreaContainer
+calls showCharacters
+*/
 BattleController.prototype.show = function() {
 	// console.log('show');
 	this.view.show(this.battleAreaContainer);
 	this.showCharacters();
 };
 
+/*
+Called by end
+hides battleAreaContainer
+*/
 BattleController.prototype.hide = function() {
 	// console.log('hide');
 	this.view.hide(this.battleAreaContainer);
 };
 
+/*
+Called by constructor, end, and endRoundFrame
+resets time to FULL_TIME, calls view.clearTimer, calls setTimerContents
+*/
 BattleController.prototype.clearTimer = function() {
 	// console.log('clearTimer');
 	this.time = this.FULL_TIME;
@@ -113,16 +161,29 @@ BattleController.prototype.clearTimer = function() {
 	this.setTimerContents(this.time);
 };
 
+/*
+called by clearTimer, decrementTimer
+sets time as string in view.setContents. For drawing?
+*/
 BattleController.prototype.setTimerContents = function(time) {
 	// console.log('setTimerContents');
 	this.view.setContents(this.battleTimer, time.toString().padStart(2, 0));
 };
 
+/*
+Called by roundFrame
+increment timerFrames up. if it's >= FPS, then it's been 1 second, decrement timer
+*/
 BattleController.prototype.trackTimer = function() {
 	// console.log('trackTimer');
 	if (++this.timerFrames >= FRAMES_PER_SECOND) this.decrementTimer();
 };
 
+/*
+called by trackTimer; counts down timer 
+calls view.urgentTimer if time =URGENT_TIME -what's an urgent time?
+if time = 0, calls endRound
+*/
 BattleController.prototype.decrementTimer = function() {
 	// console.log('decrementTimer');
 	this.timerFrames = 0;
@@ -131,6 +192,12 @@ BattleController.prototype.decrementTimer = function() {
 	else if (this.time == 0) this.endRound();
 };
 
+/*
+Called by decrementTimer
+sets nextFrame to endRoundFrame (calls it?)
+sets endRoundFrames to 0? What's that mean?
+deactivates AI
+*/
 BattleController.prototype.endRound = function() {
 	// console.log('endRound');
 	this.view.doneTimer(this.battleTimer);
@@ -139,12 +206,22 @@ BattleController.prototype.endRound = function() {
 	this.deactivateAI();
 };
 
+/*
+called by constructor and by end
+@param characters = an array of characters
+seths this.characters to characters, and sets the characters for BattleCharacterController
+*/
 BattleController.prototype.setCharacters = function(characters) {
 	// console.log('setCharacters');
 	this.characters = characters;
 	this.battleCharacterController.setCharacters(characters);
 };
 
+/*
+Called by show
+draws all active characters. I'm still unclear on what the purpose of ci is, if we're passing the
+character object
+*/
 BattleController.prototype.showCharacters = function() {
 	// console.log('showCharacters');
 	var ci = 1;
@@ -156,6 +233,11 @@ BattleController.prototype.showCharacters = function() {
 	}
 };
 
+/*
+Called by showCharacters
+sets specified character to be drawn in idle poses
+calls resetCharacter on specified character
+*/
 BattleController.prototype.showCharacter = function(character, ci) {
 	// console.log('showCharacter');
 	this.view.addBattleImage(this.battleObjects, character.visual.idle);
@@ -163,17 +245,32 @@ BattleController.prototype.showCharacter = function(character, ci) {
 	this.resetCharacter(character, ci);
 };
 
+/*
+Called by showCharacter
+resets specified charater. What does ci represent?
+*/
 BattleController.prototype.resetCharacter = function(character, ci) {
 	// console.log('resetCharacter');
 	character.character.reset(ci == 1 ? this.view.MAX_BATTLE_X : 0);
 	this.view.resetCharacter(character, ci);
 };
 
+/*
+Called by end
+deletes all objects related to the battle?
+*/
 BattleController.prototype.clearBattleObjects = function() {
 	// console.log('clearBattleObjects');
 	this.view.clearBattleObjects(this.battleObjects);
 };
 
+/*
+called on pause?
+sets all players to not playing
+deactivates AI's
+calls activateController 'battleMenu'
+clears the battleTimer? 
+*/
 BattleController.prototype.showBattleMenu = function(pi, params) {
 	// console.log('showBattleMenu');
 	this.streetBrawler.players[this.getOtherPlayerIndex(pi)].playing = false;
@@ -182,18 +279,30 @@ BattleController.prototype.showBattleMenu = function(pi, params) {
 	this.view.clearTimer(this.battleTimer);
 };
 
+/*
+called when play resumes from pause?
+alows other human player to resume playing, and calls activateController 'battleCharacer'
+*/
 BattleController.prototype.resume = function(pi, params) {
 	// console.log('resume');
 	if (this.aiControllers.length < 1) this.streetBrawler.players[this.getOtherPlayerIndex(pi)].playing = true;
 	this.activateController('battleCharacter', 'battle', pi);
 };
 
+/*
+called when a player quits?
+sets quitter, sets nextFrame to endFrame; does this mean the endFrame function is called?
+*/
 BattleController.prototype.quit = function(pi, params) {
 	// console.log('quit');
 	this.quitter = pi;
 	this.nextFrame = this.endFrame;
 };
 
+/*
+called by start
+for each player that playing but not controlled, create a new aiController
+*/
 BattleController.prototype.initAIControllers = function() {
 	// console.log('initAIControllers');
 	var players = this.streetBrawler.players;
@@ -204,6 +313,10 @@ BattleController.prototype.initAIControllers = function() {
 	}
 };
 
+/*
+Called by startRound and controllerActivated.
+calls activate on each registered aiController
+*/
 BattleController.prototype.activateAI = function() {
 	// console.log('activateAI');
 	for (var i in this.aiControllers) {
@@ -211,6 +324,10 @@ BattleController.prototype.activateAI = function() {
 	}
 };
 
+/*
+Called by endRound and showBattleMenu
+calls deactivate on each aiController
+*/
 BattleController.prototype.deactivateAI = function() {
 	// console.log('deactivateAI');
 	for (var i in this.aiControllers) {
@@ -218,6 +335,10 @@ BattleController.prototype.deactivateAI = function() {
 	}
 };
 
+/*
+Called by constructor function
+if activeCtonroller = battleCharacterController, start battle timer and activate AI's?
+*/
 BattleController.prototype.controllerActivated = function() {
 	// console.log('controllerActivated');
 	if (this.activeController == this.battleCharacterController) {
