@@ -1,0 +1,32 @@
+SOUNDS
+
+MENU
+	Navigating from option to option
+	Selecting option
+	Canceling
+
+BATTLE
+	NARRATOR
+		Round 1/2/3
+		Begin fight
+		Winner
+	CHARACTER
+		Haymaker
+		Jab
+		Roundhouse Kick
+		Uppercut
+		High Kick
+		Low Kick
+		Aerial Punch
+		Aerial Kick
+		Slam
+		Pummel (hitting during grab)
+		Throws (forward, backward)
+		Grab broken (grabbed character breaks free)
+	TIMER
+		Start
+		Beginning of urgency
+		Each second for last seconds
+		End of round
+		End of battle
+		Pause
