@@ -195,7 +195,7 @@ StreetBrawlerController.prototype.mainMenu = function(pi, params) {
  */
 StreetBrawlerController.prototype.singlePlayer = function(pi, params) {
 	// console.log('singlePlayer');
-	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
 	//where is this.activateCharacterSelect defined?
 	this.activateCharacterSelect(pi, 'onePlayerBattle');
 };
