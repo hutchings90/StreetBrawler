@@ -9,8 +9,8 @@
  * Each frame, the values of the axes and the buttons' "pressed" booleans
  * are checked and interpreted by the GamepadReader, GamepadStatus,
  * GamepadAxisStatus, GamepadButtonStatus and GamepadItemStatus. The
- * possible interpretations are start, end, idle repeat, prepeat and
- * postpeat.
+ * possible interpretations are start, end, idle repeat, pre button press and
+ * post button press (release).
  *
  * Gamepad Layout
  *   TRIGGERS
@@ -50,7 +50,7 @@
 function GamepadSimulator() {
 	// console.log('GamepadSimulator');
 	this.buttons = [ this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton() ];
-	this.axes = [ 0, 0 ];
+	this.axes = [ 0, 0 ]; // Sets the character movement to Stopped.
 }
 
 /**

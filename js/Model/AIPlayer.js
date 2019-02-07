@@ -11,7 +11,7 @@ function AIPlayer() {
 	Player.call(this, new GamepadSimulator(), true);
 	this.DIFFICULTY_FREQUENCIES = [ 500, 350, 250 ];
 	this.playing = false;
-	this.difficulty = 0;
+	this.difficulty = 0; // Will probably use an enum for difficulty setting. 
 }
 
 AIPlayer.prototype = Object.create(Player.prototype);
