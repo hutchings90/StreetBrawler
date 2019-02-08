@@ -1,3 +1,26 @@
+/**
+ * @file
+ *
+ * Model object to track gamepad events not tracked by browser.
+ * Menus treat start and repeat states like onkeydown.
+ * Battle treats start state like onkeydown.
+ * End state might be useful at some point.
+ * Other states are for determining what the next state could be,
+ * based on user input or lack thereof.
+ *
+ * STATE EXPLANATIONS
+ * +----------+---------------------------------------+
+ * | STATE    | EXPLANATION                           |
+ * +----------+---------------------------------------+
+ * | idle     | Before start state or after end state |
+ * | start    | First frame of input from user        |
+ * | prepeat  | After start, before first repeat      |
+ * | repeat   | After prepeat, lasts 1 frame          |
+ * | postpeat | After repeat, before next repeat      |
+ * | end      | First frame since user stopped input  |
+ * +----------+---------------------------------------+
+ */
+
 function GamepadItemStatus() {
 	// console.log('GamepadItemStatus');
 	this.REPEAT = 18;
