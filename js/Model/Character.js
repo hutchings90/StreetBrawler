@@ -1,12 +1,10 @@
-function Character(name) {
+function Character(name, attacks) {
 	// console.log('Character');
 	this.GRAVITY = -.1;
 	this.JUMP_VY = 20;
 	this.JUMP_VX = 6;
 	this.WALK_VX = 2;
 	this.BATTLE_AREA_W = 900;
-	this.BATTLE_CHARACTER_W = 90;
-	this.MAX_X = this.BATTLE_AREA_W - this.BATTLE_CHARACTER_W;
 	this.name = name;
 	this.health = 100;
 	this.x = 0;
@@ -14,8 +12,21 @@ function Character(name) {
 	this.dx = 0;
 	this.dy = 0;
 	this.jumpFrames = 0;
+	this.attacks = attacks || this.createAttacks(
+		[ 'haymaker', 'jab', 'roundhouse', 'special' ],
+		[ 'uppercut', 'highKick', 'lowKick', 'crouchSpecial' ],
+		[ 'jumpPunchHigh', 'jumpPunchLow', 'jumpKickLow', 'jumpKickHigh' ]);
 	this.resetState();
 }
+
+Character.prototype.createAttacks = function(idle, crouch, jump) {
+	// console.log('createAttacks');
+	return {
+		idle: idle,
+		crouch: crouch,
+		jump: jump
+	}
+};
 
 Character.prototype.reset = function(x) {
 	// console.log('reset');
@@ -28,6 +39,7 @@ Character.prototype.reset = function(x) {
 Character.prototype.resetState = function() {
 	console.log('resetState');
 	this.state = 'idle';
+	this.curAttack = null;
 	this.move = this.walkMove;
 	this.reset(this.x);
 };
@@ -73,6 +85,12 @@ Character.prototype.grab = function() {
 	this.state = 'grab';
 };
 
+Character.prototype.attack = function(i) {
+	// console.log('attack');
+	this.curAttack = this.attacks[this.state][i];
+	this.state = 'attack';
+};
+
 Character.prototype.walkMove = function() {
 	// console.log('move');
 	this.moveX();
@@ -100,7 +118,7 @@ Character.prototype.moveY = function() {
 Character.prototype.setX = function(x) {
 	// console.log('setX');
 	if (x < 0) x = 0;
-	if (x > this.MAX_X) x = this.MAX_X;
+	if (x > this.BATTLE_AREA_W) x = this.BATTLE_AREA_W;
 	this.x = x;
 };
 

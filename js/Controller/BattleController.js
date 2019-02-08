@@ -240,8 +240,9 @@ calls resetCharacter on specified character
 */
 BattleController.prototype.showCharacter = function(character, ci) {
 	// console.log('showCharacter');
-	this.view.addBattleImage(this.battleObjects, character.visual.idle);
-	character.e = character.visual.idle;
+	var img = character.visual.idle;
+	this.view.addBattleImage(this.battleObjects, img);
+	character.e = img;
 	this.resetCharacter(character, ci);
 };
 
@@ -251,7 +252,7 @@ resets specified charater. What does ci represent?
 */
 BattleController.prototype.resetCharacter = function(character, ci) {
 	// console.log('resetCharacter');
-	character.character.reset(ci == 1 ? this.view.MAX_BATTLE_X : 0);
+	character.character.reset(ci == 1 ? this.view.BATTLE_AREA_W - character.e.width : 0);
 	this.view.resetCharacter(character, ci);
 };
 

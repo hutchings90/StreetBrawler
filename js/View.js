@@ -2,9 +2,7 @@ function View() {
 	// console.log('View');
 	this.HIDE_CLASS = 'hide';
 	this.CHARACTER_SIDES = [ 'left', 'right' ];
-	this.BATTLE_CHARACTER_W = 90;
 	this.BATTLE_AREA_W = 900;
-	this.MAX_BATTLE_X = this.BATTLE_AREA_W - this.BATTLE_CHARACTER_W;
 	this.healthBars = this.getBattleHealthBars();
 }
 
@@ -13,17 +11,18 @@ View.prototype.getOtherPlayerIndex = function(i) {
 	return (i + 1) & 1;
 };
 
-View.prototype.createImage = function(src, w) {
+View.prototype.createImage = function(src, w, h) {
 	// console.log('createImage');
 	var e = this.createElement('img');
 	e.src = src;
-	e.width = w;
+	if (w) e.width = w;
+	if (h) e.height = h;
 	return e;
 };
 
-View.prototype.createBattleCharacterImage = function(src) {
+View.prototype.createBattleCharacterImage = function(src, w, h) {
 	// console.log('createBattleCharacterImage');
-	return this.createImage(src, this.BATTLE_CHARACTER_W);
+	return this.createImage(src, w, h);
 };
 
 View.prototype.createAudio = function(src) {
@@ -259,6 +258,12 @@ View.prototype.addBattleImage = function(e, img) {
 	// console.log('addBattleImage');
 	this.addClassName(img, 'battle-character ');
 	this.appendChild(e, img);
+};
+
+View.prototype.replaceBattleImage = function(oldE, newE) {
+	// console.log('replaceBattleImage');
+	this.addClassName(newE, 'battle-character ');
+	oldE.parentElement.replaceChild(newE, oldE);
 };
 
 View.prototype.appendChild = function(e, c) {

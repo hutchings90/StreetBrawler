@@ -73,6 +73,14 @@ BattleCharacterController.prototype.grab = function(character) {
 	character.character.grab();
 };
 
+BattleCharacterController.prototype.attack = function(character, params) {
+	// console.log('attack');
+	character.character.attack(params.button);
+	var img = character.visual[character.character.curAttack];
+	this.view.replaceBattleImage(character.e, img);
+	character.e = img;
+};
+
 BattleCharacterController.prototype.processAxes = function(character, axes) {
 	// console.log('processAxes');
 	this.processAction(character, this[character.character.state + 'Axes'](axes));
@@ -149,6 +157,10 @@ BattleCharacterController.prototype.idleButtons = function(buttons) {
 	// console.log('idleButtons');
 	if (this.buttonsPressed(buttons, [ 4, 5 ])) return this.createReport('block');
 	if (this.buttonsPressed(buttons, [ 6, 7 ])) return this.createReport('grab');
+	if (this.buttonPressed(buttons[0])) return this.createReport('attack', { button: 0 });
+	if (this.buttonPressed(buttons[1])) return this.createReport('attack', { button: 1 });
+	if (this.buttonPressed(buttons[2])) return this.createReport('attack', { button: 2 });
+	if (this.buttonPressed(buttons[3])) return this.createReport('attack', { button: 3 });
 };
 
 BattleCharacterController.prototype.walkButtons = function(buttons) {

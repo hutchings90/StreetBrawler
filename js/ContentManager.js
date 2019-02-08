@@ -57,7 +57,19 @@ ContentManager.prototype.loadGolemVisuals = function(golemType) {
 	var path = this.golemVisualPath(golemType);
 	return {
 		bust: this.view.createBattleCharacterImage(path + 'bust.png'),
-		idle: this.view.createBattleCharacterImage(path + 'idle.png')
+		idle: this.view.createBattleCharacterImage(path + 'idle.png', 90),
+		haymaker: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		jab: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		roundhouse: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		special: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		uppercut: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		highKick: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		lowKick: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		crouchSpecial: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		jumpPunchHigh: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		jumpPunchLow: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		jumpKickLow: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		jumpKickHigh: this.view.createBattleCharacterImage(path + 'jab.png', 150)
 	};
 };
 
@@ -85,6 +97,18 @@ ContentManager.prototype.getBattleCharacterVisuals = function(character) {
 ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 	// console.log('getBattleCharacterVisualsFromAsset');
 	return {
-		idle: asset.idle.cloneNode(true)
+		idle: asset.idle.cloneNode(true),
+		haymaker: asset.haymaker.cloneNode(true),
+		jab: asset.jab.cloneNode(true),
+		roundhouse: asset.roundhouse.cloneNode(true),
+		special: asset.special.cloneNode(true),
+		uppercut: asset.uppercut.cloneNode(true),
+		highKick: asset.highKick.cloneNode(true),
+		lowKick: asset.lowKick.cloneNode(true),
+		crouchSpecial: asset.crouchSpecial.cloneNode(true),
+		jumpPunchHigh: asset.jumpPunchHigh.cloneNode(true),
+		jumpPunchLow: asset.jumpPunchLow.cloneNode(true),
+		jumpKickLow: asset.jumpKickLow.cloneNode(true),
+		jumpKickHigh: asset.jumpKickHigh.cloneNode(true)
 	};
 };
