@@ -23,6 +23,19 @@ body {
 	margin: 5px;
 }
 
+#overworld-container {
+	text-align: center;
+}
+
+#overworld {
+	position: relative;
+	display: inline-block;
+	background: White;
+	height: 500px;
+	width: 900px;
+	overflow: hidden;
+}
+
 #battle-area-container {
 	text-align: center;
 }

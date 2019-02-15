@@ -94,6 +94,19 @@ ContentManager.prototype.getBattleCharacterVisuals = function(character) {
 	return this.getBattleCharacterVisualsFromAsset(this.visuals[character.name.replace(/ /g, '')]);
 };
 
+ContentManager.prototype.getOverworldCharacterVisuals = function(){
+	return this.getOverworldCharacterVisualsFromAsset(this.visuals['IceGolem']);
+};
+
+ContentManager.prototype.getOverworldCharacterVisualsFromAsset = function(asset) {
+	return {
+		down: asset.bust.cloneNode(true),
+		up: asset.bust.cloneNode(true),
+		left: asset.bust.cloneNode(true),
+		right: asset.bust.cloneNode(true)
+	};
+}
+
 ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 	// console.log('getBattleCharacterVisualsFromAsset');
 	return {

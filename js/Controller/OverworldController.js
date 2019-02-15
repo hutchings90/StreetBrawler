@@ -3,7 +3,9 @@ function OverworldController(model, view, utils, contentManager) {
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.overworld = this.view.getOverworld();
-	//TODO: attach corect OverWorld character
+	this.character = new OverworldCharacter('IceGolem');
+	
+	
 }
 
 OverworldController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -76,6 +78,21 @@ BattleCharacterController.prototype.walkAxes = function(axes) {
 	if (h == 1) return this.createReport('right');
 	if (h == -1) return this.createReport('left');
 	return this.createReport('resetState');
+};
+
+BattleCharacterController.prototype.drawImage = function(img){
+	this.view.addOverworldImage(this.overworld,img);
+}
+
+/*
+	create img library for overWorld character
+*/
+BattleCharacterController.prototype.getOverworldCharacter = function() {
+	return {
+		character: new OverworldCharacter('IceGolem'),
+		//audio: this.contentManager.getBattleCharacterAudio(character),
+		visual: this.contentManager.getOverworldCharacterVisuals()
+	}
 };
 
 /*
