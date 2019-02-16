@@ -3,7 +3,7 @@ function OverworldController(model, view, utils, contentManager) {
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.overworld = this.view.getOverworld();
-	this.character = new OverworldCharacter('IceGolem');
+	this.character = this.getOverworldCharacter();
 	
 	
 }
@@ -80,9 +80,19 @@ BattleCharacterController.prototype.walkAxes = function(axes) {
 	return this.createReport('resetState');
 };
 
+BattleCharacterController.prototype.show = function() {
+	this.view.show(this.overworld);
+	this.showCharacter();
+};
+
+BattleCharacterController.prototype.showCharacter() {
+	var img = this.character.visual.down();
+	this.drawImage();
+};
+
 BattleCharacterController.prototype.drawImage = function(img){
 	this.view.addOverworldImage(this.overworld,img);
-}
+};
 
 /*
 	create img library for overWorld character
