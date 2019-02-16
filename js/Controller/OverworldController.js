@@ -50,12 +50,12 @@ OverworldController.prototype.down = function (character){
 	character.character.down();
 };
 
-BattleCharacterController.prototype.processAxes = function(character, axes) {
+OverworldController.prototype.processAxes = function(character, axes) {
 	// console.log('processAxes');
 	this.processAction(character, this[character.character.state + 'Axes'](axes));
 };
 
-BattleCharacterController.prototype.idleAxes = function(axes) {
+OverworldController.prototype.idleAxes = function(axes) {
 	// console.log('idleAxes');
 	var v = this.verticalDirection(axes);
 	var h = this.horizontalDirection(axes);
@@ -67,7 +67,7 @@ BattleCharacterController.prototype.idleAxes = function(axes) {
 	if (h == -1) return this.createReport('left');
 };
 
-BattleCharacterController.prototype.walkAxes = function(axes) {
+OverworldController.prototype.walkAxes = function(axes) {
 	// console.log('walkAxes');
 	var v = this.verticalDirection(axes);
 	var h = this.horizontalDirection(axes);
@@ -80,24 +80,24 @@ BattleCharacterController.prototype.walkAxes = function(axes) {
 	return this.createReport('resetState');
 };
 
-BattleCharacterController.prototype.show = function() {
+OverworldController.prototype.show = function() {
 	this.view.show(this.overworld);
 	this.showCharacter();
 };
 
-BattleCharacterController.prototype.showCharacter() {
+OverworldController.prototype.showCharacter = function() {
 	var img = this.character.visual.down();
 	this.drawImage();
 };
 
-BattleCharacterController.prototype.drawImage = function(img){
+OverworldController.prototype.drawImage = function(img){
 	this.view.addOverworldImage(this.overworld,img);
 };
 
 /*
 	create img library for overWorld character
 */
-BattleCharacterController.prototype.getOverworldCharacter = function() {
+OverworldController.prototype.getOverworldCharacter = function() {
 	return {
 		character: new OverworldCharacter('IceGolem'),
 		//audio: this.contentManager.getBattleCharacterAudio(character),

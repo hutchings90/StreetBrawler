@@ -23,6 +23,7 @@ BATTLE
 		Pummel (hitting during grab)
 		Throws (forward, backward)
 		Grab broken (grabbed character breaks free)
+		Blocked attack(s)
 	TIMER
 		Start
 		Beginning of urgency
