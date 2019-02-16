@@ -16,8 +16,38 @@ function Character(name, attacks) {
 		[ 'haymaker', 'jab', 'roundhouse', 'special' ],
 		[ 'uppercut', 'highKick', 'lowKick', 'crouchSpecial' ],
 		[ 'jumpPunchHigh', 'jumpPunchLow', 'jumpKickLow', 'jumpKickHigh' ]);
+	this.hurtboxes = {
+		idle: this.makeHurtbox(10, 0, 210, 60),
+		jump: this.makeHurtbox(10, 0, 210, 60),
+		crouch: this.makeHurtbox(),
+		walk: this.makeHurtbox(),
+		block: this.makeHurtbox(),
+		grab: this.makeHurtbox(),
+		haymaker: this.makeHurtbox(50, 0, 210, 55),
+		jab: this.makeHurtbox(70, 0, 210, 62),
+		roundhouse: this.makeHurtbox(),
+		special: this.makeHurtbox(),
+		uppercut: this.makeHurtbox(),
+		highKick: this.makeHurtbox(),
+		lowKick: this.makeHurtbox(),
+		crouchSpecial: this.makeHurtbox(),
+		jumpPunchHigh: this.makeHurtbox(),
+		jumpPunchLow: this.makeHurtbox(),
+		jumpKickLow: this.makeHurtbox(),
+		jumpKickHigh: this.makeHurtbox()
+	};
 	this.resetState();
 }
+
+Character.prototype.makeHurtbox = function(x, y, height, width) {
+	// console.log('makeHurtbox');
+	return {
+		x: x || 0,
+		y: y || 0,
+		height: height || 0,
+		width: width || 0
+	};
+};
 
 Character.prototype.createAttacks = function(idle, crouch, jump) {
 	// console.log('createAttacks');
@@ -36,9 +66,15 @@ Character.prototype.reset = function(x) {
 	this.dy = 0;
 };
 
+Character.prototype.setState = function(state) {
+	// console.log('setState');
+	this.state = state;
+	this.hurtbox = this.hurtboxes[state];
+};
+
 Character.prototype.resetState = function() {
 	console.log('resetState');
-	this.state = 'idle';
+	this.setState('idle');
 	this.curAttack = null;
 	this.move = this.walkMove;
 	this.reset(this.x);

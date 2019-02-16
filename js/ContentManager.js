@@ -58,7 +58,7 @@ ContentManager.prototype.loadGolemVisuals = function(golemType) {
 	return {
 		bust: this.view.createBattleCharacterImage(path + 'bust.png'),
 		idle: this.view.createBattleCharacterImage(path + 'idle.png', 90),
-		haymaker: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		haymaker: this.view.createBattleCharacterImage(path + 'haymaker.png', 109),
 		jab: this.view.createBattleCharacterImage(path + 'jab.png', 150),
 		roundhouse: this.view.createBattleCharacterImage(path + 'jab.png', 150),
 		special: this.view.createBattleCharacterImage(path + 'jab.png', 150),
