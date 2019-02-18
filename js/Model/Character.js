@@ -12,10 +12,14 @@ function Character(name, attacks) {
 	this.dx = 0;
 	this.dy = 0;
 	this.jumpFrames = 0;
+	this.direction = '';
+	this.attackFrames = 0;
+	this.freezeFrames = 0;
 	this.attacks = attacks || this.createAttacks(
-		[ 'haymaker', 'jab', 'roundhouse', 'special' ],
-		[ 'uppercut', 'highKick', 'lowKick', 'crouchSpecial' ],
-		[ 'jumpPunchHigh', 'jumpPunchLow', 'jumpKickLow', 'jumpKickHigh' ]);
+		[ this.createAttack('haymaker', 8), this.createAttack('jab', 5), this.createAttack('roundhouse', 15), this.createAttack('special', 10) ],
+		[ this.createAttack('uppercut', 10), this.createAttack('highKick', 15), this.createAttack('lowKick', 15), this.createAttack('crouchSpecial', 10) ],
+		[ this.createAttack('jumpPunchHigh', 10), this.createAttack('jumpPunchLow', 10), this.createAttack('jumpKickLow', 10), this.createAttack('jumpKickHigh', 10) ]
+	);
 	this.hurtboxes = {
 		idle: this.makeHurtbox(10, 0, 210, 60),
 		jump: this.makeHurtbox(10, 0, 210, 60),
@@ -55,6 +59,14 @@ Character.prototype.createAttacks = function(idle, crouch, jump) {
 		idle: idle,
 		crouch: crouch,
 		jump: jump
+	}
+};
+
+Character.prototype.createAttack = function(name, frames) {
+	// console.log('createAttack');
+	return {
+		name: name,
+		frames: frames
 	}
 };
 
@@ -123,13 +135,40 @@ Character.prototype.grab = function() {
 
 Character.prototype.attack = function(i) {
 	// console.log('attack');
+	if (this.freezeFrames) return;
 	this.curAttack = this.attacks[this.state][i];
-	this.state = 'attack';
+	this.state += 'Attack';
+	this.attackFrames = 1;
+};
+
+Character.prototype.baseMove = function() {
+	// console.log('baseMove');
+	if (this.attackFrames && this.attackFrames++ >= this.curAttack.frames) {
+		this.endAttack();
+		return true;
+	}
+	if (this.freezeFrames && this.freezeFrames-- <= 0) {
+		this.endFreeze();
+	}
+};
+
+Character.prototype.endAttack = function() {
+	// console.log('endAttack');
+	this.attackFrames = 0;
+	this.curAttack = null;
+	this.setState(this.state.replace('Attack', ''));
+	this.freezeFrames = 5;
+};
+
+Character.prototype.endFreeze = function() {
+	// console.log('endFreeze');
+	this.freezeFrames = 0;
 };
 
 Character.prototype.walkMove = function() {
 	// console.log('move');
 	this.moveX();
+	return this.baseMove();
 };
 
 Character.prototype.jumpMove = function() {
@@ -139,6 +178,7 @@ Character.prototype.jumpMove = function() {
 	this.jumpFrames++;
 	this.dy += this.GRAVITY * this.jumpFrames;
 	if (this.y <= 0) this.resetState();
+	return this.baseMove();
 };
 
 Character.prototype.moveX = function() {
@@ -162,4 +202,9 @@ Character.prototype.setY = function(y) {
 	// console.log('setY');
 	if (y < 0) y = 0;
 	this.y = y;
+};
+
+Character.prototype.canTurn = function() {
+	// console.log('canTurn');
+	return this.state == 'walk' || this.state == 'idle' || this.state == 'crouch';
 };

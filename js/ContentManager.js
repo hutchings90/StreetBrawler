@@ -58,6 +58,7 @@ ContentManager.prototype.loadGolemVisuals = function(golemType) {
 	return {
 		bust: this.view.createBattleCharacterImage(path + 'bust.png'),
 		idle: this.view.createBattleCharacterImage(path + 'idle.png', 90),
+		walk: this.view.createBattleCharacterImage(path + 'idle.png', 90),
 		haymaker: this.view.createBattleCharacterImage(path + 'haymaker.png', 109),
 		jab: this.view.createBattleCharacterImage(path + 'jab.png', 150),
 		roundhouse: this.view.createBattleCharacterImage(path + 'jab.png', 150),
@@ -111,6 +112,7 @@ ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 	// console.log('getBattleCharacterVisualsFromAsset');
 	return {
 		idle: asset.idle.cloneNode(true),
+		walk: asset.idle.cloneNode(true),
 		haymaker: asset.haymaker.cloneNode(true),
 		jab: asset.jab.cloneNode(true),
 		roundhouse: asset.roundhouse.cloneNode(true),
