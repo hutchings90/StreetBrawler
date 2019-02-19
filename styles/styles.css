@@ -5,6 +5,16 @@ body {
 	margin: 0;
 }
 
+.hitbox {
+	background: red;
+	opacity: .5;
+}
+
+.hurtbox {
+	background: blue;
+	opacity: .5;
+}
+
 #development-menu-container {
 }
 

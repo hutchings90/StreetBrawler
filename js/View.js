@@ -305,8 +305,11 @@ View.prototype.resetCharacter = function(character, ci) {
 
 View.prototype.setCharacterPosition = function(character) {
 	// console.log('setCharacterPosition');
-	character.e.style.left = character.character.x + 'px';
-	character.e.style.bottom = character.character.y + 'px';
+	var c = character.character;
+	var left = c.x;
+	if (c.direction == 'right') left += character.visual.idle.width - character.e.width;
+	character.e.style.left = left + 'px';
+	character.e.style.bottom = c.y + 'px';
 };
 
 View.prototype.setBattleNametag = function(e, nametag) {

@@ -3,7 +3,7 @@
  * Provides the controller for the Street Brawler game.
  */
 
-function StreetBrawlerController(model, view, utils, contentManager) {
+function StreetBrawlerController(model, view, utils, contentManager, testing) {
 	// console.log('StreetBrawlerController');
 	Controller.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
@@ -11,7 +11,7 @@ function StreetBrawlerController(model, view, utils, contentManager) {
 	this.mainMenuController = new MainMenuController(view, utils, contentManager);
 	this.characterSelectController = new CharacterSelectController(view, utils, contentManager);
 	this.characterDetailController = new CharacterDetailController(view, utils, contentManager);
-	this.battleController = new BattleController(model, view, utils, contentManager);
+	this.battleController = new BattleController(model, view, utils, contentManager, testing);
 	this.campaignController = new CampaignController(model, view, utils, contentManager, this.battleController);
 	this.activateMainMenu();
 	//where is this.streetBrawler defined?

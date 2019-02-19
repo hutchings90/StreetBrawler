@@ -1,5 +1,5 @@
 //constructor function as defined below
-function BattleController(model, view, utils, contentManager) {
+function BattleController(model, view, utils, contentManager, testing) {
 	// console.log('BattleController');
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model, this.controllerActivated);
@@ -8,7 +8,8 @@ function BattleController(model, view, utils, contentManager) {
 	this.PRE_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
 	this.END_ROUND_FRAMES = FRAMES_PER_SECOND * 3;
 	this.FULL_TIME = 99;
-	this.battleCharacterController = new BattleCharacterController(view, utils, contentManager);
+	this.testing = testing;
+	this.battleCharacterController = new BattleCharacterController(view, utils, contentManager, testing);
 	this.battleMenuController = new BattleMenuController(view, utils, contentManager);
 	this.battleAreaContainer = this.view.getBattleAreaContainer();
 	this.battleArea = this.view.getBattleArea();
@@ -244,6 +245,18 @@ BattleController.prototype.showCharacter = function(character, ci) {
 	this.view.addBattleImage(this.battleObjects, img);
 	character.e = img;
 	this.resetCharacter(character, ci);
+	if (this.testing) {
+		character.hurtE = this.view.createElement('div');
+		character.hitE = this.view.createElement('div');
+		character.hurtE.style.left = character.character.hurtbox.x + 'px';
+		character.hurtE.style.bottom = character.character.hurtbox.y + 'px';
+		character.hurtE.style.heigth = character.character.hurtbox.height + 'px';
+		character.hurtE.style.width = character.character.hurtbox.width + 'px';
+		this.view.addClassName(character.hurtE, 'hurtbox');
+		this.view.addClassName(character.hitE, 'hitbox');
+		this.view.addBattleImage(this.battleObjects, character.hurtE);
+		this.view.addBattleImage(this.battleObjects, character.hitE);
+	}
 };
 
 /*

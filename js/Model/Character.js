@@ -4,7 +4,6 @@ function Character(name, attacks) {
 	this.JUMP_VY = 20;
 	this.JUMP_VX = 6;
 	this.WALK_VX = 2;
-	this.BATTLE_AREA_W = 900;
 	this.name = name;
 	this.health = 100;
 	this.x = 0;
@@ -21,24 +20,78 @@ function Character(name, attacks) {
 		[ this.createAttack('jumpPunchHigh', 10), this.createAttack('jumpPunchLow', 10), this.createAttack('jumpKickLow', 10), this.createAttack('jumpKickHigh', 10) ]
 	);
 	this.hurtboxes = {
-		idle: this.makeHurtbox(10, 0, 210, 60),
-		jump: this.makeHurtbox(10, 0, 210, 60),
-		crouch: this.makeHurtbox(),
-		walk: this.makeHurtbox(),
-		block: this.makeHurtbox(),
-		grab: this.makeHurtbox(),
-		haymaker: this.makeHurtbox(50, 0, 210, 55),
-		jab: this.makeHurtbox(70, 0, 210, 62),
-		roundhouse: this.makeHurtbox(),
-		special: this.makeHurtbox(),
-		uppercut: this.makeHurtbox(),
-		highKick: this.makeHurtbox(),
-		lowKick: this.makeHurtbox(),
-		crouchSpecial: this.makeHurtbox(),
-		jumpPunchHigh: this.makeHurtbox(),
-		jumpPunchLow: this.makeHurtbox(),
-		jumpKickLow: this.makeHurtbox(),
-		jumpKickHigh: this.makeHurtbox()
+		idle: {
+			hurt: this.makeHurtbox(10, 0, 210, 60),
+			hit: this.makeHurtbox()
+		},
+		jump: {
+			hurt: this.makeHurtbox(10, 0, 210, 60),
+			hit: this.makeHurtbox()
+		},
+		crouch: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		walk: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		block: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		grab: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		haymaker: {
+			hurt: this.makeHurtbox(5, 0, 210, 55),
+			hit: this.makeHurtbox(75, 90, 30, 40)
+		},
+		jab: {
+			hurt: this.makeHurtbox(17, 0, 210, 62),
+			hit: this.makeHurtbox(100, 93, 30, 55)
+		},
+		roundhouse: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		special: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		uppercut: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		highKick: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		lowKick: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		crouchSpecial: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		jumpPunchHigh: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		jumpPunchLow: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		jumpKickLow: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		},
+		jumpKickHigh: {
+			hurt: this.makeHurtbox(),
+			hit: this.makeHurtbox()
+		}
 	};
 	this.resetState();
 }
@@ -81,7 +134,7 @@ Character.prototype.reset = function(x) {
 Character.prototype.setState = function(state) {
 	// console.log('setState');
 	this.state = state;
-	this.hurtbox = this.hurtboxes[state];
+	this.hurtbox = this.hurtboxes[state].hurt;
 };
 
 Character.prototype.resetState = function() {
@@ -139,6 +192,8 @@ Character.prototype.attack = function(i) {
 	this.curAttack = this.attacks[this.state][i];
 	this.state += 'Attack';
 	this.attackFrames = 1;
+	this.hurtbox = this.hurtboxes[this.curAttack.name].hurt;
+	this.hitbox = this.hurtboxes[this.curAttack.name].hit;
 };
 
 Character.prototype.baseMove = function() {
@@ -158,6 +213,7 @@ Character.prototype.endAttack = function() {
 	this.curAttack = null;
 	this.setState(this.state.replace('Attack', ''));
 	this.freezeFrames = 5;
+	this.hitbox = null;
 };
 
 Character.prototype.endFreeze = function() {
@@ -193,14 +249,11 @@ Character.prototype.moveY = function() {
 
 Character.prototype.setX = function(x) {
 	// console.log('setX');
-	if (x < 0) x = 0;
-	if (x > this.BATTLE_AREA_W) x = this.BATTLE_AREA_W;
 	this.x = x;
 };
 
 Character.prototype.setY = function(y) {
 	// console.log('setY');
-	if (y < 0) y = 0;
 	this.y = y;
 };
 

@@ -49,7 +49,7 @@
  */
 function GamepadSimulator() {
 	// console.log('GamepadSimulator');
-	this.buttons = [ this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton() ];
+	this.buttons = [ this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton(), this.makeButton() ];
 	this.axes = [ 0, 0 ]; // Sets the character movement to Stopped.
 }
 

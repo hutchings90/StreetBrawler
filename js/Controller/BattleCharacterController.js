@@ -1,8 +1,10 @@
-function BattleCharacterController(view, utils, contentManager) {
+function BattleCharacterController(view, utils, contentManager, testing) {
 	// console.log('BattleCharacterController');
 	GamepadProcessingController.call(this, view, utils, contentManager);
+	this.BATTLE_AREA_W = 900;
 	this.setCharacters([]);
 	this.characterAttacks = [ [], [] ];
+	this.testing = testing;
 }
 
 BattleCharacterController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -29,13 +31,80 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 	this.setCharacterDirections();
 	for (var i = this.characters.length - 1; i >= 0; i--) {
 		var character = this.characters[i];
-		if (character.character.move() || !this.view.hasClassName(character.e, character.character.direction)) {
-			var img = character.visual[character.character.state];
-			this.view.replaceBattleImage(character.e, img, character.character.direction);
-			character.e = img;
+		var c = character.character;
+		var o = this.characters[this.getOtherPlayerIndex(i)];
+		var oc = o.character;
+		var preX = c.x;
+		if (c.move() || !this.view.hasClassName(character.e, c.direction)) this.setCharacterImage(character, c.state);
+		if (!c.state.includes('jump') && !oc.state.includes('jump') && this.utils.charactersCollide(character, o)) {
+			if (c.dx < 0) {
+				if (c.direction == 'right') {
+					var ocRight = oc.x + oc.hurtbox.x + oc.hurtbox.width;
+					var minLeft = ocRight - character.visual.idle.width + c.hurtbox.x + c.hurtbox.width;
+					if (preX >= minLeft) c.setX(minLeft);
+					else c.setX(preX);
+				}
+			}
+			else if (c.dx > 0) {
+				if (c.direction == 'left') {
+					var ocLeft = oc.x + o.visual.idle.width - oc.hurtbox.x - oc.hurtbox.width;
+					var maxRight = ocLeft - c.hurtbox.x - c.hurtbox.width;
+					if (preX <= maxRight) c.setX(maxRight);
+					else c.setX(preX);
+				}
+			}
 		}
+		if (c.direction == 'left') {
+			var left = c.x + c.hurtbox.x;
+			var right = left + c.hurtbox.width;
+			var minLeft = 0 - c.hurtbox.x
+			var maxRight = this.BATTLE_AREA_W - c.hurtbox.x - c.hurtbox.width;
+		}
+		else {
+			var offset = c.x + character.visual.idle.width;
+			var right = offset - c.hurtbox.x;
+			var left = right - c.hurtbox.width;
+			var minLeft = c.hurtbox.x + c.hurtbox.width - character.visual.idle.width;
+			var maxRight = this.BATTLE_AREA_W - character.visual.idle.width + c.hurtbox.x;
+		}
+		if (left < 0) c.x = minLeft;
+		if (right > this.BATTLE_AREA_W) c.x = maxRight;
+		if (c.y < 0) c.y = 0;
+		this.setHitboxes(character);
 		this.view.setCharacterPosition(character);
 	}
+};
+
+BattleCharacterController.prototype.setHitboxes = function(character) {
+	// console.log('setHitboxes');
+	if (!this.testing) return;
+	var c = character.character;
+	if (c.direction == 'left') character.hurtE.style.left = (c.x + c.hurtbox.x) + 'px';
+	else character.hurtE.style.left = (c.x + character.visual.idle.width - c.hurtbox.x - c.hurtbox.width) + 'px';
+	character.hurtE.style.bottom = (c.y + c.hurtbox.y) + 'px';
+	character.hurtE.style.height = c.hurtbox.height + 'px';
+	character.hurtE.style.width = c.hurtbox.width + 'px';
+	if (c.hitbox) {
+		if (c.direction == 'left') character.hitE.style.left = (c.x + c.hitbox.x) + 'px';
+		else character.hitE.style.left = (c.x + character.visual.idle.width - c.hitbox.x - c.hitbox.width) + 'px';
+		character.hitE.style.bottom = (c.y + c.hitbox.y) + 'px';
+		character.hitE.style.height = c.hitbox.height + 'px';
+		character.hitE.style.width = c.hitbox.width + 'px';
+	}
+	else {
+		character.hitE.style.left = '0px';
+		character.hitE.style.bottom = '0px';
+		character.hitE.style.height = '0px';
+		character.hitE.style.width = '0px';
+	}
+};
+
+BattleCharacterController.prototype.setCharacterImage = function(character, name) {
+	// console.log('setCharacterImage');
+	var img = character.visual[name];
+	this.view.replaceBattleImage(character.e, img, character.character.direction);
+	character.e = img;
+	this.setHitboxes(character);
 };
 
 BattleCharacterController.prototype.setCharacterDirections = function() {
@@ -96,9 +165,8 @@ BattleCharacterController.prototype.attack = function(character, params) {
 	// console.log('attack');
 	if (character.character.freezeFrames) return;
 	character.character.attack(params.button);
-	var img = character.visual[character.character.curAttack.name];
-	this.view.replaceBattleImage(character.e, img, character.character.direction);
-	character.e = img;
+	this.setCharacterImage(character, character.character.curAttack.name);
+	this.setHitboxes(character);
 };
 
 BattleCharacterController.prototype.processAxes = function(character, axes) {
