@@ -7,9 +7,10 @@ Utils.prototype.makeControllerVariableInput = function(controller, model, contro
 	controller.timeout = null;
 	controller.streetBrawler = model;
 	controller.activateController = function(controllerName, mode, pi) {
-		// console.log('activateController');
+		 //console.log('activateController');
 		var me = this;
 		var nextController = me[controllerName + 'Controller'];
+		//console.log(nextController);
 		me.streetBrawler.setGamepadHalted(true);
 		nextController.show();
 		me.activeController = null;

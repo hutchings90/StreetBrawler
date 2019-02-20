@@ -3,6 +3,8 @@ function OverworldController(model, view, utils, contentManager) {
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.overworld = this.view.getOverworld();
+	this.overworldContainer = this.view.getOverworldContainer();
+	console.log(this.overworldContainer);
 	this.character = this.getOverworldCharacter();
 	
 	
@@ -81,13 +83,15 @@ OverworldController.prototype.walkAxes = function(axes) {
 };
 
 OverworldController.prototype.show = function() {
-	this.view.show(this.overworld);
+	//console.log(this.overworldContainer);
+	this.view.show(this.overworldContainer);
 	this.showCharacter();
 };
 
 OverworldController.prototype.showCharacter = function() {
-	var img = this.character.visual.down();
-	this.drawImage();
+	//console.log(this.character);
+	var img = this.character.visual.down;
+	this.drawImage(img);
 };
 
 OverworldController.prototype.drawImage = function(img){

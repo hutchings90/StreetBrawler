@@ -12,4 +12,9 @@ CampaignController.constructor = BattleController;
 
 CampaignController.prototype.show = function() {
 	// console.log('show');
+	this.loadOverworld();
+};
+
+CampaignController.prototype.loadOverworld = function() {
+	this.activateController('overworld','overworld',this.activator);
 };
