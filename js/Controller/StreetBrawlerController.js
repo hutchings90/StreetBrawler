@@ -10,11 +10,9 @@ function StreetBrawlerController(model, view, utils, contentManager, testing) {
 	this.interval = null;
 	this.mainMenuController = new MainMenuController(view, utils, contentManager);
 	this.characterSelectController = new CharacterSelectController(view, utils, contentManager);
-	this.characterDetailController = new CharacterDetailController(view, utils, contentManager);
 	this.battleController = new BattleController(model, view, utils, contentManager, testing);
 	this.campaignController = new CampaignController(model, view, utils, contentManager, this.battleController);
 	this.activateMainMenu();
-	//where is this.streetBrawler defined?
 	if (this.streetBrawler.activePlayerCount() > 0) this.start();
 }
 
@@ -143,16 +141,6 @@ StreetBrawlerController.prototype.activateCampaign = function(pi, mode) {
 };
 
 /*
-Called only by characterDetail
-@param pi = player index
-activates characterDetail menu using specified player index
-*/
-StreetBrawlerController.prototype.activateCharacterDetail = function(pi) {
-	// console.log('activateCharacterDetail');
-	this.activateMenu('characterDetail', pi);
-};
-
-/*
 @param pi = player index, params contains characters
 calls battleController.setCharacters using params.characters
 calls activates battle controller
@@ -232,16 +220,6 @@ StreetBrawlerController.prototype.characterDetails = function(pi, params) {
 	// console.log('characterDetails');
 	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
 	this.activateCharacterSelect(pi, 'characterDetail');
-};
-
-/**
- * Begins the character detail for the specified player.
- * @param {number} i
- *   The index within this controller's streetBrawler model of the player who selected this option.
- */
-StreetBrawlerController.prototype.characterDetail = function(pi, params) {
-	// console.log('characterDetail');
-	this.activateCharacterDetail(pi);
 };
 
 /*

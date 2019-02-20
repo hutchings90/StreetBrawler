@@ -82,9 +82,9 @@ View.prototype.getBattleStartButton = function() {
 	return this.getElement('#battle-start');
 };
 
-View.prototype.getCharacterDetail = function() {
-	// console.log('getCharacterDetail');
-	return this.getElement('#character-detail');
+View.prototype.getCharacterDetails = function() {
+	// console.log('getCharacterDetails');
+	return this.getElement('#character-details');
 };
 
 View.prototype.getOverworld = function() {

@@ -3,6 +3,7 @@ function CharacterSelectController(view, utils, contentManager) {
 	MenuController.call(this, view, utils, contentManager, 'CharacterSelect');
 	this.TWO_PLAYER = 'twoPlayerBattle';
 	this.CHARACTER_DETAIL = 'characterDetail';
+	this.characterDetails = this.view.getCharacterDetails();
 	this.mode = '';
 	this.i = [ 0, 0 ];
 	this.startButton = this.view.getBattleStartButton();
@@ -18,6 +19,10 @@ CharacterSelectController.prototype.start = function(activator) {
 	this.setIndex(0, this.activator);
 	if (this.mode == this.TWO_PLAYER) this.setIndex(0, this.getNonActivator());
 	this.view.show(this.menu);
+	if (this.mode == this.CHARACTER_DETAIL) {
+		this.view.show(this.characterDetails.children[this.i[0]]);
+		this.view.show(this.characterDetails);
+	}
 };
 
 CharacterSelectController.prototype.nextFrame = function(inputs) {
@@ -38,7 +43,15 @@ CharacterSelectController.prototype.nextFrame = function(inputs) {
 			else if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
 			if (this.allCharactersSelected()) this.showStartButton(pi);
 		}
-		if (!this.isPlayerSelected(pi)) this.moveHorizontal(this.horizontalDirection(status.axes), pi);
+		if (!this.isPlayerSelected(pi)) {
+			var direction = this.horizontalDirection(status.axes);
+			var prevI = this.i[0];
+			this.moveHorizontal(direction, pi);
+			if (this.mode == this.CHARACTER_DETAIL && prevI != this.i[0]) {
+				this.view.hide(this.characterDetails.children[prevI]);
+				this.view.show(this.characterDetails.children[this.i[0]]);
+			}
+		}
 	}
 };
 
@@ -154,6 +167,8 @@ CharacterSelectController.prototype.end = function(pi) {
 	}
 	this.hide();
 	this.hideStartButton();
+	this.view.hide(this.characterDetails.children[this.i[0]]);
+	this.view.hide(this.characterDetails);
 	this.mode = '';
 	this.clearAllOptions(pi);
 	return ret;
