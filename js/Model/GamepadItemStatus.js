@@ -92,3 +92,5 @@ GamepadItemStatus.prototype.battleUpdate = function(pressed) {
 	if (!pressed) this.processNoPress();
 	else if (this.status == 'idle') this.start();
 };
+
+GamepadItemStatus.prototype.overworldUpdate = GamepadItemStatus.prototype.battleUpdate;

@@ -10,9 +10,17 @@ function CampaignController(model, view, utils, contentManager, battleController
 CampaignController.prototype = Object.create(GamepadProcessingController.prototype);
 CampaignController.constructor = BattleController;
 
+CampaignController.prototype.nextFrame = function(inputs){
+	this.activeController.nextFrame(inputs);
+};
+
+CampaignController.prototype.start = function() {
+	this.loadOverworld();
+};
+
 CampaignController.prototype.show = function() {
 	// console.log('show');
-	this.loadOverworld();
+	//this.loadOverworld();
 };
 
 CampaignController.prototype.loadOverworld = function() {

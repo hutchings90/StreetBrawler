@@ -25,7 +25,7 @@ Utils.prototype.makeControllerVariableInput = function(controller, model, contro
 		}, 1000);
 	};
 	controller.controllerActivated = controllerActivated || function() {
-		// console.log('controllerActivated');
+		 //console.log('controllerActivated');
 	};
 };
 

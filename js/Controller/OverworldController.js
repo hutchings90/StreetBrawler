@@ -1,10 +1,9 @@
 function OverworldController(model, view, utils, contentManager) {
-	console.log('OverworldController');
+	//console.log('OverworldController');
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	this.overworld = this.view.getOverworld();
 	this.overworldContainer = this.view.getOverworldContainer();
-	console.log(this.overworldContainer);
 	this.character = this.getOverworldCharacter();
 	
 	
@@ -14,22 +13,17 @@ OverworldController.prototype = Object.create(GamepadProcessingController.protot
 OverworldController.constructor = OverworldController;
 
 OverworldController.prototype.nextFrame = function(inputs) {
-	// console.log('BattleCharacterController');
-	for (var i = inputs.length - 1; i >= 0; i--) {
-		var input = inputs[i];
-		var status = input.status;
-		if (!status) continue;
-		var character = this.characters[i];
-		if (this.buttonPressed(status.buttons[9])) return this.createReport('showBattleMenu', {}, input.pi);
-		this.processAxes(character, status.axes);
-		this.processButtons(character, status.buttons);
-	}
+	//console.log('OverworldController frame');
+	var input = inputs[0];
+	var status = input.status;
+	if (!status) return;
+	if (this.buttonPressed(status.buttons[9])) return this.createReport('showBattleMenu', {}, input.pi);
+	this.processAxes(this.character, status.axes);
+	//this.processButtons(this.character, status.buttons);
 
-	for (var i = this.characters.length - 1; i >= 0; i--) {
-		var character = this.characters[i];
-		character.character.move();
-		this.view.setCharacterPosition(character);
-	}
+	this.character.character.move();
+	//console.log('x/y:',this.character.character.x,this.character.character.y);
+	this.view.setCharacterPosition(this.character);
 };
 
 OverworldController.prototype.startBattle = function(params){};
@@ -37,24 +31,34 @@ OverworldController.prototype.startBattle = function(params){};
 OverworldController.prototype.interact = function(params){};
 
 OverworldController.prototype.left = function (character){
-	character.character.left();
+	this.character.character.left();
 };
 
 OverworldController.prototype.right = function (character){
-	character.character.right();
+	this.character.character.right();
 };
 
 OverworldController.prototype.up = function (character){
-	character.character.up();
+	this.character.character.up();
 };
 
 OverworldController.prototype.down = function (character){
-	character.character.down();
+	this.character.character.down();
+};
+
+OverworldController.prototype.resetState = function(character) {
+	// console.log('resetState');
+	this.character.character.resetState();
+};
+
+OverworldController.prototype.processAction = function(character, action) {
+	// console.log('processAction');
+	if (action && action.action) this[action.action](character, action.params);
 };
 
 OverworldController.prototype.processAxes = function(character, axes) {
-	// console.log('processAxes');
-	this.processAction(character, this[character.character.state + 'Axes'](axes));
+	 //console.log('processAxes');
+	this.processAction(character, this[this.character.character.state + 'Axes'](axes));
 };
 
 OverworldController.prototype.idleAxes = function(axes) {
@@ -95,6 +99,7 @@ OverworldController.prototype.showCharacter = function() {
 };
 
 OverworldController.prototype.drawImage = function(img){
+	this.character.e = img;
 	this.view.addOverworldImage(this.overworld,img);
 };
 

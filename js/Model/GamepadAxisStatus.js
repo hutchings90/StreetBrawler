@@ -54,3 +54,5 @@ GamepadAxisStatus.prototype.battleUpdate = function(direction) {
 	if (Math.abs(direction) != 1) this.processNoPress();
 	else if (this.status == 'idle' || this.direction != direction) this.start(direction);
 };
+
+GamepadAxisStatus.prototype.overworldUpdate = GamepadAxisStatus.prototype.battleUpdate;

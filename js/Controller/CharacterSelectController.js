@@ -18,6 +18,7 @@ CharacterSelectController.prototype.start = function(activator) {
 	if (activator) this.activator = activator;
 	this.setIndex(0, this.activator);
 	if (this.mode == this.TWO_PLAYER) this.setIndex(0, this.getNonActivator());
+	console.log(this.menu);
 	this.view.show(this.menu);
 	if (this.mode == this.CHARACTER_DETAIL) {
 		this.view.show(this.characterDetails.children[this.i[0]]);
