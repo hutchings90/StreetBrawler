@@ -94,7 +94,7 @@ View.prototype.getCharacterDetails = function() {
 
 View.prototype.getOverworld = function() {
 	// console.log('getOverworld');
-	return this.getElement('#overworld');
+	return this.getElement('#overworld-objects');
 };
 
 View.prototype.getBattleObjects = function() {

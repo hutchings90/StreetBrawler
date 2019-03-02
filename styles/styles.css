@@ -46,6 +46,10 @@ body {
 	overflow: hidden;
 }
 
+#overworld #overworld-objects * {
+	position: absolute;
+}
+
 #battle-area-container {
 	text-align: center;
 }
