@@ -2,6 +2,7 @@ function OverworldController(model, view, utils, contentManager) {
 	//console.log('OverworldController');
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
+	//actually retrieves overworld-objects
 	this.overworld = this.view.getOverworld();
 	this.overworldContainer = this.view.getOverworldContainer();
 	this.character = this.getOverworldCharacter();
@@ -96,6 +97,7 @@ OverworldController.prototype.showCharacter = function() {
 	//console.log(this.character);
 	var img = this.character.visual.down;
 	this.drawImage(img);
+	this.view.setCharacterPosition(this.character);
 };
 
 OverworldController.prototype.drawImage = function(img){

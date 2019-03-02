@@ -6,8 +6,10 @@ function OverworldCharacter(name) {
 	//this.JUMP_VX = 6;
 	this.WALK_V = 2;
 	this.BATTLE_AREA_W = 900;
+	this.BATTLE_AREA_H = 500;
 	this.BATTLE_CHARACTER_W = 90;
 	this.MAX_X = this.BATTLE_AREA_W - this.BATTLE_CHARACTER_W;
+	this.MAX_Y = this.BATTLE_AREA_H - this.BATTLE_CHARACTER_W;
 	this.name = name;
 	this.health = 100;
 	this.x = 0;
@@ -18,10 +20,10 @@ function OverworldCharacter(name) {
 	this.resetState();
 }
 
-OverworldCharacter.prototype.reset = function(x) {
+OverworldCharacter.prototype.reset = function(x,y) {
 	// console.log('reset');
 	this.x = x || 0;
-	this.y = 0;
+	this.y = y || 0;
 	this.dx = 0;
 	this.dy = 0;
 };
@@ -30,7 +32,7 @@ OverworldCharacter.prototype.resetState = function() {
 	//console.log('resetState');
 	this.state = 'idle';
 	this.move = this.walkMove;
-	this.reset(this.x);
+	this.reset(this.x,this.y);
 };
 
 OverworldCharacter.prototype.left = function() {
@@ -94,5 +96,6 @@ OverworldCharacter.prototype.setX = function(x) {
 OverworldCharacter.prototype.setY = function(y) {
 	// console.log('setY'); 
 	if (y < 0) y = 0;
+	if (y> this.MAX_Y) y = this.MAX_Y;
 	this.y = y;
 };
