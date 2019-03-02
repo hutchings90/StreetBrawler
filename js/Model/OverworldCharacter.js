@@ -1,9 +1,5 @@
 function OverworldCharacter(name) {
 	// console.log('Character');
-	//TODO: update vars
-	//this.GRAVITY = -.1;
-	//this.JUMP_VY = 20;
-	//this.JUMP_VX = 6;
 	this.WALK_V = 2;
 	this.BATTLE_AREA_W = 900;
 	this.BATTLE_AREA_H = 500;
@@ -16,7 +12,6 @@ function OverworldCharacter(name) {
 	this.y = 0;
 	this.dx = 0;
 	this.dy = 0;
-	//this.jumpFrames = 0;
 	this.resetState();
 }
 
