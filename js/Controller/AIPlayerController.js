@@ -46,6 +46,11 @@ AIController.prototype.deactivate = function() {
  */
 AIController.prototype.makeDecisions = function() {
 	console.log('makeDecisions');
+	this.makeRandomDecision();
+}
+
+AIController.prototype.makeRandomDecision = function() {
+	console.log('makeRandomDecision');
 	var gamepad = this.ai.gamepadReader.gamepad;
 	gamepad.clear();
 	// 50% chance that a button will be pressed
