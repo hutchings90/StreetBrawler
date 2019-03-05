@@ -1,7 +1,9 @@
 function CharacterSelectController(view, utils, contentManager) {
 	// console.log('CharacterSelectController');
 	MenuController.call(this, view, utils, contentManager, 'CharacterSelect');
+	this.ONE_PLAYER = 'onePlayerBattle';
 	this.TWO_PLAYER = 'twoPlayerBattle';
+	this.CAMPAIGN = 'campaign';
 	this.CHARACTER_DETAIL = 'characterDetail';
 	this.characterDetails = this.view.getCharacterDetails();
 	this.mode = '';
@@ -151,19 +153,25 @@ CharacterSelectController.prototype.end = function(pi) {
 	// console.log('end');
 	var ret = this.createReport('mainMenu', { characters: [] }, pi);
 	if (this.allCharactersSelected()) {
-		if (this.mode == this.TWO_PLAYER) {
+		switch (this.mode) {
+		case this.TWO_PLAYER:
 			ret.action = 'twoPlayerBattle';
 			ret.params.characters = [
 				this.getBattleCharacter(0, this.getPlayerCharacter(0)),
 				this.getBattleCharacter(1, this.getPlayerCharacter(1))
 			];
-		}
-		else {
+			break;
+		case this.ONE_PLAYER:
 			ret.action = 'onePlayerBattle';
 			ret.params.characters = [
 				this.getBattleCharacter(pi, this.getPlayerCharacter(pi)),
 				this.getBattleCharacter(2, this.view.getRandomCharacter())
 			];
+			break;
+		case this.CAMPAIGN:
+			ret.action = 'startCampaign';
+			ret.params.character = this.getOverworldCharacter(pi, new OverworldCharacter(this.view.getCharacterName(this.options, this.i[pi], pi)));
+			break;
 		}
 	}
 	this.hide();
@@ -207,5 +215,15 @@ CharacterSelectController.prototype.getBattleCharacter = function(pi, character)
 		character: character,
 		audio: this.contentManager.getBattleCharacterAudio(character),
 		visual: this.contentManager.getBattleCharacterVisuals(character)
+	}
+};
+
+CharacterSelectController.prototype.getOverworldCharacter = function(pi, character) {
+	// console.log('getOverworldCharacter');
+	return {
+		pi: pi,
+		character: character,
+		audio: this.contentManager.getOverworldCharacterAudio(character),
+		visual: this.contentManager.getOverworldCharacterVisuals(character)
 	}
 };

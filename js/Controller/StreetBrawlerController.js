@@ -134,9 +134,9 @@ Called only from StreetBrawlerController.prototype.campaign
 sets the characterSelectController mode to 'campaign'
 activates campaign menu
 */
-StreetBrawlerController.prototype.activateCampaign = function(pi, mode) {
+StreetBrawlerController.prototype.activateCampaign = function(pi, params, mode) {
 	// console.log('activateCampaign');
-	this.characterSelectController.mode = mode;
+	this.campaignController.overworldController.setCharacter(params.character);
 	this.activateMenu('campaign', 'menu', pi);
 };
 
@@ -197,7 +197,7 @@ StreetBrawlerController.prototype.singlePlayer = function(pi, params) {
 StreetBrawlerController.prototype.campaign = function(pi, params) {
 	// console.log('campaign');
 	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
-	this.activateCampaign(pi, 'campaign');
+	this.activateCharacterSelect(pi, 'campaign');
 };
 
 /**
@@ -246,4 +246,9 @@ passes player index and params to activateBattle
 StreetBrawlerController.prototype.twoPlayerBattle = function(pi, params) {
 	// console.log('twoPlayerBattle');
 	this.activateBattle(pi, params);
+};
+
+StreetBrawlerController.prototype.startCampaign = function(pi, params) {
+	// console.log('startCampaign');
+	this.activateCampaign(pi, params);
 };

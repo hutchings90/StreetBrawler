@@ -5,9 +5,7 @@ function OverworldController(model, view, utils, contentManager) {
 	//actually retrieves overworld-objects
 	this.overworldImgs = this.view.getOverworld();
 	this.overworldContainer = this.view.getOverworldContainer();
-	this.character = this.getOverworldCharacter('IceGolem');
-	
-	
+	this.character = null;
 }
 
 OverworldController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -107,17 +105,6 @@ OverworldController.prototype.showCharacter = function() {
 OverworldController.prototype.drawImage = function(img){
 	this.character.e = img;
 	this.view.addOverworldImage(this.overworldImgs,img);
-};
-
-/*
-	create img library for overWorld character
-*/
-OverworldController.prototype.getOverworldCharacter = function(character) {
-	return {
-		character: new OverworldCharacter(character),
-		//audio: this.contentManager.getBattleCharacterAudio(character),
-		visual: this.contentManager.getOverworldCharacterVisuals(character)
-	}
 };
 
 /*

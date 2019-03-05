@@ -83,6 +83,16 @@ ContentManager.prototype.loadGolemAudio = function(golemType) {
 	return {};
 };
 
+ContentManager.prototype.getOverworldCharacterAudio = function(character) {
+	// console.log('getOverworldCharacterAudio');
+	return this.getOverworldCharacterAudioFromAsset(this.audio[character.name]);
+};
+
+ContentManager.prototype.getOverworldCharacterAudioFromAsset = function(asset) {
+	// console.log('getOverworldCharacterAudioFromAsset');
+	return {};
+};
+
 ContentManager.prototype.getBattleCharacterAudio = function(character) {
 	// console.log('getBattleCharacterAudio');
 	return this.getBattleCharacterAudioFromAsset(this.audio[character.constructor.name]);
@@ -93,13 +103,8 @@ ContentManager.prototype.getBattleCharacterAudioFromAsset = function(asset) {
 	return {};
 };
 
-ContentManager.prototype.getBattleCharacterVisuals = function(character) {
-	// console.log('getBattleCharacterVisuals');
-	return this.getBattleCharacterVisualsFromAsset(this.visuals[character.name.replace(/ /g, '')]);
-};
-
 ContentManager.prototype.getOverworldCharacterVisuals = function(character){
-	return this.getOverworldCharacterVisualsFromAsset(this.visuals[character]);
+	return this.getOverworldCharacterVisualsFromAsset(this.visuals[character.name]);
 };
 
 ContentManager.prototype.getOverworldCharacterVisualsFromAsset = function(asset) {
@@ -108,7 +113,12 @@ ContentManager.prototype.getOverworldCharacterVisualsFromAsset = function(asset)
 		up: asset.overworldBack.cloneNode(true),
 		side: asset.overworldSide.cloneNode(true)
 	};
-}
+};
+
+ContentManager.prototype.getBattleCharacterVisuals = function(character) {
+	// console.log('getBattleCharacterVisuals');
+	return this.getBattleCharacterVisualsFromAsset(this.visuals[character.name.replace(/ /g, '')]);
+};
 
 ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 	// console.log('getBattleCharacterVisualsFromAsset');
