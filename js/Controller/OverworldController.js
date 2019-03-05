@@ -13,7 +13,7 @@ function OverworldController(model, view, utils, contentManager) {
 OverworldController.prototype = Object.create(GamepadProcessingController.prototype);
 OverworldController.constructor = OverworldController;
 
-OverworldController.prototype.setCharacter = hunction(character) {
+OverworldController.prototype.setCharacter = function(character) {
 	this.character = character;
 };
 

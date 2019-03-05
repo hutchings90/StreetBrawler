@@ -75,7 +75,7 @@ GamepadSimulator.prototype.makeButton = function() {
  *   The index of the button to be pressed
  */
 GamepadSimulator.prototype.pressButton = function(i) {
-	// console.log('pressButton');
+	console.log('pressButton', i);
 	if (!this.validateButton(i)) return;
 	this.buttons[i].pressed = true;
 };
@@ -102,7 +102,7 @@ GamepadSimulator.prototype.releaseButton = function(i) {
  *   The direction of the axis
  */
 GamepadSimulator.prototype.pressAxis = function(i, direction) {
-	// console.log('pressAxis');
+	console.log('pressAxis', i, direction);
 	if (!this.validateAxis(i)) return;
 	this.axes[i] = direction;
 };
@@ -120,6 +120,35 @@ GamepadSimulator.prototype.releaseAxis = function(i) {
 };
 
 /**
+ * Releases all buttons and axes
+ */
+GamepadSimulator.prototype.clear = function() {
+	// console.log('clear');
+	this.clearButtons();
+	this.clearAxes();
+}
+
+/**
+ * Releases all buttons
+ */
+GamepadSimulator.prototype.clearButtons = function() {
+	// console.log('clearButtons');
+	for (var i = this.buttons.length - 4; i >= 0; i--) {
+		this.releaseButton(i);
+	}
+}
+
+/**
+ * Releases all axes
+ */
+GamepadSimulator.prototype.clearAxes = function() {
+	// console.log('clearAxes');
+	for (var i in this.axes) {
+		this.releaseButton(i);
+	}
+};
+
+/**
  * Calls validate with parameters "buttons" and i, returns the result.
  *
  * @param {number} i
@@ -127,7 +156,7 @@ GamepadSimulator.prototype.releaseAxis = function(i) {
  */
 GamepadSimulator.prototype.validateButton = function(i) {
 	// console.log('validateButton');
-	return this.validate('buttons', i);
+	return this.validate('buttons', this.buttons.length - 4, i);
 };
 
 /**
@@ -138,7 +167,7 @@ GamepadSimulator.prototype.validateButton = function(i) {
  */
 GamepadSimulator.prototype.validateAxis = function(i) {
 	// console.log('validateAxis');
-	return this.validate('axes', i);
+	return this.validate('axes', this.axes.length - 1, i);
 };
 
 /**
@@ -151,9 +180,9 @@ GamepadSimulator.prototype.validateAxis = function(i) {
  *   The index within
  * @return True if i is a valid index of prop, false otherwise
  */
-GamepadSimulator.prototype.validate = function(prop, i) {
+GamepadSimulator.prototype.validate = function(prop, max, i) {
 	// console.log('validate');
-	if (this.isValid(prop, i)) return true;
+	if (this.isValid(prop, max, i)) return true;
 	console.log(prop + '[' + i + '] is not valid.');
 	return false;
 };
@@ -167,7 +196,7 @@ GamepadSimulator.prototype.validate = function(prop, i) {
  *   The index within prop
  * @return True if i is a valid index of prop, false otherwise
  */
-GamepadSimulator.prototype.isValid = function(prop, i) {
+GamepadSimulator.prototype.isValid = function(prop, max, i) {
 	// console.log('isValid');
-	return Math.floor(i) == i && i >= 0 && this[prop] && i < this[prop].length;
+	return Math.floor(i) == i && i >= 0 && this[prop] && i <= max;
 };
