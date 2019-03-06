@@ -75,7 +75,7 @@ GamepadSimulator.prototype.makeButton = function() {
  *   The index of the button to be pressed
  */
 GamepadSimulator.prototype.pressButton = function(i) {
-	console.log('pressButton', i);
+	// console.log('pressButton', i);
 	if (!this.validateButton(i)) return;
 	this.buttons[i].pressed = true;
 };
@@ -94,6 +94,8 @@ GamepadSimulator.prototype.releaseButton = function(i) {
 };
 
 /**
+ * private
+ *
  * Sets the specified axis to direction, if i is a valid axis index.
  *
  * @param {number} i
@@ -102,12 +104,46 @@ GamepadSimulator.prototype.releaseButton = function(i) {
  *   The direction of the axis
  */
 GamepadSimulator.prototype.pressAxis = function(i, direction) {
-	console.log('pressAxis', i, direction);
+	// console.log('pressAxis', i, direction);
 	if (!this.validateAxis(i)) return;
 	this.axes[i] = direction;
 };
 
 /**
+ * Moves the horizontal axis left.
+ */
+GamepadSimulator.prototype.left = function() {
+	// console.log('left');
+	this.pressAxis(0, -1);
+};
+
+/**
+ * Moves the horizontal axis right.
+ */
+GamepadSimulator.prototype.right = function() {
+	// console.log('right');
+	this.pressAxis(0, 1);
+};
+
+/**
+ * Moves the vertical axis up.
+ */
+GamepadSimulator.prototype.up = function() {
+	// console.log('up');
+	this.pressAxis(1, -1);
+};
+
+/**
+ * Moves the vertical axis down.
+ */
+GamepadSimulator.prototype.down = function() {
+	// console.log('down');
+	this.pressAxis(1, 1);
+};
+
+/**
+ * private
+ *
  * Sets the specified axis to 0, if i is a valid axis index.
  *
  * @param {number} i
@@ -117,6 +153,22 @@ GamepadSimulator.prototype.releaseAxis = function(i) {
 	// console.log('releaseAxis');
 	if (!this.validateAxis(i)) return;
 	this.axes[i] = 0;
+};
+
+/**
+ * Releases the horizontal axis.
+ */
+GamepadSimulator.prototype.releaseHorizontalAxis = function() {
+	// console.log('releaseHorizontalAxis');
+	this.releaseAxis(0);
+};
+
+/**
+ * Releases the vertical axis.
+ */
+GamepadSimulator.prototype.releaseVerticalAxis = function() {
+	// console.log('releaseVerticalAxis');
+	this.releaseAxis(1);
 };
 
 /**

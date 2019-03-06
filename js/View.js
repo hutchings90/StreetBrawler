@@ -262,12 +262,12 @@ View.prototype.createCharacter = function(characterName) {
 View.prototype.addOverworldImage = function(e,img){
 	this.addClassName(img,'overworld-image ' );
 	this.appendChild(e, img);
-}
+};
 
 View.prototype.replaceOverworldImage = function(oldE, newE){
 	this.addClassName(newE, 'overworld-image ');
 	oldE.parentElement.replaceChild(newE,oldE);
-}
+};
 
 View.prototype.addBattleImage = function(e, img) {
 	// console.log('addBattleImage');
