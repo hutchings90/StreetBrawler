@@ -55,43 +55,63 @@ GamepadReader.prototype.setGamepad = function(gamepad) {
 	this.reset();
 };
 
+ 
+
 // TODO: Need to make this function call the AIPlayerController to follow MVC patter.
 GamepadReader.prototype.moveAI = function(player, gamepad) {
 	var pickHorizontalMovement = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
 	// var pickVerticalMovement = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
 	var flipToNeg = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	var jumpOrWalk = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
+	var jumpOrWalk = Math.floor(Math.random() * Math.floor(3)); // Picks a number between 0 and 2
+	var attackOrBlock = Math.floor(Math.random() * Math.floor(3)); // Picks a number between 0 and 2
 
 	if (flipToNeg == 0) { pickHorizontalMovement *= -1; }
 	// else if (flipToNeg == 1) { pickVerticalMovement *= -1; }
 
+	// Stop the AI from repeatedly doing these same moves until it can act again.
 	if (player.isJumping) { // Only make the AI jump once in a row for now
 		gamepad.releaseAxis(VERTICLE_AXIS); // Stop moving
 		player.toggleJumping();
 		jumpOrWalk = 0; // If the AI just jumped, don't let it jump again but make it walk if it does an action.
 	}
+	if(player.isAttacking) {
+		gamepad.releaseButton(ATTACK_JAB);
+		player.toggleAttacking();
+		var attackOrBlock = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
+	}
+	if (player.isGrabbing) {
+		// gamepad.releaseButton(ATTACK_GRAB);
+		// player.toggleGrabbing();
+	}
+
 	if (player.canDoMove()) {
 		if (player.isWalking) {
 			gamepad.releaseAxis(HORIZONTAL_AXIS); // Stop moving
 			player.toggleWalking();
 		}
-		else if (player.isJumping) {
-			gamepad.releaseAxis(VERTICLE_AXIS); // Stop moving
-			player.toggleJumping();
-		}
-		else { // If the AI isn't doing anything, make it do something
-			if (jumpOrWalk == 0) { // AI walks
+		// else { // If the AI isn't doing anything, make it do something
+			if (jumpOrWalk < 2) { // AI walks
 				gamepad.pressAxis(HORIZONTAL_AXIS, pickHorizontalMovement);
 				player.toggleWalking();
 			}
-			else { // AI jumps
+			else if (jumpOrWalk == 1) { // AI jumps
 				gamepad.pressAxis(VERTICLE_AXIS, MOVE_JUMP);
 				player.toggleJumping();
 			}
-		}
-
+			else if (attackOrBlock == 2) { // AI attacks 
+				gamepad.pressButton(ATTACK_JAB);
+				player.toggleAttacking();
+			}
+			else if (attackOrBlock == 1) { // AI blocks
+				// gamepad.pressButton();
+				// player.toggleBlock();
+			}
+			else { // Only possible action for checking is blocking
+				// gamepad.pressButton();
+				// player.toggleGrabbing();
+			}
+		// }
 		player.resetFrequency(); // Always reset the frequency when an action is done
 	}
-	
 	player.incrementFrequency(); // Always increment the frequency
 }

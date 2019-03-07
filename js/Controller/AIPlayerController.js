@@ -3,15 +3,6 @@
  * Provides AI decision making.
  */
 
- // const variables to avoid confusion
- var HORIZONTAL_AXIS = 0;
- var VERTICLE_AXIS = 1; 
- var MOVE_LEFT = -1;
- var MOVE_RIGHT = 1;
- var MOVE_STOP = 0;
- var MOVE_JUMP = -1;
- var MOVE_CROUCH = 1;
-
 
 /**
  * Holds the AI model and intervals used for AIPlayers
