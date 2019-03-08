@@ -3,7 +3,6 @@
  * Provides AI decision making.
  */
 
-
 /**
  * Holds the AI model and intervals used for AIPlayers
  * @param {AIPlayer} ai
@@ -13,53 +12,21 @@ function AIController(ai) {
 	// console.log('AIController');
 	this.ai = ai;
 	this.interval = null;
-	this.gamepad = new GamepadSimulator();
 }
-
-// Created functions for ease when calling AI actions
-AIController.prototype.jump = function(gamepad) {
-	gamepad.pressAxis(VERTICLE_AXIS, MOVE_JUMP);
-}
-
-AIController.prototype.crouch = function(gamepad) {
-	gamepad.pressAxis(VERTICLE_AXIS, MOVE_CROUCH);
-}
-
-AIController.prototype.walkLeft = function(gamepad) {
-	gamepad.pressAxis(HORIZONTAL_AXIS, MOVE_LEFT);
-}
-
-AIController.prototype.walkRight = function(gamepad) {
-	gamepad.pressAxis(HORIZONTAL_AXIS, MOVE_RIGHT);
-}
-
-AIController.prototype.stop = function(gamepad) {
-	gamepad.pressAxis(VERTICLE_AXIS, MOVE_STOP);
-	gamepad.pressAxis(HORIZONTAL_AXIS, MOVE_STOP);
-}
-
-// TODO: implement attack functions
-
-
-/**
- * private
- * Determines what move the AI will make according to the Difficulty Frequency
- * @param gamepad
- * 	 Is the gamepad simulator that we're manipulating
- */
-AIController.prototype.pickMove = function(gamepad) {
-	this.gamepad.pressAxis(VERTICLE_AXIS, MOVE_JUMP);
-};
 
 /**
  * private
  * Starts an interval for deciding how to control the AIPlayer
  */
 AIController.prototype.activate = function() {
-	// console.log('AI activate');
-	this.ai.playing = true;
-	// this.interval = this.pickMove(this.gamepad), this.ai.getDifficultyFrequency();
-	this.interval = this.ai.getDifficultyFrequency();
+	// console.log('activate');
+	// this does not refer to this instance of AIController in the inverval
+	var me = this;
+	me.ai.playing = true;
+	me.interval = setInterval(function() {
+		// TODO: Implement AIPlayer decision making.
+		me.makeDecisions();
+	}, me.ai.getDifficultyFrequency());
 };
 
 /**
@@ -71,4 +38,38 @@ AIController.prototype.deactivate = function() {
 	this.ai.playing = false;
 	clearInterval(this.interval);
 	this.interval = null;
+};
+
+/**
+ * private
+ * Determines which buttons/axes should be pressed/released
+ */
+AIController.prototype.makeDecisions = function() {
+	console.log('makeDecisions');
+	this.makeRandomDecision();
+}
+
+AIController.prototype.makeRandomDecision = function() {
+	console.log('makeRandomDecision');
+	var gamepad = this.ai.gamepadReader.gamepad;
+	gamepad.clear();
+	// 50% chance that a button will be pressed
+	if (Math.floor((Math.random() * 2)) == 1) {
+		// The last four buttons of a GamepadSimulator are there to
+		//   match the layout of a real gamepad. They should not be
+		//   used by the AIPlayer.
+		gamepad.pressButton(Math.floor(Math.random() * (gamepad.buttons.length - 4)));
+	}
+	else {
+		// 50% chance that the horizontal axis will be pressed
+		if (Math.floor((Math.random() * 2)) == 1) {
+			// 50/50 left/right
+			gamepad.pressAxis(0, Math.floor((Math.random() * 2)) == 1 ? -1 : 1);
+		}
+		// 50% chance that the vertical axis will be pressed
+		if (Math.floor((Math.random() * 2)) == 1) {
+			// 50/50 up/down
+			gamepad.pressAxis(1, Math.floor((Math.random() * 2)) == 1 ? -1 : 1);
+		}
+	}
 };
