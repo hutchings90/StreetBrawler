@@ -70,7 +70,7 @@ StreetBrawlerController.prototype.getInputs = function() {
 	for (var i = 0; i < players.length; i++) {
 		var player = players[i];
 		if (player.isActive()) inputs.push({
-			status: player.gamepadReader.read(player),
+			status: player.gamepadReader.read(),
 			pi: i
 		});
 	}
