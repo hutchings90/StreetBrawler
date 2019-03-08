@@ -252,3 +252,8 @@ StreetBrawlerController.prototype.startCampaign = function(pi, params) {
 	// console.log('startCampaign');
 	this.activateCampaign(pi, params);
 };
+
+StreetBrawlerController.prototype.quitCampaign = function(pi, params) {
+	// console.log('quitCampaign');
+	this.activateMainMenu(pi);
+};

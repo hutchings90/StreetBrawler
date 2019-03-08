@@ -20,7 +20,7 @@ OverworldController.prototype.nextFrame = function(inputs) {
 	var input = inputs[0];
 	var status = input.status;
 	if (!status) return;
-	if (this.buttonPressed(status.buttons[9])) return this.createReport('showBattleMenu', {}, input.pi);
+	if (this.buttonPressed(status.buttons[9])) return this.createReport('showCampaignMenu', {}, input.pi);
 	this.processAxes(this.character, status.axes);
 	//this.processButtons(this.character, status.buttons);
 
@@ -93,6 +93,11 @@ OverworldController.prototype.show = function() {
 	//console.log(this.overworldContainer);
 	this.view.show(this.overworldContainer);
 	this.showCharacter();
+};
+
+OverworldController.prototype.hide = function() {
+	// console.log('hide');
+	this.view.hide(this.overworldContainer);
 };
 
 OverworldController.prototype.showCharacter = function() {

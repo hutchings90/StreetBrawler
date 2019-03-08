@@ -57,6 +57,11 @@ View.prototype.getBattleMenu = function() {
 	return this.getElement('#battle-menu');
 };
 
+View.prototype.getCampaignMenu = function() {
+	// console.log('getCampaignMenu');
+	return this.getElement('#campaign-menu');
+};
+
 View.prototype.getOverworldContainer = function() {
 	// console.log('getBattleAreaContainer');
 	return this.getElement('#overworld-container');
