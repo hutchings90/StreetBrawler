@@ -41,8 +41,7 @@ retrieves a timestamp, then calls readGamepads using that timestamp
 */
 StreetBrawlerController.prototype.gameLoop = function() {
 	// console.log('gameLoop');
-	var ts = (new Date).getTime();
-	this.readGamepads(ts);
+	this.readGamepads();
 };
 
 /*
@@ -51,11 +50,11 @@ only called by gameLoop
 calls getInputs and passes along ts. Passes returned inputs to activeController.nextFrame
 I'm not certain what the last line does; the syntax is foreign to me
 */
-StreetBrawlerController.prototype.readGamepads = function(ts) {
+StreetBrawlerController.prototype.readGamepads = function() {
 	// console.log('readGamepads');
 	if (!this.activeController) return;
 	navigator.getGamepads();
-	var report = this.activeController.nextFrame(this.getInputs(ts));
+	var report = this.activeController.nextFrame(this.getInputs());
 	if (report) this[report.action](report.pi, report.params);
 };
 
