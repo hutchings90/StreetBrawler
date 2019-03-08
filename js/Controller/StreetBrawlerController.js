@@ -63,14 +63,14 @@ StreetBrawlerController.prototype.readGamepads = function(ts) {
 Called only by gameLoop
 checks for inputs from either player, and returns these
 */
-StreetBrawlerController.prototype.getInputs = function(ts) {
+StreetBrawlerController.prototype.getInputs = function() {
 	// console.log('getInputs');
 	var inputs = [];
 	var players = this.streetBrawler.players;
 	for (var i = 0; i < players.length; i++) {
 		var player = players[i];
 		if (player.isActive()) inputs.push({
-			status: player.gamepadReader.read(ts),
+			status: player.gamepadReader.read(player),
 			pi: i
 		});
 	}

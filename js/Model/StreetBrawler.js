@@ -1,6 +1,6 @@
 function StreetBrawler(gamepads) {
 	// console.log('StreetBrawler');
-	this.players = [ new Player(gamepads[0]), new Player(gamepads[1]), new AIPlayer() ];
+	this.players = [ new Player(gamepads[0]), new Player(gamepads[1]), new AIPlayer(new GamepadSimulator()) ];
 }
 
 StreetBrawler.prototype.setGamepadHalted = function(halted) {
