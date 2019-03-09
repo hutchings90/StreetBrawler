@@ -7,11 +7,19 @@
  * Holds the AI model and intervals used for AIPlayers
  * @param {AIPlayer} ai
  *   The AIPlayer that will be controlled
+ * @param {BattleController}
+ *   The BattleController with information regarding hurtboxes.
+ *   This data should only be read; the AI should not manipulate it.
+ *   To access character hurtboxes, this.battleController.battleCharacterController.characters[playerIndex].character.hurtboxes[characterState]
+ *     See Model/Character.js
+ *   To access projectile hurtboxes, this.battleController.battleCharacterController.charactersAttacks[playerIndex][attackIndex].hurtbox
+ *     See Model/Attack.js
  */
-function AIController(ai) {
+function AIController(ai, battleController) {
 	// console.log('AIController');
 	this.ai = ai;
 	this.interval = null;
+	this.battleController = battleController;
 }
 
 /**

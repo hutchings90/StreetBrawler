@@ -226,7 +226,7 @@ GamepadSimulator.prototype.validateAxis = function(i) {
  * Logs an error message to the console if i is not a valid
  * index of prop. Calls isValid, returns the result.
  *
- * @param {string}
+ * @param {string} prop
  *   The name of the property of the GamepadSimulator instance
  * @param {number} i
  *   The index within
@@ -242,7 +242,7 @@ GamepadSimulator.prototype.validate = function(prop, max, i) {
 /**
  * Checks whether i is an index of prop
  *
- * @param {string}
+ * @param {string} prop
  *   The name of the property of the GamepadSimulator instance
  * @param {number} i
  *   The index within prop

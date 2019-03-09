@@ -323,7 +323,7 @@ BattleController.prototype.initAIControllers = function() {
 	this.aiControllers = [];
 	for (var i in players) {
 		var player = players[i];
-		if (player.isAI && player.playing) this.aiControllers.push(new AIController(player));
+		if (player.isAI && player.playing) this.aiControllers.push(new AIController(player, this));
 	}
 };
 
