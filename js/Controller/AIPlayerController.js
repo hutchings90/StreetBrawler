@@ -48,6 +48,15 @@ AIController.prototype.deactivate = function() {
 };
 
 /**
+ * This will randomly return a number from 0 to num-1.
+ * @param num
+ * 		This number will decide how far the random will go.
+ */
+rand = function(num) {
+	return Math.floor(Math.random() * Math.floor(num));
+}
+
+/**
  * private
  * Determines which buttons/axes should be pressed/released.
  * 
@@ -58,14 +67,11 @@ AIController.prototype.deactivate = function() {
  * until the AI can make its next decision.
  */
 AIController.prototype.makeRandomDecision = function() {
-	var gamepad = this.ai.gamepadReader.gamepad;
-	var pickHorizontalMovement = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	// var pickVerticalMovement = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	var flipToNeg = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	var jumpOrWalk = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-
-	if (flipToNeg == 0) { pickHorizontalMovement *= -1; }
-	// else if (flipToNeg == 1) { pickVerticalMovement *= -1; }
+	var gamepad = this.ai.gamepadReader.gamepad; // Make a func scoped gamepad variable.
+	var pickHorizontalMove = rand(2); // Picks a number between 0 and 1
+	var flipToNeg = rand(3); // Picks a number between 0 and 1
+	var jumpOrWalk = rand(2); // Picks a number between 0 and 1
+	if (flipToNeg == 0) pickHorizontalMove *= -1;
 
 	if (this.ai.isJumping) { // Only make the AI jump once for one button input
 		gamepad.releaseAxis(VERTICLE_AXIS); // Stop moving
@@ -73,6 +79,7 @@ AIController.prototype.makeRandomDecision = function() {
 		jumpOrWalk = 0; // If the AI just jumped, don't let it jump again but make it walk if it does an action.
 	}
 	if (this.ai.canDoMove()) {
+		console.log("left or right? ", pickHorizontalMove);
 		if (this.ai.isWalking) {
 			gamepad.releaseAxis(HORIZONTAL_AXIS); // Stop moving
 			this.ai.toggleWalking();
@@ -83,7 +90,7 @@ AIController.prototype.makeRandomDecision = function() {
 		}
 		else { // If the AI isn't doing anything, make it do something
 			if (jumpOrWalk == 0) { // AI walks
-				gamepad.pressAxis(HORIZONTAL_AXIS, pickHorizontalMovement);
+				(pickHorizontalMove == 0) ? gamepad.left() : gamepad.right();
 				this.ai.toggleWalking();
 			}
 			else { // AI jumps
