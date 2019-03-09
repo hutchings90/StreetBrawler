@@ -35,7 +35,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		var o = this.characters[this.getOtherPlayerIndex(i)];
 		var oc = o.character;
 		var preX = c.x;
-		if (c.move() || !this.view.hasClassName(character.e, c.direction)) this.setCharacterImage(character, c.state);
+		if (c.move() || !this.view.hasClassName(character.e, c.direction) || this.blockTransition(character)) this.setCharacterImage(character, c.state);
 		if (!c.state.includes('jump') && !oc.state.includes('jump') && this.utils.charactersCollide(character, o)) {
 			if (c.dx < 0) {
 				if (c.direction == 'right') {
@@ -99,10 +99,17 @@ BattleCharacterController.prototype.setHitboxes = function(character) {
 	}
 };
 
+BattleCharacterController.prototype.blockTransition = function(character) {
+	// console.log('blockTransition');
+	var c = character.character;
+	var e = character.e;
+	return (c.state == 'block' && !e.className.includes('block')) || (c.state == 'idle' && e.className.includes('block'));
+};
+
 BattleCharacterController.prototype.setCharacterImage = function(character, name) {
 	// console.log('setCharacterImage');
 	var img = character.visual[name];
-	this.view.replaceBattleImage(character.e, img, character.character.direction);
+	this.view.replaceBattleImage(character.e, img, character.character.direction, character.character.state);
 	character.e = img;
 	this.setHitboxes(character);
 };
@@ -277,6 +284,7 @@ BattleCharacterController.prototype.jumpAttackButtons = function(axes) {
 
 BattleCharacterController.prototype.grabButtons = function(buttons) {
 	// console.log('grabButtons');
+	if (!this.buttonsPressed(buttons, [ 4, 5, 6, 7 ])) return this.createReport('resetState');
 };
 
 BattleCharacterController.prototype.heldButtons = function(buttons) {
@@ -285,6 +293,7 @@ BattleCharacterController.prototype.heldButtons = function(buttons) {
 
 BattleCharacterController.prototype.blockButtons = function(buttons) {
 	// console.log('blockButtons');
+	if (!this.buttonsPressed(buttons, [ 4, 5, 6, 7 ])) return this.createReport('resetState');
 };
 
 BattleCharacterController.prototype.launchButtons = function(buttons) {

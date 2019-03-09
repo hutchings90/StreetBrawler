@@ -280,11 +280,12 @@ View.prototype.addBattleImage = function(e, img) {
 	this.appendChild(e, img);
 };
 
-View.prototype.replaceBattleImage = function(oldE, newE, direction) {
+View.prototype.replaceBattleImage = function(oldE, newE, direction, state) {
 	// console.log('replaceBattleImage');
 	this.replaceClassName(newE, newE.className, '');
 	this.addClassName(newE, 'battle-character');
 	this.addClassName(newE, direction);
+	this.addClassName(newE, state);
 	oldE.parentElement.replaceChild(newE, oldE);
 };
 

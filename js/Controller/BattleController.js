@@ -242,6 +242,8 @@ calls resetCharacter on specified character
 BattleController.prototype.showCharacter = function(character, ci) {
 	// console.log('showCharacter');
 	var img = character.visual.idle;
+	if (ci == 0) character.character.direction = 'left';
+	else character.character.direction = 'right';
 	this.view.addBattleImage(this.battleObjects, img);
 	character.e = img;
 	this.resetCharacter(character, ci);

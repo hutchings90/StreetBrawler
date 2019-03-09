@@ -177,13 +177,13 @@ Character.prototype.walk = function(direction) {
 };
 
 Character.prototype.block = function() {
-	console.log('block');
+	// console.log('block');
 	this.state = 'block';
 };
 
 Character.prototype.grab = function() {
-	console.log('grab');
-	this.state = 'grab';
+	// console.log('grab');
+	this.block();
 };
 
 Character.prototype.attack = function(i) {
