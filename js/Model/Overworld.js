@@ -12,5 +12,5 @@ Overworld.prototype.loadActor = function(charName,x,y){
 	}
 	actor.character.x = x;
 	actor.character.y = y;
-	actors.push(actor);
+	this.actors.push(actor);
 };
