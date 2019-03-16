@@ -10,9 +10,9 @@
  * @param {BattleController}
  *   The BattleController with information regarding hurtboxes.
  *   This data should only be read; the AI should not manipulate it.
- *   To access character hurtboxes, this.battleController.battleCharacterController.characters[playerIndex].character.hurtboxes[characterState]
+ *   To access character hit/hurt boxes, battleCharacterController.get{Hit/Hurt}Coords(battleCharacterController.characters[playerIndex])
  *     See Model/Character.js
- *   To access projectile hurtboxes, this.battleController.battleCharacterController.charactersAttacks[playerIndex][attackIndex].hurtbox
+ *   Projectile hitboxes pending
  *     See Model/Attack.js
  */
 function AIController(ai, battleController) {
