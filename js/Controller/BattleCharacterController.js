@@ -75,21 +75,56 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 	}
 };
 
+BattleCharacterController.prototype.getHurtCoords = function(c) {
+	// console.log('getHurtCoords');
+	return this.getHurtboxCoords(c, 'hurtbox');
+};
+
+BattleCharacterController.prototype.getHitCoords = function(c) {
+	// console.log('getHurtCoords');
+	return this.getHurtboxCoords(c, 'hitbox');
+};
+
+BattleCharacterController.prototype.getHurtboxCoords = function(c, prop) {
+	// console.log('getHurtboxCoords');
+	var character = c.character;
+	var hurtbox = character[prop];
+	var x = -1;
+	var y = -1;
+	var height = 0;
+	var width = 0;
+	if (hurtbox) {
+		switch (character.direction) {
+		case 'left': x = character.x + hurtbox.x; break;
+		case 'right': x = character.x + c.visual.idle.width - hurtbox.x - hurtbox.width; break;
+		}
+		y = character.y + hurtbox.y;
+		height = hurtbox.height;
+		width =  hurtbox.width;
+	}
+	return {
+		x: x,
+		y: y,
+		height: height,
+		width: width
+	};
+};
+
 BattleCharacterController.prototype.setHitboxes = function(character) {
 	// console.log('setHitboxes');
 	if (!this.testing) return;
 	var c = character.character;
-	if (c.direction == 'left') character.hurtE.style.left = (c.x + c.hurtbox.x) + 'px';
-	else character.hurtE.style.left = (c.x + character.visual.idle.width - c.hurtbox.x - c.hurtbox.width) + 'px';
-	character.hurtE.style.bottom = (c.y + c.hurtbox.y) + 'px';
-	character.hurtE.style.height = c.hurtbox.height + 'px';
-	character.hurtE.style.width = c.hurtbox.width + 'px';
+	var hurtbox = this.getHurtCoords(character);
+	character.hurtE.style.left = hurtbox.x + 'px';
+	character.hurtE.style.bottom = hurtbox.y + 'px';
+	character.hurtE.style.height = hurtbox.height + 'px';
+	character.hurtE.style.width = hurtbox.width + 'px';
 	if (c.hitbox) {
-		if (c.direction == 'left') character.hitE.style.left = (c.x + c.hitbox.x) + 'px';
-		else character.hitE.style.left = (c.x + character.visual.idle.width - c.hitbox.x - c.hitbox.width) + 'px';
-		character.hitE.style.bottom = (c.y + c.hitbox.y) + 'px';
-		character.hitE.style.height = c.hitbox.height + 'px';
-		character.hitE.style.width = c.hitbox.width + 'px';
+		var hitbox = this.getHitCoords(character);
+		character.hitE.style.left = hitbox.x + 'px';
+		character.hitE.style.bottom = hitbox.y + 'px';
+		character.hitE.style.height = hitbox.height + 'px';
+		character.hitE.style.width = hitbox.width + 'px';
 	}
 	else {
 		character.hitE.style.left = '0px';
