@@ -7,11 +7,19 @@
  * Holds the AI model and intervals used for AIPlayers
  * @param {AIPlayer} ai
  *   The AIPlayer that will be controlled
+ * @param {BattleController}
+ *   The BattleController with information regarding hurtboxes.
+ *   This data should only be read; the AI should not manipulate it.
+ *   To access character hit/hurt boxes, battleCharacterController.get{Hit/Hurt}Coords(battleCharacterController.characters[playerIndex])
+ *     See Model/Character.js
+ *   Projectile hitboxes pending
+ *     See Model/Attack.js
  */
-function AIController(ai) {
+function AIController(ai, battleController) {
 	// console.log('AIController');
 	this.ai = ai;
 	this.interval = null;
+	this.battleController = battleController;
 }
 
 /**
@@ -40,6 +48,41 @@ AIController.prototype.deactivate = function() {
 };
 
 /**
+ * This will randomly return a number from 0 to num-1.
+ * @param num
+ * 		This number will decide how far the random will go.
+ */
+rand = function(num) {
+	return Math.floor(Math.random() * Math.floor(num));
+}
+
+/** 
+ * This randomly picks one of the 4 attacks a character can do.
+ * This is excluding grabs.
+ */
+pickAttack = function() {
+	var button = 0; // The button we're going to press for the AI.
+	var decide = rand(11); // Decides which move will be executed.
+
+	// Pick the faster attacks more often.
+	if (decide <= 3) {
+		button = ATTACK_JAB;
+	}
+	else if (decide <= 6) {
+		button = ATTACK_LOWKICK;
+	}
+	// Pick the slower attacks less often.
+	else if (decide <= 8) {
+		button = ATTACK_HAYMAKER;
+	}
+	else {
+		button = ATTACK_HIGHKICK;
+	}
+
+	return button; // Return the index of the attack button
+}
+
+/**
  * private
  * Determines which buttons/axes should be pressed/released.
  * 
@@ -48,40 +91,79 @@ AIController.prototype.deactivate = function() {
  * So far, jumping, grabbing, and attacking (all moves that should only execute ONCE per button press),
  * will be released the very next time this funciton is called. That way the AI isn't always jumping 
  * until the AI can make its next decision.
+ * 
+ * FUTURE IMPLEMENTATION IDEAS:
+ * Maybe adjust the frequency of actions by taking the difficulty_frequency / randomized_number.
+ * Once the game can track where the other player is on the screen, the ai can be manipulated as such:
+ *	- Move towards the other player more often
+ *	- Allow grabbing to occur when within grab range/proximity
  */
 AIController.prototype.makeRandomDecision = function() {
-	var gamepad = this.ai.gamepadReader.gamepad;
-	var pickHorizontalMovement = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	// var pickVerticalMovement = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	var flipToNeg = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
-	var jumpOrWalk = Math.floor(Math.random() * Math.floor(2)); // Picks a number between 0 and 1
+	var gamepad = this.ai.gamepadReader.gamepad; // Make a func scoped gamepad variable.
+	var state = this.battleController.battleCharacterController.characters[1].character.state; // Make a func scoped state variable
+	var pickHorizontalMove = rand(2); // Decides if AI will move left(0) or right(1)
+	var stop = rand(4); // Stop the AI from doing anything. 25% chance of stopping
+	var willWalk = rand(3); // Decides if AI will walk. 50% chance
+	var willJump = rand(6); // Decides if the AI will jump. 16% chance
+	var willCrouch = rand(4); // Decides if AI will crouch. 25% chance. NOT READY YET
+	var willAttack = rand(2); // Decides if AI will attack. 50% chance
+	var willBlock = rand(8); // Decides if AI will block. 13% chance
+	var willGrab = rand(10); // Decides if AI will grab. 10% chance
 
-	if (flipToNeg == 0) { pickHorizontalMovement *= -1; }
-	// else if (flipToNeg == 1) { pickVerticalMovement *= -1; }
-
-	if (this.ai.isJumping) { // Only make the AI jump once for one button input
-		gamepad.releaseAxis(VERTICLE_AXIS); // Stop moving
-		this.ai.toggleJumping();
-		jumpOrWalk = 0; // If the AI just jumped, don't let it jump again but make it walk if it does an action.
+	if (state.includes('jump')) { // Only make the AI jump once for one button input
+		gamepad.releaseVerticalAxis(); // Stop jumping
+		// willWalk = 0; // If the AI just jumped, don't let it jump again but make it walk if it does an action.
 	}
+	if (state.includes('Attack') || state.includes('grab')) { // Don't want to make it attack rapidly in a row after 1 button press
+		gamepad.clearButtons();
+	}
+
+	// 
 	if (this.ai.canDoMove()) {
-		if (this.ai.isWalking) {
-			gamepad.releaseAxis(HORIZONTAL_AXIS); // Stop moving
-			this.ai.toggleWalking();
+		// console.log("left(0) or right(1)? ", pickHorizontalMove);
+		if (state.includes('block')) { // Make the AI stop blocking so it can do a new action
+			// console.log("ai stops blocking");
+			gamepad.clearButtons();
 		}
-		else if (this.ai.isJumping) {
-			gamepad.releaseAxis(VERTICLE_AXIS); // Stop moving
-			this.ai.toggleJumping();
+
+		if (stop == 0 && !state.includes('idle')) { // Make the AI do nothing until it can act again
+			// console.log("ai is idle");
+			gamepad.clearButtons();
+			gamepad.releaseVerticalAxis();
+			gamepad.releaseHorizontalAxis();
 		}
-		else { // If the AI isn't doing anything, make it do something
-			if (jumpOrWalk == 0) { // AI walks
-				gamepad.pressAxis(HORIZONTAL_AXIS, pickHorizontalMovement);
-				this.ai.toggleWalking();
+		else { // If the AI is idle, make it do something
+			// Allow AI to walk or jump
+			if (willWalk == 0) { // AI walks
+				// console.log("ai walks");
+				(rand(2) == 0) ? gamepad.left() : gamepad.right();
 			}
-			else { // AI jumps
-				gamepad.pressAxis(VERTICLE_AXIS, MOVE_JUMP);
-				this.ai.toggleJumping();
+			else if (willJump == 0) { // AI jumps
+				// console.log("ai jumps");
+				gamepad.up();
 			}
+			else if (willCrouch == 0) { // AI crouches
+				// gamepad.down();
+			}
+
+			// Allow AI to attack even if walking (but not while jumping)
+			if (willAttack == 0 && !state.includes('jump')) { 
+				// console.log("ai attacks");
+				gamepad.releaseHorizontalAxis(); // Stop AI from walking
+				gamepad.pressButton(pickAttack()); // Attack
+			}
+			else if (willGrab == 0 && !state.includes('jump')) { // AI can grab if not attacking
+				// console.log("ai grabs");
+				// gamepad.pressButton(GRAB);
+			}
+
+			// Allows AI to block if it's walking or idle.
+			if (willBlock == 0 && (state.includes('idle') || state.includes('walk'))) {
+				// console.log("ai blocks");
+				gamepad.releaseHorizontalAxis(); // AI stops walking
+				gamepad.pressButton(BLOCK); // AI now blocks
+			}
+			
 		}
 		this.ai.resetFrequency(); // Always reset the frequency when an action is done
 	}

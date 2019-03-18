@@ -35,7 +35,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		var o = this.characters[this.getOtherPlayerIndex(i)];
 		var oc = o.character;
 		var preX = c.x;
-		if (c.move() || !this.view.hasClassName(character.e, c.direction)) this.setCharacterImage(character, c.state);
+		if (c.move() || !this.view.hasClassName(character.e, c.direction) || this.blockTransition(character)) this.setCharacterImage(character, c.state);
 		if (!c.state.includes('jump') && !oc.state.includes('jump') && this.utils.charactersCollide(character, o)) {
 			if (c.dx < 0) {
 				if (c.direction == 'right') {
@@ -75,21 +75,56 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 	}
 };
 
+BattleCharacterController.prototype.getHurtCoords = function(c) {
+	// console.log('getHurtCoords');
+	return this.getHurtboxCoords(c, 'hurtbox');
+};
+
+BattleCharacterController.prototype.getHitCoords = function(c) {
+	// console.log('getHurtCoords');
+	return this.getHurtboxCoords(c, 'hitbox');
+};
+
+BattleCharacterController.prototype.getHurtboxCoords = function(c, prop) {
+	// console.log('getHurtboxCoords');
+	var character = c.character;
+	var hurtbox = character[prop];
+	var x = -1;
+	var y = -1;
+	var height = 0;
+	var width = 0;
+	if (hurtbox) {
+		switch (character.direction) {
+		case 'left': x = character.x + hurtbox.x; break;
+		case 'right': x = character.x + c.visual.idle.width - hurtbox.x - hurtbox.width; break;
+		}
+		y = character.y + hurtbox.y;
+		height = hurtbox.height;
+		width =  hurtbox.width;
+	}
+	return {
+		x: x,
+		y: y,
+		height: height,
+		width: width
+	};
+};
+
 BattleCharacterController.prototype.setHitboxes = function(character) {
 	// console.log('setHitboxes');
 	if (!this.testing) return;
 	var c = character.character;
-	if (c.direction == 'left') character.hurtE.style.left = (c.x + c.hurtbox.x) + 'px';
-	else character.hurtE.style.left = (c.x + character.visual.idle.width - c.hurtbox.x - c.hurtbox.width) + 'px';
-	character.hurtE.style.bottom = (c.y + c.hurtbox.y) + 'px';
-	character.hurtE.style.height = c.hurtbox.height + 'px';
-	character.hurtE.style.width = c.hurtbox.width + 'px';
+	var hurtbox = this.getHurtCoords(character);
+	character.hurtE.style.left = hurtbox.x + 'px';
+	character.hurtE.style.bottom = hurtbox.y + 'px';
+	character.hurtE.style.height = hurtbox.height + 'px';
+	character.hurtE.style.width = hurtbox.width + 'px';
 	if (c.hitbox) {
-		if (c.direction == 'left') character.hitE.style.left = (c.x + c.hitbox.x) + 'px';
-		else character.hitE.style.left = (c.x + character.visual.idle.width - c.hitbox.x - c.hitbox.width) + 'px';
-		character.hitE.style.bottom = (c.y + c.hitbox.y) + 'px';
-		character.hitE.style.height = c.hitbox.height + 'px';
-		character.hitE.style.width = c.hitbox.width + 'px';
+		var hitbox = this.getHitCoords(character);
+		character.hitE.style.left = hitbox.x + 'px';
+		character.hitE.style.bottom = hitbox.y + 'px';
+		character.hitE.style.height = hitbox.height + 'px';
+		character.hitE.style.width = hitbox.width + 'px';
 	}
 	else {
 		character.hitE.style.left = '0px';
@@ -99,10 +134,17 @@ BattleCharacterController.prototype.setHitboxes = function(character) {
 	}
 };
 
+BattleCharacterController.prototype.blockTransition = function(character) {
+	// console.log('blockTransition');
+	var c = character.character;
+	var e = character.e;
+	return (c.state == 'block' && !e.className.includes('block')) || (c.state == 'idle' && e.className.includes('block'));
+};
+
 BattleCharacterController.prototype.setCharacterImage = function(character, name) {
 	// console.log('setCharacterImage');
 	var img = character.visual[name];
-	this.view.replaceBattleImage(character.e, img, character.character.direction);
+	this.view.replaceBattleImage(character.e, img, character.character.direction, character.character.state);
 	character.e = img;
 	this.setHitboxes(character);
 };
@@ -277,6 +319,7 @@ BattleCharacterController.prototype.jumpAttackButtons = function(axes) {
 
 BattleCharacterController.prototype.grabButtons = function(buttons) {
 	// console.log('grabButtons');
+	if (!this.buttonsPressed(buttons, [ 4, 5, 6, 7 ])) return this.createReport('resetState');
 };
 
 BattleCharacterController.prototype.heldButtons = function(buttons) {
@@ -285,6 +328,7 @@ BattleCharacterController.prototype.heldButtons = function(buttons) {
 
 BattleCharacterController.prototype.blockButtons = function(buttons) {
 	// console.log('blockButtons');
+	if (!this.buttonsPressed(buttons, [ 4, 5, 6, 7 ])) return this.createReport('resetState');
 };
 
 BattleCharacterController.prototype.launchButtons = function(buttons) {

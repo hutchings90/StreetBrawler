@@ -242,6 +242,8 @@ calls resetCharacter on specified character
 BattleController.prototype.showCharacter = function(character, ci) {
 	// console.log('showCharacter');
 	var img = character.visual.idle;
+	if (ci == 0) character.character.direction = 'left';
+	else character.character.direction = 'right';
 	this.view.addBattleImage(this.battleObjects, img);
 	character.e = img;
 	this.resetCharacter(character, ci);
@@ -323,7 +325,7 @@ BattleController.prototype.initAIControllers = function() {
 	this.aiControllers = [];
 	for (var i in players) {
 		var player = players[i];
-		if (player.isAI && player.playing) this.aiControllers.push(new AIController(player));
+		if (player.isAI && player.playing) this.aiControllers.push(new AIController(player, this));
 	}
 };
 

@@ -71,6 +71,7 @@ ContentManager.prototype.loadGolemVisuals = function(golemType) {
 		jumpPunchLow: this.view.createBattleCharacterImage(path + 'jab.png', 150),
 		jumpKickLow: this.view.createBattleCharacterImage(path + 'jab.png', 150),
 		jumpKickHigh: this.view.createBattleCharacterImage(path + 'jab.png', 150),
+		block: this.view.createBattleCharacterImage(path + 'block.png', 127),
 		overworldBack: this.view.createBattleCharacterImage(path + 'bust.png', 90),
 		overworldFront: this.view.createBattleCharacterImage(path + 'bust.png', 90),
 		overworldSide: this.view.createBattleCharacterImage(path + 'bust.png', 90)
@@ -136,6 +137,7 @@ ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 		jumpPunchHigh: asset.jumpPunchHigh.cloneNode(true),
 		jumpPunchLow: asset.jumpPunchLow.cloneNode(true),
 		jumpKickLow: asset.jumpKickLow.cloneNode(true),
-		jumpKickHigh: asset.jumpKickHigh.cloneNode(true)
+		jumpKickHigh: asset.jumpKickHigh.cloneNode(true),
+		block: asset.block.cloneNode(true),
 	};
 };
