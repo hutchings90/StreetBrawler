@@ -32,6 +32,8 @@ CampaignController.prototype.hide = function() {
 
 CampaignController.prototype.loadOverworld = function() {
 	this.activateController('overworld','overworld',this.activator);
+	var overworld = new TestWorld(this.contentManager);
+	this.overworldController.setOverworld (overworld);
 };
 
 CampaignController.prototype.showCampaignMenu = function(pi, params) {
@@ -54,5 +56,6 @@ CampaignController.prototype.end = function(pi) {
 	// console.log('end');
 	this.hide();
 	this.overworldController.setCharacter(null);
+	this.overworldController.setOverworld(null);
 	return this.createReport('quitCampaign', {}, pi);
 };

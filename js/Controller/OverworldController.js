@@ -3,9 +3,10 @@ function OverworldController(model, view, utils, contentManager) {
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	utils.makeControllerVariableInput(this, model);
 	//actually retrieves overworld-objects
-	this.overworldImgs = this.view.getOverworld();
+	this.overworldCanvas = this.view.getOverworld();
 	this.overworldContainer = this.view.getOverworldContainer();
 	this.character = null;
+	this.overworld = null;
 }
 
 OverworldController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -13,6 +14,9 @@ OverworldController.constructor = OverworldController;
 
 OverworldController.prototype.setCharacter = function(character) {
 	this.character = character;
+};
+OverworldController.prototype.setOverworld = function(overworld) {
+	this.overworld = overworld;
 };
 
 OverworldController.prototype.nextFrame = function(inputs) {
@@ -107,9 +111,19 @@ OverworldController.prototype.showCharacter = function() {
 	this.view.setCharacterPosition(this.character);
 };
 
+OverworldController.prototype.showActors = function() {
+	var actors = this.overworld.actors;
+	for (i=0; i<actors.length; i++){
+		var img = actors[i].visual.down;
+		actors[i].e = img;
+		this.view.addOverworldImage(this.overworldCanvas,img);
+		this.view.setCharacterPosition(actors[i]);
+	}
+};
+
 OverworldController.prototype.drawImage = function(img){
 	this.character.e = img;
-	this.view.addOverworldImage(this.overworldImgs,img);
+	this.view.addOverworldImage(this.overworldCanvas,img);
 };
 
 /*
