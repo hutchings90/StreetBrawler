@@ -30,6 +30,7 @@ CampaignController.prototype.hide = function() {
 	this.overworldController.hide();
 };
 
+//TODO: develop system to determine appropriate world, modify to generate procedurally
 CampaignController.prototype.loadOverworld = function() {
 	this.activateController('overworld','overworld',this.activator);
 	var overworld = new TestWorld(this.contentManager);
@@ -54,6 +55,7 @@ CampaignController.prototype.quit = function(pi, params) {
 
 CampaignController.prototype.end = function(pi) {
 	// console.log('end');
+	this.overworldController.end();
 	this.hide();
 	this.overworldController.setCharacter(null);
 	this.overworldController.setOverworld(null);

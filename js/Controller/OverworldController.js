@@ -17,6 +17,7 @@ OverworldController.prototype.setCharacter = function(character) {
 };
 OverworldController.prototype.setOverworld = function(overworld) {
 	this.overworld = overworld;
+	if (overworld != null) this.showActors();
 };
 
 OverworldController.prototype.nextFrame = function(inputs) {
@@ -97,6 +98,7 @@ OverworldController.prototype.show = function() {
 	//console.log(this.overworldContainer);
 	this.view.show(this.overworldContainer);
 	this.showCharacter();
+	//this.showActors();
 };
 
 OverworldController.prototype.hide = function() {
@@ -124,6 +126,10 @@ OverworldController.prototype.showActors = function() {
 OverworldController.prototype.drawImage = function(img){
 	this.character.e = img;
 	this.view.addOverworldImage(this.overworldCanvas,img);
+};
+
+OverworldController.prototype.end = function(){
+	this.view.clearBattleObjects(this.overworldCanvas);
 };
 
 /*
