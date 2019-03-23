@@ -152,6 +152,13 @@ body {
 	transform: scaleX(-1);
 }
 
+#battle-area #winbar {
+	line-height: 30px;
+	font-weight: 900;
+	font-size: 25px;
+	text-transform: uppercase;
+}
+
 #menus {
 	display: inline-block;
 }

@@ -82,6 +82,11 @@ View.prototype.getBattleTimer = function() {
 	return this.getElement('#battle-timer p');
 };
 
+View.prototype.getWinbar = function() {
+	// console.log('getWinbar');
+	return this.getElement('#winbar p');
+};
+
 View.prototype.getCharacterSelectMenu = function() {
 	// console.log('getCharacterSelect');
 	return this.getElement('#character-select');

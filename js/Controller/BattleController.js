@@ -16,6 +16,7 @@ function BattleController(model, view, utils, contentManager, testing) {
 	this.battleTimer = this.view.getBattleTimer();
 	this.activeController = this.battleCharacterController;
 	this.battleObjects = this.view.getBattleObjects();
+	this.winbar = this.view.getWinbar();
 	this.aiControllers = [];
 	this.time = this.FULL_TIME;
 	this.timerFrames = 0;
@@ -23,6 +24,7 @@ function BattleController(model, view, utils, contentManager, testing) {
 	this.endRoundFrames = 0;
 	this.round = 0;
 	this.quitter = -1;
+	this.wins = [ 0, 0 ];
 	this.setCharacters([]);
 	this.clearTimer();
 }
@@ -40,6 +42,7 @@ BattleController.prototype.start = function() {
 	this.round = 0;
 	this.activeController = this.battleCharacterController;
 	this.nextFrame = this.preRoundFrame;
+	this.wins = [ 0, 0 ];
 	this.initAIControllers();
 	this.startRound();
 };
@@ -53,6 +56,9 @@ activates AI's
 */
 BattleController.prototype.startRound = function() {
 	// console.log('startRound');
+	for (var i = this.characters.length - 1; i >= 0; i--) {
+		this.characters[i].character.resetHealth();
+	}
 	this.round++;
 	this.view.steadyTimer(this.battleTimer);
 	this.nextFrame = this.roundFrame;
@@ -87,9 +93,19 @@ BattleController.prototype.endRoundFrame = function(inputs) {
 	if (++this.endRoundFrames >= this.END_ROUND_FRAMES) {
 		if (this.round >= this.ROUNDS) this.nextFrame = this.preEndFrame;
 		else {
+			this.view.setContents(this.winbar, '');
+			this.view.hide(this.winbar);
 			this.clearTimer();
 			this.nextFrame = this.preRoundFrame;
 			this.preRoundFrames = 0;
+			this.characters[0].character.direction = 'left';
+			this.characters[0].character.reset();
+			this.characters[1].character.direction = 'right';
+			this.characters[1].character.reset(this.view.BATTLE_AREA_W - this.characters[1].e.width);
+			this.battleCharacterController.setCharacterImage(this.characters[0], 'idle');
+			this.battleCharacterController.setCharacterImage(this.characters[1], 'idle');
+			this.view.setCharacterPosition(this.characters[0]);
+			this.view.setCharacterPosition(this.characters[1]);
 		}
 	}
 };
@@ -148,6 +164,7 @@ hides battleAreaContainer
 BattleController.prototype.hide = function() {
 	// console.log('hide');
 	this.view.hide(this.battleAreaContainer);
+	this.view.hide(this.winbar);
 };
 
 /*
@@ -199,12 +216,43 @@ sets nextFrame to endRoundFrame (calls it?)
 sets endRoundFrames to 0? What's that mean?
 deactivates AI
 */
-BattleController.prototype.endRound = function() {
+BattleController.prototype.endRound = function(pi, params) {
 	// console.log('endRound');
+	var prefix = 'Player ';
+	var suffix = '';
+	var win = true;
+	this.deactivateAI();
 	this.view.doneTimer(this.battleTimer);
 	this.nextFrame = this.endRoundFrame;
 	this.endRoundFrames = 0;
-	this.deactivateAI();
+	if (!params || (params.loser < 0 || params.loser > 1)) {
+		var loser = -1;
+		if (this.characters[0].character.health > this.characters[1].character.health) loser = 1;
+		else if (this.characters[1].character.health > this.characters[0].character.health) loser = 0;
+		params = {
+			loser: loser
+		};
+	}
+	switch (params.loser) {
+	case 0:
+		if (this.characters[1].pi == 2) prefix = 'AI';
+		else prefix += 2;
+		if (this.wins[0]++) this.round = 3;
+		break;
+	case 1:
+		prefix += this.characters[0].pi + 1;
+		if (this.wins[1]++) this.round = 3;
+		break;
+	default: win = false; break;
+	}
+	if (!win) prefix = 'Draw';
+	else {
+		suffix = ' ';
+		if (this.round < this.ROUNDS) suffix += 'wins the round.';
+		else suffix += 'wins!!!';
+	}
+	this.view.setContents(this.winbar, prefix + suffix);
+	this.view.show(this.winbar);
 };
 
 /*

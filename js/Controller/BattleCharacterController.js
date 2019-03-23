@@ -12,7 +12,7 @@ BattleCharacterController.constructor = BattleCharacterController;
 
 BattleCharacterController.prototype.nextFrame = function(inputs) {
 	// console.log('BattleCharacterController');
-	var loser = 0;
+	var loser = -1;
 	for (var i = inputs.length - 1; i >= 0; i--) {
 		var input = inputs[i];
 		var status = input.status;
@@ -67,7 +67,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		this.setHitboxes(character);
 		this.view.setCharacterPosition(character);
 	}
-	for (var i in this.characters) {
+	for (var i = 0; i < this.characters.length; i++) {
 		var character = this.characters[i];
 		var opponent = this.characters[this.getOtherPlayerIndex(i)];
 		var hurtbox = this.getHurtbox(character);
@@ -76,7 +76,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 			character.character.health -= hitbox.damage;
 			if (character.character.health <= 0) {
 				character.character.health = 0;
-				loser += i;
+				loser += i + 1;
 			}
 			opponent.character.hitbox.hasHit = true;
 		}
@@ -84,7 +84,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 			var projectile = this.projectiles[j];
 		}
 	}
-	if (loser) {
+	if (loser > -1) {
 		return this.createReport('endRound', {
 			loser: loser
 		});
