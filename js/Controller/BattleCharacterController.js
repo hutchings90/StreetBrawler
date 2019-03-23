@@ -3,7 +3,7 @@ function BattleCharacterController(view, utils, contentManager, testing) {
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	this.BATTLE_AREA_W = 900;
 	this.setCharacters([]);
-	this.characterAttacks = [ [], [] ];
+	this.projectiles = [];
 	this.testing = testing;
 }
 
@@ -12,6 +12,7 @@ BattleCharacterController.constructor = BattleCharacterController;
 
 BattleCharacterController.prototype.nextFrame = function(inputs) {
 	// console.log('BattleCharacterController');
+	var loser = 0;
 	for (var i = inputs.length - 1; i >= 0; i--) {
 		var input = inputs[i];
 		var status = input.status;
@@ -20,13 +21,6 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		if (this.buttonPressed(status.buttons[9])) return this.createReport('showBattleMenu', {}, input.pi);
 		this.processAxes(character, status.axes);
 		this.processButtons(character, status.buttons);
-	}
-	for (var i in this.characterAttacks) {
-		var character = this.characters[this.getOtherPlayerIndex(i)];
-		var attacks = this.characterAttacks[i];
-		for (var j in attacks) {
-			var attack = attacks[j];
-		}
 	}
 	this.setCharacterDirections();
 	for (var i = this.characters.length - 1; i >= 0; i--) {
@@ -73,26 +67,50 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		this.setHitboxes(character);
 		this.view.setCharacterPosition(character);
 	}
+	for (var i in this.characters) {
+		var character = this.characters[i];
+		var opponent = this.characters[this.getOtherPlayerIndex(i)];
+		var hurtbox = this.getHurtbox(character);
+		var hitbox = this.getHitbox(opponent);
+		if (!hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
+			character.character.health -= hitbox.damage;
+			if (character.character.health <= 0) {
+				character.character.health = 0;
+				loser += i;
+			}
+			opponent.character.hitbox.hasHit = true;
+		}
+		for (var j in this.projectiles) {
+			var projectile = this.projectiles[j];
+		}
+	}
+	if (loser) {
+		return this.createReport('endRound', {
+			loser: loser
+		});
+	}
 };
 
-BattleCharacterController.prototype.getHurtCoords = function(c) {
-	// console.log('getHurtCoords');
-	return this.getHurtboxCoords(c, 'hurtbox');
+BattleCharacterController.prototype.getHurtbox = function(c) {
+	// console.log('getHurtbox');
+	return this.getCharacterHurtbox(c, 'hurtbox');
 };
 
-BattleCharacterController.prototype.getHitCoords = function(c) {
-	// console.log('getHurtCoords');
-	return this.getHurtboxCoords(c, 'hitbox');
+BattleCharacterController.prototype.getHitbox = function(c) {
+	// console.log('getHitbox');
+	return this.getCharacterHurtbox(c, 'hitbox');
 };
 
-BattleCharacterController.prototype.getHurtboxCoords = function(c, prop) {
-	// console.log('getHurtboxCoords');
+BattleCharacterController.prototype.getCharacterHurtbox = function(c, prop) {
+	// console.log('getCharacterHurtbox');
 	var character = c.character;
 	var hurtbox = character[prop];
 	var x = -1;
 	var y = -1;
 	var height = 0;
 	var width = 0;
+	var damage = 0;
+	var hasHit = false;
 	if (hurtbox) {
 		switch (character.direction) {
 		case 'left': x = character.x + hurtbox.x; break;
@@ -101,12 +119,18 @@ BattleCharacterController.prototype.getHurtboxCoords = function(c, prop) {
 		y = character.y + hurtbox.y;
 		height = hurtbox.height;
 		width =  hurtbox.width;
+		if (hurtbox.damage) {
+			damage = hurtbox.damage;
+			hasHit = hurtbox.hasHit;
+		}
 	}
 	return {
 		x: x,
 		y: y,
 		height: height,
-		width: width
+		width: width,
+		damage: damage,
+		hasHit: hasHit
 	};
 };
 
@@ -114,13 +138,13 @@ BattleCharacterController.prototype.setHitboxes = function(character) {
 	// console.log('setHitboxes');
 	if (!this.testing) return;
 	var c = character.character;
-	var hurtbox = this.getHurtCoords(character);
+	var hurtbox = this.getHurtbox(character);
 	character.hurtE.style.left = hurtbox.x + 'px';
 	character.hurtE.style.bottom = hurtbox.y + 'px';
 	character.hurtE.style.height = hurtbox.height + 'px';
 	character.hurtE.style.width = hurtbox.width + 'px';
 	if (c.hitbox) {
-		var hitbox = this.getHitCoords(character);
+		var hitbox = this.getHitbox(character);
 		character.hitE.style.left = hitbox.x + 'px';
 		character.hitE.style.bottom = hitbox.y + 'px';
 		character.hitE.style.height = hitbox.height + 'px';

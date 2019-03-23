@@ -22,75 +22,75 @@ function Character(name, attacks) {
 	this.hurtboxes = {
 		idle: {
 			hurt: this.makeHurtbox(10, 0, 210, 60),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		jump: {
 			hurt: this.makeHurtbox(10, 0, 210, 60),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		crouch: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		walk: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		block: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		grab: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		haymaker: {
 			hurt: this.makeHurtbox(5, 0, 210, 55),
-			hit: this.makeHurtbox(75, 90, 30, 40)
+			hit: this.makeHitbox(75, 90, 30, 40, 20)
 		},
 		jab: {
 			hurt: this.makeHurtbox(17, 0, 210, 62),
-			hit: this.makeHurtbox(100, 93, 30, 55)
+			hit: this.makeHitbox(100, 93, 30, 55, 10)
 		},
 		roundhouse: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		special: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		uppercut: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		highKick: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		lowKick: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		crouchSpecial: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		jumpPunchHigh: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		jumpPunchLow: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		jumpKickLow: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		},
 		jumpKickHigh: {
 			hurt: this.makeHurtbox(),
-			hit: this.makeHurtbox()
+			hit: this.makeHitbox()
 		}
 	};
 	this.resetState();
@@ -104,6 +104,14 @@ Character.prototype.makeHurtbox = function(x, y, height, width) {
 		height: height || 0,
 		width: width || 0
 	};
+};
+
+Character.prototype.makeHitbox = function(x, y, height, width, damage) {
+	// console.log('makeHitbox');
+	var box = this.makeHurtbox(x, y, height, width);
+	box.damage = damage;
+	box.hasHit = false;
+	return box;
 };
 
 Character.prototype.createAttacks = function(idle, crouch, jump) {
@@ -194,6 +202,7 @@ Character.prototype.attack = function(i) {
 	this.attackFrames = 1;
 	this.hurtbox = this.hurtboxes[this.curAttack.name].hurt;
 	this.hitbox = this.hurtboxes[this.curAttack.name].hit;
+	this.hitbox.hasHit = false;
 };
 
 Character.prototype.baseMove = function() {
@@ -260,4 +269,9 @@ Character.prototype.setY = function(y) {
 Character.prototype.canTurn = function() {
 	// console.log('canTurn');
 	return this.state == 'walk' || this.state == 'idle' || this.state == 'crouch';
+};
+
+Character.prototype.resetHealth = function() {
+	// console.log('resetHealth');
+	this.health = 100;
 };
