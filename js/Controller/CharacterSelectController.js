@@ -20,7 +20,6 @@ CharacterSelectController.prototype.start = function(activator) {
 	if (activator) this.activator = activator;
 	this.setIndex(0, this.activator);
 	if (this.mode == this.TWO_PLAYER) this.setIndex(0, this.getNonActivator());
-	console.log(this.menu);
 	this.view.show(this.menu);
 	if (this.mode == this.CHARACTER_DETAIL) {
 		this.view.show(this.characterDetails.children[this.i[0]]);
@@ -48,11 +47,11 @@ CharacterSelectController.prototype.nextFrame = function(inputs) {
 		}
 		if (!this.isPlayerSelected(pi)) {
 			var direction = this.horizontalDirection(status.axes);
-			var prevI = this.i[0];
+			var prevI = this.i[pi];
 			this.moveHorizontal(direction, pi);
-			if (this.mode == this.CHARACTER_DETAIL && prevI != this.i[0]) {
+			if (this.mode == this.CHARACTER_DETAIL && prevI != this.i[pi]) {
 				this.view.hide(this.characterDetails.children[prevI]);
-				this.view.show(this.characterDetails.children[this.i[0]]);
+				this.view.show(this.characterDetails.children[this.i[pi]]);
 			}
 		}
 	}
