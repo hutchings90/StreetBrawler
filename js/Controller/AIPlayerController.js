@@ -9,7 +9,7 @@
  *   The AIPlayer that will be controlled
  * @param {BattleController}
  *   The BattleController with information regarding hurtboxes.
- *   This data should only be read; the AI should not manipulate it.
+ *   This data should only be READ; the AI should NOT manipulate it.
  *   To access character hit/hurt boxes, battleCharacterController.get{Hit/Hurt}(battleCharacterController.characters[playerIndex])
  *     See Model/Character.js
  *   Projectile hitboxes pending
@@ -20,6 +20,10 @@ function AIController(ai, battleController) {
 	this.ai = ai;
 	this.interval = null;
 	this.battleController = battleController;
+	this.aiHurtbox = battleController.battleCharacterController.getHurtbox(battleController.battleCharacterController.characters[1]);
+	// console.log(this.aiHurtbox);
+	this.aiHittbox = battleController.battleCharacterController.getHitbox(battleController.battleCharacterController.characters[1]);
+	// console.log(this.aiHittbox);
 }
 
 /**
