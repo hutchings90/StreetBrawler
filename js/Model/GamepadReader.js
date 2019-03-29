@@ -23,6 +23,7 @@ GamepadReader.prototype.read = function() {
 GamepadReader.prototype.readButtons = function() {
 	// console.log('readButtons');
 	var gamepad = this.gamepad;
+	if (!isNaN(this.gamepad.index)) gamepad = navigator.getGamepads()[this.gamepad.index];
 	for (var i in gamepad.buttons) {
 		this.status.buttons[i].update(gamepad.buttons[i].pressed);
 	}
@@ -31,6 +32,7 @@ GamepadReader.prototype.readButtons = function() {
 GamepadReader.prototype.readAxes = function() {
 	// console.log('readAxes');
 	var gamepad = this.gamepad;
+	if (!isNaN(this.gamepad.index)) gamepad = navigator.getGamepads()[this.gamepad.index];
 	for (var i = this.NUM_AXES - 1; i >= 0; i--) {
 		this.status.axes[i].update(gamepad.axes[i]);
 	}

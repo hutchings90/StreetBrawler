@@ -48,7 +48,8 @@ ContentManager.prototype.loadAudio = function() {
 		LavaGolem: this.loadGolemAudio('Lava'),
 		PlantGolem: this.loadGolemAudio('Plant'),
 		SandGolem: this.loadGolemAudio('Sand'),
-		WindGolem: this.loadGolemAudio('Wind')
+		WindGolem: this.loadGolemAudio('Wind'),
+		backgroundMusic: this.loadBackgroundMusic()
 	};
 };
 
@@ -140,4 +141,43 @@ ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 		jumpKickHigh: asset.jumpKickHigh.cloneNode(true),
 		block: asset.block.cloneNode(true),
 	};
+};
+
+ContentManager.prototype.loadBackgroundMusic = function() {
+	return {
+		astroid: this.view.createBackgroundMusic(this.GENERAL_SOUND_PATH + 'Astroid.mp3'),
+		voyage: this.view.createBackgroundMusic(this.GENERAL_SOUND_PATH + 'Voyage.mp3', .5)
+	};
+};
+
+ContentManager.prototype.playBackgroundMusic = function(key) {
+	// console.log('playBackgroundMusic');
+	this.playAudio('backgroundMusic', key);
+};
+
+ContentManager.prototype.playAudio = function(key1, key2) {
+	// console.log('playAudio');
+	this.audio[key1][key2].play();
+};
+
+ContentManager.prototype.stopBackgroundMusic = function(key) {
+	// console.log('stopBackgroundMusic');
+	this.stopAudio('backgroundMusic', key);
+};
+
+ContentManager.prototype.stopAudio = function(key1, key2) {
+	// console.log('stopAudio');
+	var audio = this.audio[key1][key2];
+	audio.pause();
+	audio.currentTime = 0;
+};
+
+ContentManager.prototype.pauseBackgroundMusic = function(key) {
+	// console.log('pauseBackgroundMusic');
+	this.pauseAudio('backgroundMusic', key);
+};
+
+ContentManager.prototype.pauseBackgroundMusic = function(key1, key2) {
+	// console.log('pauseBackgroundMusic');
+	this.audio[key1][key2].pause();
 };

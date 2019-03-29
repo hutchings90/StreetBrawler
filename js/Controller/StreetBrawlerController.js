@@ -113,6 +113,7 @@ StreetBrawlerController.prototype.activateMainMenu = function(pi) {
 	// console.log('activateMainMenu');
 	this.activateMenu('mainMenu', pi);
 	this.streetBrawler.allHumansPlaying();
+	this.contentManager.playBackgroundMusic('voyage');
 };
 
 /*
@@ -148,6 +149,7 @@ StreetBrawlerController.prototype.activateBattle = function(pi, params) {
 	// console.log('activateBattle');
 	this.battleController.setCharacters(params.characters);
 	this.activateController('battle', 'battle', pi);
+	this.contentManager.stopBackgroundMusic('voyage');
 };
 
 /*

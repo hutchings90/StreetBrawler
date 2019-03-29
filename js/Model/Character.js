@@ -146,7 +146,7 @@ Character.prototype.setState = function(state) {
 };
 
 Character.prototype.resetState = function() {
-	console.log('resetState');
+	// console.log('resetState');
 	this.setState('idle');
 	this.curAttack = null;
 	this.move = this.walkMove;

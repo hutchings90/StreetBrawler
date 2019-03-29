@@ -25,10 +25,11 @@ View.prototype.createBattleCharacterImage = function(src, w, h) {
 	return this.createImage(src, w, h);
 };
 
-View.prototype.createAudio = function(src) {
+View.prototype.createAudio = function(src, v) {
 	// console.log('createAudio');
 	var e = this.createElement('audio');
 	e.src = src;
+	e.volume = v || 1;
 	return e;
 };
 
@@ -349,4 +350,11 @@ View.prototype.hasSelectedOption = function(options) {
 		if (this.hasClassName(options[i], 'selected')) return true;
 	}
 	return false;
+};
+
+View.prototype.createBackgroundMusic = function(src, v) {
+	// console.log('createBackgroundMusic');
+	var e = this.createAudio(src, v);
+	e.loop = true;
+	return e;
 };

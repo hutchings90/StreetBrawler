@@ -143,6 +143,7 @@ BattleController.prototype.end = function(pi) {
 	this.clearBattleObjects();
 	this.clearTimer();
 	this.setCharacters([]);
+	this.contentManager.stopBackgroundMusic('astroid');
 	return this.createReport('quitBattle', {}, pi);
 };
 
@@ -155,6 +156,7 @@ BattleController.prototype.show = function() {
 	// console.log('show');
 	this.view.show(this.battleAreaContainer);
 	this.showCharacters();
+	this.contentManager.playBackgroundMusic('astroid');
 };
 
 /*
@@ -341,6 +343,7 @@ BattleController.prototype.showBattleMenu = function(pi, params) {
 	this.deactivateAI();
 	this.activateController('battleMenu', 'menu', pi);
 	this.view.clearTimer(this.battleTimer);
+	this.contentManager.pauseBackgroundMusic('astroid');
 };
 
 /*
@@ -351,6 +354,7 @@ BattleController.prototype.resume = function(pi, params) {
 	// console.log('resume');
 	if (this.aiControllers.length < 1) this.streetBrawler.players[this.getOtherPlayerIndex(pi)].playing = true;
 	this.activateController('battleCharacter', 'battle', pi);
+	this.contentManager.playBackgroundMusic('astroid');
 };
 
 /*
