@@ -250,7 +250,10 @@ BattleController.prototype.endRound = function(pi, params) {
 		break;
 	default: win = false; break;
 	}
-	if (!win) prefix = 'Draw';
+	if (!win) {
+		prefix = 'Draw';
+		if (this.round >= this.ROUNDS) suffix = '.';
+	}
 	else {
 		suffix = ' ';
 		if (this.round < this.ROUNDS) suffix += 'wins the round.';
