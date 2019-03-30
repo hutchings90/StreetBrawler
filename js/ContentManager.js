@@ -177,7 +177,7 @@ ContentManager.prototype.pauseBackgroundMusic = function(key) {
 	this.pauseAudio('backgroundMusic', key);
 };
 
-ContentManager.prototype.pauseBackgroundMusic = function(key1, key2) {
-	// console.log('pauseBackgroundMusic');
+ContentManager.prototype.pauseAudio = function(key1, key2) {
+	// console.log('pauseAudio');
 	this.audio[key1][key2].pause();
 };
