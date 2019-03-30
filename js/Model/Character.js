@@ -37,7 +37,7 @@ function Character(name, attacks) {
 			hit: this.makeHitbox()
 		},
 		block: {
-			hurt: this.makeHurtbox(),
+			hurt: this.makeHurtbox(0, 0, 210, 127),
 			hit: this.makeHitbox()
 		},
 		grab: {
@@ -187,6 +187,7 @@ Character.prototype.walk = function(direction) {
 Character.prototype.block = function() {
 	// console.log('block');
 	this.state = 'block';
+	this.hurtbox = this.hurtboxes.block.hurt;
 };
 
 Character.prototype.grab = function() {

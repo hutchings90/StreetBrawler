@@ -72,7 +72,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		var opponent = this.characters[this.getOtherPlayerIndex(i)];
 		var hurtbox = this.getHurtbox(character);
 		var hitbox = this.getHitbox(opponent);
-		if (!hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
+		if (character.character.state != 'block' && !hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
 			character.character.health -= hitbox.damage;
 			if (character.character.health <= 0) {
 				character.character.health = 0;
@@ -136,25 +136,16 @@ BattleCharacterController.prototype.getCharacterHurtbox = function(c, prop) {
 
 BattleCharacterController.prototype.setHitboxes = function(character) {
 	// console.log('setHitboxes');
-	if (!this.testing) return;
 	var c = character.character;
-	var hurtbox = this.getHurtbox(character);
-	character.hurtE.style.left = hurtbox.x + 'px';
-	character.hurtE.style.bottom = hurtbox.y + 'px';
-	character.hurtE.style.height = hurtbox.height + 'px';
-	character.hurtE.style.width = hurtbox.width + 'px';
-	if (c.hitbox) {
-		var hitbox = this.getHitbox(character);
-		character.hitE.style.left = hitbox.x + 'px';
-		character.hitE.style.bottom = hitbox.y + 'px';
-		character.hitE.style.height = hitbox.height + 'px';
-		character.hitE.style.width = hitbox.width + 'px';
+	if (c.state == 'block' || this.testing) {
+		var hurtbox = this.getHurtbox(character);
+		this.view.setHitboxPosition(character.hurtE, hurtbox.x, hurtbox.y, hurtbox.height, hurtbox.width);
 	}
+	if (!this.testing) return;
+	if (!c.hitbox) this.view.setHitboxPosition(character.hitE, 0, 0, 0, 0);
 	else {
-		character.hitE.style.left = '0px';
-		character.hitE.style.bottom = '0px';
-		character.hitE.style.height = '0px';
-		character.hitE.style.width = '0px';
+		var hitbox = this.getHitbox(character);
+		this.view.setHitboxPosition(character.hitE, hitbox.x, hitbox.y, hitbox.height, hitbox.width);
 	}
 };
 
@@ -162,7 +153,7 @@ BattleCharacterController.prototype.blockTransition = function(character) {
 	// console.log('blockTransition');
 	var c = character.character;
 	var e = character.e;
-	return (c.state == 'block' && !e.className.includes('block')) || (c.state == 'idle' && e.className.includes('block'));
+	return (c.state == 'block' && !this.view.hasClassName(e, 'block')) || (c.state == 'idle' && this.view.hasClassName(e, 'block'));
 };
 
 BattleCharacterController.prototype.setCharacterImage = function(character, name) {
@@ -195,6 +186,7 @@ BattleCharacterController.prototype.processAction = function(character, action) 
 BattleCharacterController.prototype.resetState = function(character) {
 	// console.log('resetState');
 	character.character.resetState();
+	if (!this.testing) this.view.characterUnblock(character.hurtE);
 };
 
 BattleCharacterController.prototype.jump = function(character, params) {
@@ -220,11 +212,13 @@ BattleCharacterController.prototype.right = function(character) {
 BattleCharacterController.prototype.block = function(character) {
 	// console.log('block');
 	character.character.block();
+	this.view.characterBlock(character.hurtE);
 };
 
 BattleCharacterController.prototype.grab = function(character) {
 	// console.log('grab');
 	character.character.grab();
+	this.view.characterBlock(character.hurtE);
 };
 
 BattleCharacterController.prototype.attack = function(character, params) {

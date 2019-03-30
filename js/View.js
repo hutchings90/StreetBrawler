@@ -11,6 +11,13 @@ View.prototype.getOtherPlayerIndex = function(i) {
 	return (i + 1) & 1;
 };
 
+View.prototype.createHitbox = function(kind) {
+	// console.log('createHurtE');
+	var e = this.createElement('div');
+	this.addClassName(e, kind);
+	return e;
+};
+
 View.prototype.createImage = function(src, w, h) {
 	// console.log('createImage');
 	var e = this.createElement('img');
@@ -362,4 +369,22 @@ View.prototype.createBackgroundMusic = function(src, v) {
 	var e = this.createAudio(src, v);
 	e.loop = true;
 	return e;
+};
+
+View.prototype.setHitboxPosition = function(e, x, y, height, width) {
+	// console.log(setHitboxPosition);
+	e.style.left = x + 'px';
+	e.style.bottom = y + 'px';
+	e.style.height = height + 'px';
+	e.style.width = width + 'px';
+};
+
+View.prototype.characterBlock = function(e) {
+	// console.log('characterBlock');
+	this.removeClassName(e, 'hide');
+};
+
+View.prototype.characterUnblock = function(e) {
+	// console.log('characterBlock');
+	this.addClassName(e, 'hide');
 };

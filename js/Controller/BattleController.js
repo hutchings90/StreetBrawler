@@ -302,19 +302,13 @@ BattleController.prototype.showCharacter = function(character, ci) {
 	else character.character.direction = 'right';
 	this.view.addBattleImage(this.battleObjects, img);
 	character.e = img;
-	this.resetCharacter(character, ci);
+	character.hurtE = this.view.createHitbox('hurtbox');
+	this.view.addBattleImage(this.battleObjects, character.hurtE);
 	if (this.testing) {
-		character.hurtE = this.view.createElement('div');
-		character.hitE = this.view.createElement('div');
-		character.hurtE.style.left = character.character.hurtbox.x + 'px';
-		character.hurtE.style.bottom = character.character.hurtbox.y + 'px';
-		character.hurtE.style.heigth = character.character.hurtbox.height + 'px';
-		character.hurtE.style.width = character.character.hurtbox.width + 'px';
-		this.view.addClassName(character.hurtE, 'hurtbox');
-		this.view.addClassName(character.hitE, 'hitbox');
-		this.view.addBattleImage(this.battleObjects, character.hurtE);
+		character.hitE = this.view.createHitbox('hitbox');
 		this.view.addBattleImage(this.battleObjects, character.hitE);
 	}
+	this.resetCharacter(character, ci);
 };
 
 /*
