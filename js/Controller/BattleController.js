@@ -56,9 +56,6 @@ activates AI's
 */
 BattleController.prototype.startRound = function() {
 	// console.log('startRound');
-	for (var i = this.characters.length - 1; i >= 0; i--) {
-		this.characters[i].character.resetHealth();
-	}
 	this.round++;
 	this.view.steadyTimer(this.battleTimer);
 	this.nextFrame = this.roundFrame;
@@ -70,6 +67,7 @@ Starts rounds when preRoundFrames are met
 */
 BattleController.prototype.preRoundFrame = function(inputs) {
 	// console.log('preRoundFrame');
+	this.battleCharacterController.updateBattleHealth();
 	if (++this.preRoundFrames >= this.PRE_ROUND_FRAMES) this.startRound();
 };
 
@@ -81,6 +79,7 @@ BattleController.prototype.roundFrame = function(inputs) {
 	if (!this.activeController) return;
 	if (this.activeController == this.battleCharacterController) this.trackTimer();
 	var report = this.activeController.nextFrame(inputs);
+	this.battleCharacterController.updateBattleHealth();
 	if (report) this[report.action](report.pi, report.params);
 };
 
@@ -90,9 +89,13 @@ else, starts new round? With not much fanfare it seems
 */
 BattleController.prototype.endRoundFrame = function(inputs) {
 	// console.log('endRoundFrame');
+	this.battleCharacterController.updateBattleHealth();
 	if (++this.endRoundFrames >= this.END_ROUND_FRAMES) {
 		if (this.round >= this.ROUNDS) this.nextFrame = this.preEndFrame;
 		else {
+			for (var i = this.characters.length - 1; i >= 0; i--) {
+				this.characters[i].character.resetHealth();
+			}
 			this.view.setContents(this.winbar, '');
 			this.view.hide(this.winbar);
 			this.clearTimer();

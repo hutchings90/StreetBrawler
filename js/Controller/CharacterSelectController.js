@@ -213,8 +213,9 @@ CharacterSelectController.prototype.getBattleCharacter = function(pi, character)
 		pi: pi,
 		character: character,
 		audio: this.contentManager.getBattleCharacterAudio(character),
-		visual: this.contentManager.getBattleCharacterVisuals(character)
-	}
+		visual: this.contentManager.getBattleCharacterVisuals(character),
+		health: character.health
+	};
 };
 
 CharacterSelectController.prototype.getOverworldCharacter = function(pi, character) {

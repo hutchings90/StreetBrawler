@@ -334,6 +334,11 @@ View.prototype.setBattleNametag = function(e, nametag) {
 	this.setContents(e.children[1], nametag);
 };
 
+View.prototype.updateBattleHealth = function(ci, health) {
+	// console.log('updateBattleHealth');
+	this.setBattleHealth(this.healthBars[ci], health);
+};
+
 View.prototype.setBattleHealth = function(e, health) {
 	// console.log('setBattleHealth');
 	this.setStyleAttr(e.children[0], health + '%', 'width');

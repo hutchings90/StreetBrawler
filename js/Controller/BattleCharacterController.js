@@ -367,3 +367,15 @@ BattleCharacterController.prototype.setCharacters = function(characters) {
 	// console.log('setCharacters');
 	this.characters = characters;
 };
+
+BattleCharacterController.prototype.updateBattleHealth = function() {
+	// console.log('updateBattleHealth');
+	for (var i = 0; i < this.characters.length; i++) {
+		var character = this.characters[i];
+		var diff = character.health - character.character.health;
+		if (diff) {
+			character.health -= diff / Math.abs(diff);
+			this.view.updateBattleHealth(i, character.health);
+		}
+	}
+};
