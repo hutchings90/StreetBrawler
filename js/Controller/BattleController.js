@@ -96,6 +96,7 @@ BattleController.prototype.endRoundFrame = function(inputs) {
 			for (var i = this.characters.length - 1; i >= 0; i--) {
 				this.characters[i].character.resetHealth();
 			}
+			this.battleCharacterController.clearProjectiles();
 			this.view.setContents(this.winbar, '');
 			this.view.hide(this.winbar);
 			this.clearTimer();

@@ -15,7 +15,7 @@ function Character(name, attacks) {
 	this.attackFrames = 0;
 	this.freezeFrames = 0;
 	this.attacks = attacks || this.createAttacks(
-		[ this.createAttack('haymaker', 8), this.createAttack('jab', 5), this.createAttack('roundhouse', 15), this.createAttack('special', 10) ],
+		[ this.createAttack('haymaker', 8), this.createAttack('jab', 5), this.createProjectile('downSpecial', 75, 0, 0, 0, 26, 27, 30), this.createProjectile('sideSpecial', 75, 5, 123, 93, 26, 27, 15) ],
 		[ this.createAttack('uppercut', 10), this.createAttack('highKick', 15), this.createAttack('lowKick', 15), this.createAttack('crouchSpecial', 10) ],
 		[ this.createAttack('jumpPunchHigh', 10), this.createAttack('jumpPunchLow', 10), this.createAttack('jumpKickLow', 10), this.createAttack('jumpKickHigh', 10) ]
 	);
@@ -52,11 +52,11 @@ function Character(name, attacks) {
 			hurt: this.makeHurtbox(17, 0, 210, 62),
 			hit: this.makeHitbox(100, 93, 30, 55, 10)
 		},
-		roundhouse: {
+		downSpecial: {
 			hurt: this.makeHurtbox(),
 			hit: this.makeHitbox()
 		},
-		special: {
+		sideSpecial: {
 			hurt: this.makeHurtbox(),
 			hit: this.makeHitbox()
 		},
@@ -120,15 +120,23 @@ Character.prototype.createAttacks = function(idle, crouch, jump) {
 		idle: idle,
 		crouch: crouch,
 		jump: jump
-	}
+	};
 };
 
-Character.prototype.createAttack = function(name, frames) {
+Character.prototype.createAttack = function(name, frames, projectile) {
 	// console.log('createAttack');
 	return {
 		name: name,
-		frames: frames
-	}
+		frames: frames,
+		projectile: projectile
+	};
+};
+
+Character.prototype.createProjectile = function(name, frames, dx, x, y, height, width, damage) {
+	// console.log('createProjectile');
+	var projectile = this.makeHitbox(x, y, height, width, damage);
+	projectile.dx = dx || 0;
+	return this.createAttack(name, frames, projectile);
 };
 
 Character.prototype.reset = function(x) {
@@ -164,6 +172,7 @@ Character.prototype.jump = function(direction) {
 
 Character.prototype.crouch = function() {
 	// console.log('crouch');
+	return;
 	this.state = 'crouch';
 	this.dx = 0;
 };
@@ -275,4 +284,9 @@ Character.prototype.canTurn = function() {
 Character.prototype.resetHealth = function() {
 	// console.log('resetHealth');
 	this.health = 100;
+};
+
+Character.prototype.getProjectile = function() {
+	// console.log('getProjectile');
+	return Object.assign({}, this.curAttack.projectile);
 };

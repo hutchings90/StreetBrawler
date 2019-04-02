@@ -11,9 +11,9 @@
  *   The BattleController with information regarding hurtboxes.
  *   This data should only be READ; the AI should NOT manipulate it.
  *   To access character hit/hurt boxes, battleCharacterController.get{Hit/Hurt}(battleCharacterController.characters[playerIndex])
- *     See Model/Character.js
- *   Projectile hitboxes pending
- *     See Model/Attack.js
+ *     See Model/Character.js, make{Hurt/Hit}box
+ *   To access projectile hitboxes, battleCharacterController.projectiles[playerIndex][projectileIndex]
+ *     See Model/Character.js, createProjectile function
  */
 function AIController(ai, battleController) {
 	// console.log('AIController');

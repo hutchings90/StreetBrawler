@@ -4,6 +4,7 @@ function View() {
 	this.CHARACTER_SIDES = [ 'left', 'right' ];
 	this.BATTLE_AREA_W = 900;
 	this.healthBars = this.getBattleHealthBars();
+	this.battleObjects = this.getBattleObjects();
 }
 
 View.prototype.getOtherPlayerIndex = function(i) {
@@ -25,6 +26,15 @@ View.prototype.createImage = function(src, w, h) {
 	if (w) e.width = w;
 	if (h) e.height = h;
 	return e;
+};
+
+View.prototype.createProjectileImage = function(character) {
+	// console.log('createProjectileImage');
+	var c = character.character;
+	var img = character.visual[c.curAttack.name + 'Object'].cloneNode(true);
+	this.addClassName(img, c.direction);
+	this.addClassName(img, 'projectile');
+	return img;
 };
 
 View.prototype.createBattleCharacterImage = function(src, w, h) {
@@ -289,8 +299,13 @@ View.prototype.replaceOverworldImage = function(oldE, newE){
 
 View.prototype.addBattleImage = function(e, img) {
 	// console.log('addBattleImage');
-	this.addClassName(img, 'battle-character ');
+	this.addClassName(img, 'battle-character');
 	this.appendChild(e, img);
+};
+
+View.prototype.addProjectile = function(img) {
+	// console.log('addProjectile');
+	this.appendChild(this.battleObjects, img);
 };
 
 View.prototype.replaceBattleImage = function(oldE, newE, direction, state) {
@@ -387,4 +402,15 @@ View.prototype.characterBlock = function(e) {
 View.prototype.characterUnblock = function(e) {
 	// console.log('characterBlock');
 	this.addClassName(e, 'hide');
+};
+
+View.prototype.setProjectilePosition = function(projectile) {
+	// console.log('setProjectilePosition');
+	projectile.img.style.left = projectile.x + 'px';
+	projectile.img.style.bottom = projectile.y + 'px';
+};
+
+View.prototype.removeProjectile = function(projectile) {
+	// console.log('removeProjectile')
+	this.battleObjects.removeChild(projectile.img);
 };

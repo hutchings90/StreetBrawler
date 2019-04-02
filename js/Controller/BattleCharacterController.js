@@ -3,7 +3,7 @@ function BattleCharacterController(view, utils, contentManager, testing) {
 	GamepadProcessingController.call(this, view, utils, contentManager);
 	this.BATTLE_AREA_W = 900;
 	this.setCharacters([]);
-	this.projectiles = [];
+	this.projectiles = [[], []];
 	this.testing = testing;
 }
 
@@ -18,9 +18,23 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		var status = input.status;
 		if (!status) continue;
 		var character = this.characters[i];
+		var c = character.character;
 		if (this.buttonPressed(status.buttons[9])) return this.createReport('showBattleMenu', {}, input.pi);
 		this.processAxes(character, status.axes);
 		this.processButtons(character, status.buttons);
+		if (c.attackFrames == 1 && c.curAttack.projectile) {
+			var projectile = c.getProjectile();
+			projectile.img = this.view.createProjectileImage(character);
+			if (c.direction == 'left') projectile.x += c.x;
+			else {
+				projectile.x = c.x + character.visual.idle.width - projectile.x - character.visual[c.curAttack.name + 'Object'].width;
+				projectile.dx *= -1;
+			}
+			projectile.y += c.y;
+			this.view.setProjectilePosition(projectile);
+			this.view.addProjectile(projectile.img);
+			this.projectiles[i].push(projectile);
+		}
 	}
 	this.setCharacterDirections();
 	for (var i = this.characters.length - 1; i >= 0; i--) {
@@ -69,19 +83,37 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 	}
 	for (var i = 0; i < this.characters.length; i++) {
 		var character = this.characters[i];
-		var opponent = this.characters[this.getOtherPlayerIndex(i)];
+		var c = character.character;
+		var opponentI = this.getOtherPlayerIndex(i);
+		var opponent = this.characters[opponentI];
 		var hurtbox = this.getHurtbox(character);
 		var hitbox = this.getHitbox(opponent);
-		if (character.character.state != 'block' && !hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
-			character.character.health -= hitbox.damage;
-			if (character.character.health <= 0) {
-				character.character.health = 0;
-				loser += i + 1;
+		var projectiles = this.projectiles[opponentI];
+		for (var j = projectiles.length - 1; j >= 0; j--) {
+			var removeProjectile = false;
+			var projectile = projectiles[j];
+			projectile.x += projectile.dx;
+			if (!this.utils.collide(projectile, hurtbox)) {
+				if (projectile.x < 0 - projectile.img.width || projectile.x > this.BATTLE_AREA_W) removeProjectile = true;
+				else this.view.setProjectilePosition(projectile);
 			}
+			else {
+				removeProjectile = true;
+				if (c.state != 'block') c.health -= projectile.damage;
+			}
+			if (removeProjectile) {
+				this.view.removeProjectile(projectile);
+				projectiles.splice(j, 1);
+				if (projectiles.length != this.projectiles[opponentI].length) console.log('original object not modified');
+			}
+		}
+		if (c.state != 'block' && !hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
+			c.health -= hitbox.damage;
 			opponent.character.hitbox.hasHit = true;
 		}
-		for (var j in this.projectiles) {
-			var projectile = this.projectiles[j];
+		if (c.health <= 0) {
+			c.health = 0;
+			loser += i + 1;
 		}
 	}
 	if (loser > -1) {
@@ -371,5 +403,16 @@ BattleCharacterController.prototype.updateBattleHealth = function() {
 			character.health -= diff / Math.abs(diff);
 			this.view.updateBattleHealth(i, character.health);
 		}
+	}
+};
+
+BattleCharacterController.prototype.clearProjectiles = function() {
+	// console.log('clearProjectiles');
+	for (var i = this.projectiles.length - 1; i >= 0; i--) {
+		var projectiles = this.projectiles[i];
+		for (var k = projectiles.length - 1; k >= 0; k--) {
+			this.view.removeProjectile(projectiles[k]);
+		}
+		this.projectiles[i] = [];
 	}
 };

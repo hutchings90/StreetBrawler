@@ -152,6 +152,10 @@ body {
 	transform: scaleX(-1);
 }
 
+#battle-area #battle-objects .projectile.left {
+	transform: scaleX(-1);
+}
+
 #battle-area #winbar {
 	line-height: 30px;
 	font-weight: 900;
