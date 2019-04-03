@@ -30,7 +30,7 @@ OverworldController.prototype.nextFrame = function(inputs) {
 	//this.processButtons(this.character, status.buttons);
 
 	this.character.character.move();
-	//console.log('x/y:',this.character.character.x,this.character.character.y);
+	if (this.overworld.collider(this.character)) this.character.character.unmove();
 	this.view.setCharacterPosition(this.character);
 };
 

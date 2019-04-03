@@ -1,6 +1,6 @@
-function TestWorld(contentManager) {
-	Overworld.call(this,contentManager);
-	this.addActor('PlantGolem',0,0);
+function TestWorld(contentManager,utils) {
+	Overworld.call(this,contentManager,utils);
+	this.addActor('PlantGolem',300,300);
 }
 
 TestWorld.prototype = Object.create(Overworld.prototype);

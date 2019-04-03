@@ -33,12 +33,12 @@ GamepadProcessingController.prototype.buttonsPressed = function(buttons, checks)
 
 GamepadProcessingController.prototype.buttonPressed = function(button) {
 	// console.log('buttonPressed');
-	return button.status == 'start' || button.status == 'repeat';
+	return button && (button.status == 'start' || button.status == 'repeat');
 };
 
 GamepadProcessingController.prototype.axisPressed = function(axis) {
 	// console.log('axisPressed');
-	return axis.status == 'start' || axis.status == 'repeat';
+	return axis && (axis.status == 'start' || axis.status == 'repeat');
 };
 
 GamepadProcessingController.prototype.verticalDirection = function(axes) {
