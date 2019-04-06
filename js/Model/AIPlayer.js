@@ -16,7 +16,7 @@ var MOVE_CROUCH = 1;
 var ATTACK_JAB = 0;
 var ATTACK_HAYMAKER = 1;
 var ATTACK_HIGHKICK = 2;
-var ATTACK_LOWKICK = 3;
+var ATTACK_PROJECTILE = 3;
 var BLOCK = 4;
 var GRAB = 6;
 
@@ -34,8 +34,8 @@ function AIPlayer() {
 
 	 // Use the same Player variables but use a GamepadSimulator and set isAI to true;
 	Player.call(this, new GamepadSimulator(), true);
-	this.DIFFICULTY_FREQUENCIES = [ 38, 27, 20 ]; // These are milliseconds, NOT frames
-	this.difficulty = EASY; // Default to easy
+	this.DIFFICULTY_FREQUENCIES = [ 27, 20, 13 ]; // These are milliseconds, NOT frames
+	this.difficulty = HARD; // Default to easy
 	this.playing = false; 
 
 	this.currentFrequency = 0; // This will help measure when the AI should make a move

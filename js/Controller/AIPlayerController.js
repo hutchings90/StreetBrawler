@@ -20,10 +20,8 @@ function AIController(ai, battleController) {
 	this.ai = ai;
 	this.interval = null;
 	this.battleController = battleController;
-	this.aiHurtbox = battleController.battleCharacterController.getHurtbox(battleController.battleCharacterController.characters[1]);
-	// console.log(this.aiHurtbox);
-	this.aiHittbox = battleController.battleCharacterController.getHitbox(battleController.battleCharacterController.characters[1]);
-	// console.log(this.aiHittbox);
+	// this.aiHurtbox = battleController.battleCharacterController.getHurtbox(battleController.battleCharacterController.characters[1]);
+	// this.aiHitbox = battleController.battleCharacterController.getHitbox(battleController.battleCharacterController.characters[1]);
 }
 
 /**
@@ -33,9 +31,10 @@ function AIController(ai, battleController) {
 AIController.prototype.activate = function() {
 	// console.log('activate');
 	// this does not refer to this instance of AIController in the inverval
-	var me = this;
+	let me = this;
 	me.ai.playing = true;
 	me.interval = setInterval(function() { // IPlayer decision making.
+		// me.getHurtBox(); // Hurtboxes seem to work even without this.
 		me.makeRandomDecision();
 	}, me.ai.getDifficultyFrequency());
 };
@@ -49,6 +48,10 @@ AIController.prototype.deactivate = function() {
 	this.ai.playing = false;
 	clearInterval(this.interval);
 	this.interval = null;
+};
+
+AIController.prototype.getHurtBox = function() {
+	this.aiHurtbox = battleController.battleCharacterController.getHurtbox(battleController.battleCharacterController.characters[1]);
 };
 
 /**
@@ -65,22 +68,22 @@ rand = function(num) {
  * This is excluding grabs.
  */
 pickAttack = function() {
-	var button = 0; // The button we're going to press for the AI.
-	var decide = rand(11); // Decides which move will be executed.
+	let button = 0; // The button we're going to press for the AI.
+	let decide = rand(9); // Decides which move will be executed.
 
 	// Pick the faster attacks more often.
 	if (decide <= 3) {
-		button = ATTACK_JAB;
+		button = ATTACK_HAYMAKER;
 	}
 	else if (decide <= 6) {
-		button = ATTACK_LOWKICK;
+		button = ATTACK_JAB;
 	}
 	// Pick the slower attacks less often.
 	else if (decide <= 8) {
-		button = ATTACK_HAYMAKER;
+		button = ATTACK_PROJECTILE;
 	}
 	else {
-		button = ATTACK_HIGHKICK;
+		// button = ATTACK_HIGHKICK; // Not working right now
 	}
 
 	return button; // Return the index of the attack button
@@ -103,16 +106,15 @@ pickAttack = function() {
  *	- Allow grabbing to occur when within grab range/proximity
  */
 AIController.prototype.makeRandomDecision = function() {
-	var gamepad = this.ai.gamepadReader.gamepad; // Make a func scoped gamepad variable.
-	var state = this.battleController.battleCharacterController.characters[1].character.state; // Make a func scoped state variable
-	var pickHorizontalMove = rand(2); // Decides if AI will move left(0) or right(1)
-	var stop = rand(4); // Stop the AI from doing anything. 25% chance of stopping
-	var willWalk = rand(3); // Decides if AI will walk. 50% chance
-	var willJump = rand(6); // Decides if the AI will jump. 16% chance
-	var willCrouch = rand(4); // Decides if AI will crouch. 25% chance. NOT READY YET
-	var willAttack = rand(2); // Decides if AI will attack. 50% chance
-	var willBlock = rand(8); // Decides if AI will block. 13% chance
-	var willGrab = rand(10); // Decides if AI will grab. 10% chance
+	let gamepad = this.ai.gamepadReader.gamepad; // Make a func scoped gamepad variable.
+	let state = this.battleController.battleCharacterController.characters[1].character.state; // Make a func scoped state variable
+	let stop = rand(6); // Stop the AI from doing anything. 17% chance of stopping
+	let willWalk = rand(2); // Decides if AI will walk. 50% chance
+	let willJump = rand(9); // Decides if the AI will jump. 11% chance
+	// let willCrouch = rand(4); // NOT READY YET
+	let willAttack = rand(3); // Decides if AI will attack. 33% chance
+	let willBlock = rand(6); // Decides if AI will block. 17% chance
+	// let willGrab = rand(10); // NOT READY YET
 
 	if (state.includes('jump')) { // Only make the AI jump once for one button input
 		gamepad.releaseVerticalAxis(); // Stop jumping
@@ -124,13 +126,8 @@ AIController.prototype.makeRandomDecision = function() {
 
 	// 
 	if (this.ai.canDoMove()) {
-		// console.log("left(0) or right(1)? ", pickHorizontalMove);
-		if (state.includes('block')) { // Make the AI stop blocking so it can do a new action
-			// console.log("ai stops blocking");
-			gamepad.clearButtons();
-		}
-
-		if (stop == 0 && !state.includes('idle')) { // Make the AI do nothing until it can act again
+		console.log("NEW AI MOVE");
+		if (stop == 0 && !state.includes('idle') && this.ai.getDifficultyFrequency() != HARD) { // Make the AI do nothing if it was doing an action. If on hard mode, never make it stop doing actions
 			// console.log("ai is idle");
 			gamepad.clearButtons();
 			gamepad.releaseVerticalAxis();
@@ -140,29 +137,38 @@ AIController.prototype.makeRandomDecision = function() {
 			// Allow AI to walk or jump
 			if (willWalk == 0) { // AI walks
 				// console.log("ai walks");
-				(rand(2) == 0) ? gamepad.left() : gamepad.right();
+				(rand(4) == 0) ? gamepad.right() : gamepad.left(); // Pick to move left more often
 			}
-			else if (willJump == 0) { // AI jumps
+			if (willJump == 0) { // AI jumps
 				// console.log("ai jumps");
+				let doSideJump = rand(2);
+				if (doSideJump == 0 && state.includes('walk')) { // decides if the ai will do a side jump while walking
+					gamepad.releaseHorizontalAxis(); // Do a verticle jump
+				}
+				else if (doSideJump == 0 && !state.includes('walk')) {
+					console.log("decide to move left or right");
+					(rand(3) == 0) ? gamepad.right() : gamepad.left(); // Pick to move left more often
+				}
 				gamepad.up();
 			}
-			else if (willCrouch == 0) { // AI crouches
-				// gamepad.down();
-			}
+			// else if (willCrouch == 0) { // AI crouching isn't implemented yet
+			// 	gamepad.down();
+			// }
 
-			// Allow AI to attack even if walking (but not while jumping)
-			if (willAttack == 0 && !state.includes('jump')) { 
+			// Allow AI to attack if not walking or jumping
+			if (willAttack == 0) { 
 				// console.log("ai attacks");
 				gamepad.releaseHorizontalAxis(); // Stop AI from walking
+				gamepad.releaseVerticalAxis(); // Stop AI jumping
 				gamepad.pressButton(pickAttack()); // Attack
 			}
-			else if (willGrab == 0 && !state.includes('jump')) { // AI can grab if not attacking
-				// console.log("ai grabs");
-				// gamepad.pressButton(GRAB);
-			}
+			// else if (willGrab == 0 && !state.includes('jump')) { // Grab not implemented yet
+			// 	console.log("ai grabs");
+			// 	gamepad.pressButton(GRAB);
+			// }
 
-			// Allows AI to block if it's walking or idle.
-			if (willBlock == 0 && (state.includes('idle') || state.includes('walk'))) {
+			// Allows AI to block if it's attacking or idle.
+			if (willBlock == 0) {
 				// console.log("ai blocks");
 				gamepad.releaseHorizontalAxis(); // AI stops walking
 				gamepad.pressButton(BLOCK); // AI now blocks
