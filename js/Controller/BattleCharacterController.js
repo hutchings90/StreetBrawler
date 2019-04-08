@@ -93,14 +93,18 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 			var removeProjectile = false;
 			var projectile = projectiles[j];
 			projectile.x += projectile.dx;
-			if (!this.utils.collide(projectile, hurtbox)) {
-				if (projectile.x < 0 - projectile.img.width || projectile.x > this.BATTLE_AREA_W) removeProjectile = true;
-				else this.view.setProjectilePosition(projectile);
+			if (!projectile.hasHit) {
+				if (!this.utils.collide(projectile, hurtbox)) {
+					if (projectile.x < 0 - projectile.img.width || projectile.x > this.BATTLE_AREA_W) removeProjectile = true;
+					else this.view.setProjectilePosition(projectile);
+				}
+				else {
+					projectile.hasHit = true;
+					removeProjectile = projectile.destroyOnHit;
+					if (c.state != 'block') c.health -= projectile.damage;
+				}
 			}
-			else {
-				removeProjectile = true;
-				if (c.state != 'block') c.health -= projectile.damage;
-			}
+			if (projectile.maxFrames && ++projectile.frames >= projectile.maxFrames) removeProjectile = true;
 			if (removeProjectile) {
 				this.view.removeProjectile(projectile);
 				projectiles.splice(j, 1);

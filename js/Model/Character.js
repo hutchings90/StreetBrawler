@@ -15,7 +15,7 @@ function Character(name, attacks) {
 	this.attackFrames = 0;
 	this.freezeFrames = 0;
 	this.attacks = attacks || this.createAttacks(
-		[ this.createAttack('haymaker', 8), this.createAttack('jab', 5), this.createProjectile('downSpecial', 75, 0, 0, 0, 26, 27, 30), this.createProjectile('sideSpecial', 75, 5, 123, 93, 26, 27, 15) ],
+		[ this.createProjectile('upSpecial', 75, 0, 0, 215, 110, 150, 30, false, 50), this.createAttack('jab', 5), this.createAttack('haymaker', 8), this.createProjectile('sideSpecial', 75, 5, 123, 93, 26, 27, 15, true) ],
 		[ this.createAttack('uppercut', 10), this.createAttack('highKick', 15), this.createAttack('lowKick', 15), this.createAttack('crouchSpecial', 10) ],
 		[ this.createAttack('jumpPunchHigh', 10), this.createAttack('jumpPunchLow', 10), this.createAttack('jumpKickLow', 10), this.createAttack('jumpKickHigh', 10) ]
 	);
@@ -52,12 +52,12 @@ function Character(name, attacks) {
 			hurt: this.makeHurtbox(17, 0, 210, 62),
 			hit: this.makeHitbox(100, 93, 30, 55, 10)
 		},
-		downSpecial: {
-			hurt: this.makeHurtbox(),
+		upSpecial: {
+			hurt: this.makeHurtbox(25, 0, 210, 90),
 			hit: this.makeHitbox()
 		},
 		sideSpecial: {
-			hurt: this.makeHurtbox(),
+			hurt: this.makeHurtbox(17, 0, 210, 62),
 			hit: this.makeHitbox()
 		},
 		uppercut: {
@@ -132,10 +132,12 @@ Character.prototype.createAttack = function(name, frames, projectile) {
 	};
 };
 
-Character.prototype.createProjectile = function(name, frames, dx, x, y, height, width, damage) {
+Character.prototype.createProjectile = function(name, frames, dx, x, y, height, width, damage, destroyOnHit, projectileFrames) {
 	// console.log('createProjectile');
 	var projectile = this.makeHitbox(x, y, height, width, damage);
 	projectile.dx = dx || 0;
+	projectile.maxFrames = projectileFrames || 0;
+	projectile.destroyOnHit = destroyOnHit || false;
 	return this.createAttack(name, frames, projectile);
 };
 
@@ -288,5 +290,7 @@ Character.prototype.resetHealth = function() {
 
 Character.prototype.getProjectile = function() {
 	// console.log('getProjectile');
-	return Object.assign({}, this.curAttack.projectile);
+	return Object.assign({
+		frames: 0
+	}, this.curAttack.projectile);
 };
