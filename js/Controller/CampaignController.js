@@ -5,7 +5,7 @@ function CampaignController(model, view, utils, contentManager, battleController
 	this.overworldController = new OverworldController(model, view, utils, contentManager);
 	this.campaignMenuController = new CampaignMenuController(view, utils, contentManager);
 	this.battleController = battleController;
-	this.character = new LavaGolem();
+	//this.character = new LavaGolem();
 }
 
 CampaignController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -35,6 +35,16 @@ CampaignController.prototype.loadOverworld = function() {
 	this.activateController('overworld','overworld',this.activator);
 	var overworld = new TestWorld(this.contentManager,this.utils);
 	this.overworldController.setOverworld (overworld);
+};
+
+CampaignController.prototype.activateBattle = function(pi, opponent) {
+	// console.log('activateBattle');
+	this.ai.character = opponent
+	this.streetBrawler.activateAI();
+	this.battleController.setCharacters([this.overworldController.character,this.ai]);
+	this.overworldController.hide();
+	this.activateController('battle', 'battle', pi);
+	this.contentManager.stopBackgroundMusic('voyage');
 };
 
 CampaignController.prototype.showCampaignMenu = function(pi, params) {

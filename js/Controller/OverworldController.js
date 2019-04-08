@@ -7,6 +7,7 @@ function OverworldController(model, view, utils, contentManager) {
 	this.overworldContainer = this.view.getOverworldContainer();
 	this.character = null;
 	this.overworld = null;
+	this.opponent = null; 
 }
 
 OverworldController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -27,36 +28,51 @@ OverworldController.prototype.nextFrame = function(inputs) {
 	if (!status) return;
 	if (this.buttonPressed(status.buttons[9])) return this.createReport('showCampaignMenu', {}, input.pi);
 	this.processAxes(this.character, status.axes);
-	//this.processButtons(this.character, status.buttons);
+	this.processButtons(this.character, status.buttons);
+	if (this.opponent) return this.createReport('activateBattle',this.opponent,input.pi);
 
-	this.character.character.move();
-	if (this.overworld.collider(this.character)) this.character.character.unmove();
-	this.view.setCharacterPosition(this.character);
+	this.character.overworldCharacter.move();
+	if (this.overworld.collider(this.character)) this.character.overworldCharacter.unmove();
+	this.view.setOverworldCharacterPosition(this.character);
 };
 
-OverworldController.prototype.startBattle = function(params){};
+OverworldController.prototype.startBattle = function(params){
+	
+};
 
-OverworldController.prototype.interact = function(params){};
+OverworldController.prototype.interact = function(){
+	interaction = this.overworld.interacter(this.character);
+	if (!interaction) return;
+	if (interaction[0] === 'fight'){
+		/*params = {
+			characters: [
+				this.view.createCharacter(this.character.overworldCharacter.name),
+				this.view.createCharacter(interaction[1]),
+			]
+		};*/
+		this.opponent = this.view.createCharacter(interaction[1]);
+	}
+};
 
 OverworldController.prototype.left = function (character){
-	this.character.character.left();
+	this.character.overworldCharacter.left();
 };
 
 OverworldController.prototype.right = function (character){
-	this.character.character.right();
+	this.character.overworldCharacter.right();
 };
 
 OverworldController.prototype.up = function (character){
-	this.character.character.up();
+	this.character.overworldCharacter.up();
 };
 
 OverworldController.prototype.down = function (character){
-	this.character.character.down();
+	this.character.overworldCharacter.down();
 };
 
 OverworldController.prototype.resetState = function(character) {
 	// console.log('resetState');
-	this.character.character.resetState();
+	this.character.overworldCharacter.resetState();
 };
 
 OverworldController.prototype.processAction = function(character, action) {
@@ -66,7 +82,7 @@ OverworldController.prototype.processAction = function(character, action) {
 
 OverworldController.prototype.processAxes = function(character, axes) {
 	 //console.log('processAxes');
-	this.processAction(character, this[this.character.character.state + 'Axes'](axes));
+	this.processAction(character, this[character.overworldCharacter.state + 'Axes'](axes));
 };
 
 OverworldController.prototype.idleAxes = function(axes) {
@@ -94,6 +110,20 @@ OverworldController.prototype.walkAxes = function(axes) {
 	return this.createReport('resetState');
 };
 
+OverworldController.prototype.processButtons = function(character, buttons) {
+	// console.log('processButtons');
+	this.processAction(character, this[character.overworldCharacter.state + 'Buttons'](buttons));
+};
+
+OverworldController.prototype.idleButtons = function(buttons) {
+	// console.log('idleButtons');
+	if (this.buttonPressed(buttons[1])) return this.createReport('interact', { button: 1 });
+};
+
+OverworldController.prototype.walkButtons = function(buttons) {
+	// console.log('walkButtons');
+};
+
 OverworldController.prototype.show = function() {
 	//console.log(this.overworldContainer);
 	this.view.show(this.overworldContainer);
@@ -108,7 +138,7 @@ OverworldController.prototype.hide = function() {
 
 OverworldController.prototype.showCharacter = function() {
 	//console.log(this.character);
-	var img = this.character.visual.down;
+	var img = this.character.overworldVisual.down;
 	this.drawImage(img);
 	this.view.setCharacterPosition(this.character);
 };

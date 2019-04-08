@@ -169,7 +169,8 @@ CharacterSelectController.prototype.end = function(pi) {
 			break;
 		case this.CAMPAIGN:
 			ret.action = 'startCampaign';
-			ret.params.character = this.getOverworldCharacter(pi, new OverworldCharacter(this.view.getCharacterName(this.options, this.i[pi], pi)));
+			ret.params.characters = [this.getOverworldCharacter(pi, this.view.getCharacterName(this.options, this.i[pi], pi)),
+			this.getBattleCharacter(2, this.view.getRandomCharacter())];
 			break;
 		}
 	}
@@ -218,12 +219,17 @@ CharacterSelectController.prototype.getBattleCharacter = function(pi, character)
 	};
 };
 
-CharacterSelectController.prototype.getOverworldCharacter = function(pi, character) {
+CharacterSelectController.prototype.getOverworldCharacter = function(pi, charName) {
 	// console.log('getOverworldCharacter');
-	return {
+	var out = this.getBattleCharacter(pi,this.view.createCharacter(charName));
+	out.overworldCharacter = new OverworldCharacter(charName);
+	out.overworldAudio = this.contentManager.getOverworldCharacterAudio(out.overworldCharacter);
+	out.overworldVisual = this.contentManager.getOverworldCharacterVisuals(out.overworldCharacter);
+	return out;
+	/*return {
 		pi: pi,
 		character: character,
 		audio: this.contentManager.getOverworldCharacterAudio(character),
 		visual: this.contentManager.getOverworldCharacterVisuals(character)
-	}
+	}*/
 };

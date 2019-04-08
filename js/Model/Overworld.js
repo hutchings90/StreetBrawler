@@ -11,7 +11,8 @@ Overworld.prototype.addActor = function(charName,x,y){
 	var actor = {
 		character: newChar,
 		audio: this.contentManager.getOverworldCharacterAudio(newChar),
-		visual: this.contentManager.getOverworldCharacterVisuals(newChar)
+		visual: this.contentManager.getOverworldCharacterVisuals(newChar),
+		onInteract: this.fightInteraction
 	}
 	actor.character.setX(x);
 	actor.character.setY(y);
@@ -24,8 +25,28 @@ Overworld.prototype.addActor = function(charName,x,y){
 Overworld.prototype.collider = function(chara){
 	collision = false;
 	for (var a = 0; a<this.actors.length; a++){
-		if (this.utils.collide(chara.character.hurtbox,this.actors[a].character.hurtbox)) collision=true;
+		if (this.utils.collide(chara.overworldCharacter.hurtbox,this.actors[a].character.hurtbox)) collision=true;
 	}
 	return collision;
 };
 
+//Given an overworld character, checks for a collision with each actor, and interracts if there is a collision.
+// Chara is an OverworldCharacter object
+Overworld.prototype.interacter = function(chara) {
+	var hb = {
+		x: chara.overworldCharacter.hurtbox.x - 5,
+		y: chara.overworldCharacter.hurtbox.y - 5,
+		width: chara.overworldCharacter.hurtbox.width +10,
+		height: chara.overworldCharacter.hurtbox.height + 10
+	};
+	for (var a = 0; a<this.actors.length; a++){
+		if (this.utils.collide(hb,this.actors[a].character.hurtbox)) return this.actors[a].onInteract(this.actors[a]);
+	}
+};
+
+Overworld.prototype.fightInteraction = function(actor) {
+	ret = ['fight', actor.character.name];
+	return ret;
+};
+
+//TODO: add interaction function that loads dialogue from external file

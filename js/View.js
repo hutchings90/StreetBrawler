@@ -342,6 +342,15 @@ View.prototype.resetCharacter = function(character, ci) {
 	this.setBattleHealth(healthBar, character.character.health);
 };
 
+View.prototype.setOverworldCharacterPosition = function(character) {
+	// console.log('setOverworldCharacterPosition');
+	var c = character.overworldCharacter;
+	var left = c.x;
+	if (c.direction == 'right') left += character.overworldVisual.idle.width - character.e.width;
+	character.e.style.left = left + 'px';
+	character.e.style.bottom = c.y + 'px';
+};
+
 View.prototype.setCharacterPosition = function(character) {
 	// console.log('setCharacterPosition');
 	var c = character.character;

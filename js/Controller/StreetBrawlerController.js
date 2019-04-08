@@ -136,7 +136,8 @@ activates campaign menu
 */
 StreetBrawlerController.prototype.activateCampaign = function(pi, params, mode) {
 	// console.log('activateCampaign');
-	this.campaignController.overworldController.setCharacter(params.character);
+	this.campaignController.overworldController.setCharacter(params.characters[0]);
+	this.campaignController.ai = params.characters[1];
 	this.activateMenu('campaign', 'menu', pi);
 };
 
