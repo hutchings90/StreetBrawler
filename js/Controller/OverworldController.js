@@ -36,20 +36,10 @@ OverworldController.prototype.nextFrame = function(inputs) {
 	this.view.setOverworldCharacterPosition(this.character);
 };
 
-OverworldController.prototype.startBattle = function(params){
-	
-};
-
 OverworldController.prototype.interact = function(){
 	interaction = this.overworld.interacter(this.character);
 	if (!interaction) return;
 	if (interaction[0] === 'fight'){
-		/*params = {
-			characters: [
-				this.view.createCharacter(this.character.overworldCharacter.name),
-				this.view.createCharacter(interaction[1]),
-			]
-		};*/
 		this.opponent = this.view.createCharacter(interaction[1]);
 	}
 };

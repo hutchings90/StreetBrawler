@@ -226,10 +226,4 @@ CharacterSelectController.prototype.getOverworldCharacter = function(pi, charNam
 	out.overworldAudio = this.contentManager.getOverworldCharacterAudio(out.overworldCharacter);
 	out.overworldVisual = this.contentManager.getOverworldCharacterVisuals(out.overworldCharacter);
 	return out;
-	/*return {
-		pi: pi,
-		character: character,
-		audio: this.contentManager.getOverworldCharacterAudio(character),
-		visual: this.contentManager.getOverworldCharacterVisuals(character)
-	}*/
 };
