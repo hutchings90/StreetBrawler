@@ -120,6 +120,11 @@ View.prototype.getCharacterDetails = function() {
 	return this.getElement('#character-details');
 };
 
+View.prototype.getCredits = function() {
+	// console.log('getCredits');
+	return this.getElement('#credits');
+};
+
 View.prototype.getOverworld = function() {
 	// console.log('getOverworld');
 	return this.getElement('#overworld-objects');

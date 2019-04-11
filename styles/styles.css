@@ -300,6 +300,22 @@ body {
 	transform: scaleX(-1);
 }
 
+#credits {
+	background: White;
+	padding: 7px;
+	font-size: 20px;
+	margin: 0 auto;
+}
+
+#credits td:nth-child(1) {
+	text-align: left;
+	padding-right: 20px;
+}
+
+#credits td:nth-child(2) {
+	text-align: right;
+}
+
 .hide {
 	display: none;
 }

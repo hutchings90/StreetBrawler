@@ -12,6 +12,7 @@ function StreetBrawlerController(model, view, utils, contentManager, testing) {
 	this.characterSelectController = new CharacterSelectController(view, utils, contentManager);
 	this.battleController = new BattleController(model, view, utils, contentManager, testing);
 	this.campaignController = new CampaignController(model, view, utils, contentManager, this.battleController);
+	this.creditsController = new CreditsController(view, utils, contentManager);
 	this.activateMainMenu();
 	if (this.streetBrawler.activePlayerCount() > 0) this.start();
 }
@@ -258,4 +259,10 @@ StreetBrawlerController.prototype.startCampaign = function(pi, params) {
 StreetBrawlerController.prototype.quitCampaign = function(pi, params) {
 	// console.log('quitCampaign');
 	this.activateMainMenu(pi);
+};
+
+StreetBrawlerController.prototype.credits = function(pi, params) {
+	// console.log('credits');
+	this.streetBrawler.playerNotPlaying(this.getOtherPlayerIndex(pi));
+	this.activateController('credits', 'menu', pi);
 };
