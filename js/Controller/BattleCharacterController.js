@@ -11,7 +11,7 @@ BattleCharacterController.prototype = Object.create(GamepadProcessingController.
 BattleCharacterController.constructor = BattleCharacterController;
 
 BattleCharacterController.prototype.nextFrame = function(inputs) {
-	// console.log('BattleCharacterController');
+	// console.log('nextFrame');
 	var loser = -1;
 	for (var i = inputs.length - 1; i >= 0; i--) {
 		var input = inputs[i];
@@ -108,7 +108,6 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 			if (removeProjectile) {
 				this.view.removeProjectile(projectile);
 				projectiles.splice(j, 1);
-				if (projectiles.length != this.projectiles[opponentI].length) console.log('original object not modified');
 			}
 		}
 		if (c.state != 'block' && !hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
@@ -415,8 +414,7 @@ BattleCharacterController.prototype.clearProjectiles = function() {
 	for (var i = this.projectiles.length - 1; i >= 0; i--) {
 		var projectiles = this.projectiles[i];
 		for (var k = projectiles.length - 1; k >= 0; k--) {
-			this.view.removeProjectile(projectiles[k]);
+			this.view.removeProjectile(projectiles.pop());
 		}
-		this.projectiles[i] = [];
 	}
 };
