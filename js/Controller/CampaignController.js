@@ -42,6 +42,8 @@ CampaignController.prototype.activateBattle = function(pi, opponent) {
 	this.ai.audio = this.contentManager.getBattleCharacterAudio(opponent);
 	this.ai.visual = this.contentManager.getBattleCharacterVisuals(opponent);
 	this.streetBrawler.activateAI();
+	this.overworldController.character.character.resetHealth();	
+	this.ai.character.resetHealth();
 	this.battleController.setCharacters([this.overworldController.character,this.ai]);
 	this.overworldController.hide();
 	this.activateController('battle', 'battle', pi);
