@@ -37,13 +37,16 @@ CharacterSelectController.prototype.nextFrame = function(inputs) {
 		if (!status) continue;
 		if (this.trackEndFrames()) return this.end(pi);
 		if (this.buttonPressed(status.buttons[2])) {
+			this.contentManager.playSFX(this.backSFX);
 			if (!this.isPlayerSelected(pi)) return this.end(pi);
 			this.activatePlayer(pi);
 		}
 		if (this.mode != this.CHARACTER_DETAIL && this.buttonPressed(status.buttons[1])) {
 			if (this.canProceed()) this.startEnd(pi);
-			else if (!this.isPlayerSelected(pi)) this.selectPlayer(pi);
-			if (this.allCharactersSelected()) this.showStartButton(pi);
+			else if (!this.isPlayerSelected(pi)) {
+				this.selectPlayer(pi);
+				if (this.allCharactersSelected()) this.showStartButton(pi);
+			}
 		}
 		if (!this.isPlayerSelected(pi)) {
 			var direction = this.horizontalDirection(status.axes);
@@ -80,6 +83,7 @@ CharacterSelectController.prototype.isPlayerSelected = function(pi) {
 
 CharacterSelectController.prototype.selectPlayer = function(pi) {
 	// console.log('activatePlayer');
+	this.contentManager.playSFX(this.selectSFX);
 	this.view.selectPlayerCharacter(this.options, this.i[pi], pi);
 };
 
@@ -144,6 +148,7 @@ CharacterSelectController.prototype.setIndex = function(i, pi) {
 CharacterSelectController.prototype.startEnd = function() {
 	// console.log('startEnd');
 	if (this.endFrames) return;
+	this.contentManager.playSFX(this.selectSFX);
 	this.endFrames = 1;
 	this.view.selectOption(this.startButton);
 };

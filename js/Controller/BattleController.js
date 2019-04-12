@@ -41,10 +41,11 @@ BattleController.prototype.start = function() {
 	// console.log('start');
 	this.round = 0;
 	this.activeController = this.battleCharacterController;
+	this.contentManager.playSFX('ready');
+	this.preRoundFrames = 0;
 	this.nextFrame = this.preRoundFrame;
 	this.wins = [ 0, 0 ];
 	this.initAIControllers();
-	this.startRound();
 };
 
 /*
@@ -56,6 +57,7 @@ activates AI's
 */
 BattleController.prototype.startRound = function() {
 	// console.log('startRound');
+	this.contentManager.playSFX('fight');
 	this.round++;
 	this.view.steadyTimer(this.battleTimer);
 	this.nextFrame = this.roundFrame;
@@ -100,12 +102,13 @@ BattleController.prototype.endRoundFrame = function(inputs) {
 			this.view.setContents(this.winbar, '');
 			this.view.hide(this.winbar);
 			this.clearTimer();
-			this.nextFrame = this.preRoundFrame;
+			this.contentManager.playSFX('ready');
 			this.preRoundFrames = 0;
+			this.nextFrame = this.preRoundFrame;
 			this.characters[0].character.direction = 'left';
 			this.characters[0].character.reset();
 			this.characters[1].character.direction = 'right';
-			this.characters[1].character.reset(this.view.BATTLE_AREA_W - this.characters[1].e.width);
+			this.characters[1].character.reset(this.view.BATTLE_AREA_W - this.characters[1].visual.idle.width);
 			this.battleCharacterController.setCharacterImage(this.characters[0], 'idle');
 			this.battleCharacterController.setCharacterImage(this.characters[1], 'idle');
 			this.view.setCharacterPosition(this.characters[0]);
@@ -252,13 +255,20 @@ BattleController.prototype.endRound = function(pi, params) {
 	default: win = false; break;
 	}
 	if (!win) {
+		this.contentManager.playSFX('draw');
 		prefix = 'Draw';
 		if (this.round >= this.ROUNDS) suffix = '.';
 	}
 	else {
 		suffix = ' ';
-		if (this.round < this.ROUNDS) suffix += 'wins the round.';
-		else suffix += 'wins!!!';
+		if (this.round < this.ROUNDS) {
+			this.contentManager.playSFX('winner');
+			suffix += 'wins the round.';
+		}
+		else {
+			this.contentManager.playSFX('champion');
+			suffix += 'wins!!!';
+		}
 	}
 	this.view.setContents(this.winbar, prefix + suffix);
 	this.view.show(this.winbar);
@@ -318,7 +328,7 @@ resets specified charater. What does ci represent?
 */
 BattleController.prototype.resetCharacter = function(character, ci) {
 	// console.log('resetCharacter');
-	character.character.reset(ci == 1 ? this.view.BATTLE_AREA_W - character.e.width : 0);
+	character.character.reset(ci == 1 ? this.view.BATTLE_AREA_W - character.visual.idle.width : 0);
 	this.view.resetCharacter(character, ci);
 };
 

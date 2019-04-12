@@ -5,6 +5,9 @@ function MenuController(view, utils, contentManager, menu) {
 	this.menu = this.view['get' + menu + 'Menu']();
 	this.options = this.view.getOptions(this.menu);
 	this.endFrames = 0;
+	this.moveSFX = 'menuMove';
+	this.selectSFX = 'menuSelect';
+	this.backSFX = 'menuBack';
 }
 
 MenuController.prototype = Object.create(GamepadProcessingController.prototype);
@@ -13,13 +16,16 @@ MenuController.constructor = MenuController;
 MenuController.prototype.start = function(activator) {
 	// console.log('start');
 	if (activator) this.activator = activator;
-	this.move(this.i || 0);
+	this.clearAllOptions();
+	this.setIndex(this.i || 0);
+	this.activateOption(this.i);
 	this.view.show(this.menu);
 };
 
-MenuController.prototype.startEnd = function() {
+MenuController.prototype.startEnd = function(pi) {
 	// console.log('startEnd');
 	if (this.endFrames) return;
+	this.contentManager.playSFX(this.selectSFX);
 	this.endFrames = 1;
 	this.view.selectOption(this.options[this.i]);
 };
@@ -117,7 +123,9 @@ MenuController.prototype.moveRight = function(pi) {
 
 MenuController.prototype.move = function(i, pi) {
 	// console.log('move');
+	if (this.endFrames) return;
 	var oldi = this.i;
 	this.setIndex(i, pi);
 	this.replaceOption(oldi, this.i, pi);
+	this.contentManager.playSFX(this.moveSFX);
 };

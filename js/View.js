@@ -400,6 +400,11 @@ View.prototype.createBackgroundMusic = function(src, v) {
 	return e;
 };
 
+View.prototype.createSFX = function(src, v) {
+	// console.log('createSFX');
+	return this.createAudio(src, v);
+};
+
 View.prototype.setHitboxPosition = function(e, x, y, height, width) {
 	// console.log(setHitboxPosition);
 	e.style.left = x + 'px';
@@ -426,5 +431,12 @@ View.prototype.setProjectilePosition = function(projectile) {
 
 View.prototype.removeProjectile = function(projectile) {
 	// console.log('removeProjectile')
-	this.battleObjects.removeChild(projectile.img);
+	try {
+		projectile.img.parentElement.removeChild(projectile.img);
+	} catch(e) {
+		console.log('parent');
+		console.log(projectile.img.parentElement);
+		console.log('projectile');
+		console.log(projectile);
+	}
 };

@@ -49,7 +49,8 @@ ContentManager.prototype.loadAudio = function() {
 		PlantGolem: this.loadGolemAudio('Plant'),
 		SandGolem: this.loadGolemAudio('Sand'),
 		WindGolem: this.loadGolemAudio('Wind'),
-		backgroundMusic: this.loadBackgroundMusic()
+		backgroundMusic: this.loadBackgroundMusic(),
+		SFX: this.loadSFX()
 	};
 };
 
@@ -148,10 +149,16 @@ ContentManager.prototype.getBattleCharacterVisualsFromAsset = function(asset) {
 };
 
 ContentManager.prototype.loadBackgroundMusic = function() {
+	// console.log('loadBackgroundMusic');
 	return {
-		astroid: this.view.createBackgroundMusic(this.GENERAL_SOUND_PATH + 'Astroid.mp3'),
-		voyage: this.view.createBackgroundMusic(this.GENERAL_SOUND_PATH + 'Voyage.mp3', .5)
+		astroid: this.createBackgroundMusic('Astroid.mp3'),
+		voyage: this.createBackgroundMusic('Voyage.mp3', .5)
 	};
+};
+
+ContentManager.prototype.createBackgroundMusic = function(filename, v) {
+	// console.log('createBackgroundMusic');
+	return this.view.createBackgroundMusic(this.GENERAL_SOUND_PATH + filename, v);
 };
 
 ContentManager.prototype.playBackgroundMusic = function(key) {
@@ -159,8 +166,14 @@ ContentManager.prototype.playBackgroundMusic = function(key) {
 	this.playAudio('backgroundMusic', key);
 };
 
-ContentManager.prototype.playAudio = function(key1, key2) {
+ContentManager.prototype.playSFX = function(key) {
+	// console.log('playSFX');
+	this.playAudio('SFX', key, true);
+};
+
+ContentManager.prototype.playAudio = function(key1, key2, restart) {
 	// console.log('playAudio');
+	if (restart) this.stopAudio(key1, key2);
 	this.audio[key1][key2].play();
 };
 
@@ -174,6 +187,25 @@ ContentManager.prototype.stopAudio = function(key1, key2) {
 	var audio = this.audio[key1][key2];
 	audio.pause();
 	audio.currentTime = 0;
+};
+
+ContentManager.prototype.loadSFX = function() {
+	// console.log('loadSFX');
+	return {
+		champion: this.createSFX('champion.m4a'),
+		draw: this.createSFX('draw.m4a'),
+		fight: this.createSFX('fight.m4a'),
+		menuBack: this.createSFX('menuBack.m4a', .65),
+		menuMove: this.createSFX('menuMove.m4a', .3),
+		menuSelect: this.createSFX('menuSelect.m4a'),
+		ready: this.createSFX('ready.m4a'),
+		winner: this.createSFX('winner.m4a')
+	};
+};
+
+ContentManager.prototype.createSFX = function(filename, v) {
+	// console.log('createSFX');
+	return this.view.createSFX(this.GENERAL_SOUND_PATH + filename, v || .5);
 };
 
 ContentManager.prototype.pauseBackgroundMusic = function(key) {
