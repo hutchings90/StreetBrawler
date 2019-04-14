@@ -39,6 +39,7 @@ starts a new battle
 */
 BattleController.prototype.start = function() {
 	// console.log('start');
+	this.resetHealth();
 	this.round = 0;
 	this.activeController = this.battleCharacterController;
 	this.contentManager.playSFX('ready');
@@ -423,5 +424,13 @@ BattleController.prototype.controllerActivated = function() {
 	if (this.activeController == this.battleCharacterController) {
 		this.view.steadyTimer(this.battleTimer);
 		this.activateAI();
+	}
+};
+
+BattleController.prototype.resetHealth = function() {
+	// console.log('resetHealth');
+	for (var i = this.characters.length - 1; i >= 0; i--) {
+		var character = this.characters[i];
+		character.health = character.character.health
 	}
 };
