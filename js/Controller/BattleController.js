@@ -266,9 +266,14 @@ BattleController.prototype.endRound = function(pi, params) {
 			this.contentManager.playSFX('winner');
 			suffix += 'wins the round.';
 		}
-		else {
+		else if (this.wins[this.getOtherPlayerIndex(params.loser)] > 1) {
 			this.contentManager.playSFX('champion');
 			suffix += 'wins!!!';
+		}
+		else {
+			this.contentManager.playSFX('draw');
+			prefix = 'Draw';
+			suffix = '.';
 		}
 	}
 	this.view.setContents(this.winbar, prefix + suffix);
