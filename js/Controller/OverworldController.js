@@ -118,7 +118,6 @@ OverworldController.prototype.show = function() {
 	//console.log(this.overworldContainer);
 	this.view.show(this.overworldContainer);
 	this.showCharacter();
-	//this.showActors();
 };
 
 OverworldController.prototype.hide = function() {
@@ -130,7 +129,7 @@ OverworldController.prototype.showCharacter = function() {
 	//console.log(this.character);
 	var img = this.character.overworldVisual.down;
 	this.drawImage(img);
-	this.view.setCharacterPosition(this.character);
+	this.view.setOverworldCharacterPosition(this.character);
 };
 
 OverworldController.prototype.showActors = function() {
