@@ -89,6 +89,7 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 		var hurtbox = this.getHurtbox(character);
 		var hitbox = this.getHitbox(opponent);
 		var projectiles = this.projectiles[opponentI];
+		var playingHitSound = false;
 		for (var j = projectiles.length - 1; j >= 0; j--) {
 			var removeProjectile = false;
 			var projectile = projectiles[j];
@@ -101,7 +102,14 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 				else {
 					projectile.hasHit = true;
 					removeProjectile = projectile.destroyOnHit;
-					if (c.state != 'block') c.health -= projectile.damage;
+					if (c.state == 'block') {
+						if (!playingHitSound) this.contentManager.playSFX('blockedHit');
+					}
+					else {
+						if (!playingHitSound) this.contentManager.playSFX('hit');
+						c.health -= projectile.damage;
+					}
+					playingHitSound = true;
 				}
 			}
 			if (projectile.maxFrames && ++projectile.frames >= projectile.maxFrames) removeProjectile = true;
@@ -110,9 +118,21 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 				projectiles.splice(j, 1);
 			}
 		}
-		if (c.state != 'block' && !hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
-			c.health -= hitbox.damage;
-			opponent.character.hitbox.hasHit = true;
+		if (this.utils.collide(hurtbox, hitbox)) {
+			if (c.state == 'block') {
+				if (!playingHitSound) {
+					this.contentManager.playSFX('blockedHit');
+					playingHitSound = true;
+				}
+			}
+			else if (!hitbox.hasHit) {
+				if (!playingHitSound) {
+					this.contentManager.playSFX('hit');
+					playingHitSound = true;
+				}
+				c.health -= hitbox.damage;
+				opponent.character.hitbox.hasHit = true;
+			}
 		}
 		if (c.health <= 0) {
 			c.health = 0;
@@ -259,6 +279,10 @@ BattleCharacterController.prototype.grab = function(character) {
 BattleCharacterController.prototype.attack = function(character, params) {
 	// console.log('attack');
 	if (character.character.freezeFrames) return;
+	switch (params.button) {
+	case 0: this.contentManager.playSFX('explosion'); break;
+	case 3: this.contentManager.playSFX('launchProjectile'); break;
+	}
 	character.character.attack(params.button);
 	this.setCharacterImage(character, character.character.curAttack.name);
 	this.setHitboxes(character);

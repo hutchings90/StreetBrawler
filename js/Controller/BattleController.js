@@ -351,6 +351,7 @@ clears the battleTimer?
 */
 BattleController.prototype.showBattleMenu = function(pi, params) {
 	// console.log('showBattleMenu');
+	this.contentManager.playSFX('pause');
 	this.streetBrawler.players[this.getOtherPlayerIndex(pi)].playing = false;
 	this.deactivateAI();
 	this.activateController('battleMenu', 'menu', pi);

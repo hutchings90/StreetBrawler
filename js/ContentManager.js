@@ -199,7 +199,12 @@ ContentManager.prototype.loadSFX = function() {
 		menuMove: this.createSFX('menuMove.m4a', .3),
 		menuSelect: this.createSFX('menuSelect.m4a'),
 		ready: this.createSFX('ready.m4a'),
-		winner: this.createSFX('winner.m4a')
+		winner: this.createSFX('winner.m4a'),
+		blockedHit: this.createSFX('blockedHit.wav'),
+		hit: this.createSFX('hit.wav'),
+		explosion: this.createSFX('explosion.m4a'),
+		launchProjectile: this.createSFX('explosion.m4a'),
+		pause: this.createSFX('pause.wav'),
 	};
 };
 
