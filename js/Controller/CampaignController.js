@@ -60,11 +60,14 @@ CampaignController.prototype.quitBattle = function(pi, params){
 
 CampaignController.prototype.showCampaignMenu = function(pi, params) {
 	// console.log('showBattleMenu');
+	this.contentManager.pauseBackgroundMusic('voyage');
+	this.contentManager.playSFX('pause');
 	this.activateController('campaignMenu', 'menu', pi);
 };
 
 CampaignController.prototype.resume = function(pi, params) {
 	// console.log('resume');
+	this.contentManager.playBackgroundMusic('voyage');
 	this.activateController('overworld', 'battle', pi);
 };
 
