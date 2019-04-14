@@ -36,6 +36,7 @@ CharacterSelectController.prototype.nextFrame = function(inputs) {
 		var pi = input.pi;
 		if (!status) continue;
 		if (this.trackEndFrames()) return this.end(pi);
+		if (this.endFrames > 0) return;
 		if (this.buttonPressed(status.buttons[2])) {
 			this.contentManager.playSFX(this.backSFX);
 			if (!this.isPlayerSelected(pi)) return this.end(pi);

@@ -14,6 +14,7 @@ BattleMenuController.prototype.nextFrame = function(inputs) {
 		var pi = input.pi;
 		if (!status) continue;
 		if (this.trackEndFrames()) return this.end(pi);
+		if (this.endFrames > 0) return;
 		if (this.buttonPressed(status.buttons[1])) this.startEnd(pi);
 		if (this.buttonPressed(status.buttons[2])) {
 			this.contentManager.playSFX(this.backSFX);
