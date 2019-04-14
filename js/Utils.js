@@ -10,7 +10,6 @@ Utils.prototype.makeControllerVariableInput = function(controller, model, contro
 		 //console.log('activateController');
 		var me = this;
 		var nextController = me[controllerName + 'Controller'];
-		//console.log(nextController);
 		me.streetBrawler.setGamepadHalted(true);
 		nextController.show();
 		me.activeController = null;

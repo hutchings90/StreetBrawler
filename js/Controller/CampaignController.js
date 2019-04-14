@@ -11,6 +11,7 @@ CampaignController.prototype = Object.create(GamepadProcessingController.prototy
 CampaignController.constructor = BattleController;
 
 CampaignController.prototype.nextFrame = function(inputs){
+	if (!this.activeController) return;
 	var report = this.activeController.nextFrame(inputs);
 	if (report) return this[report.action](report.pi, report.params);
 };
