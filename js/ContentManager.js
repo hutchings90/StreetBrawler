@@ -202,8 +202,8 @@ ContentManager.prototype.loadSFX = function() {
 		winner: this.createSFX('winner.m4a'),
 		blockedHit: this.createSFX('blockedHit.wav'),
 		hit: this.createSFX('hit.wav'),
-		explosion: this.createSFX('explosion.m4a'),
-		launchProjectile: this.createSFX('explosion.m4a'),
+		explosion: this.createSFX('explosion.wav'),
+		launchProjectile: this.createSFX('explosion.wav'),
 		pause: this.createSFX('pause.wav'),
 	};
 };

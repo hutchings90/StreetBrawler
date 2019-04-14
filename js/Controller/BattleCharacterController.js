@@ -118,20 +118,20 @@ BattleCharacterController.prototype.nextFrame = function(inputs) {
 				projectiles.splice(j, 1);
 			}
 		}
-		if (this.utils.collide(hurtbox, hitbox)) {
+		if (opponent.character.hitbox && !opponent.character.hitbox.hasHit && this.utils.collide(hurtbox, hitbox)) {
+			opponent.character.hitbox.hasHit = true;
 			if (c.state == 'block') {
 				if (!playingHitSound) {
 					this.contentManager.playSFX('blockedHit');
 					playingHitSound = true;
 				}
 			}
-			else if (!hitbox.hasHit) {
+			else  {
+				c.health -= hitbox.damage;
 				if (!playingHitSound) {
 					this.contentManager.playSFX('hit');
 					playingHitSound = true;
 				}
-				c.health -= hitbox.damage;
-				opponent.character.hitbox.hasHit = true;
 			}
 		}
 		if (c.health <= 0) {
