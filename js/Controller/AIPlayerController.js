@@ -110,10 +110,10 @@ AIController.prototype.makeRandomDecision = function() {
 	let state = this.battleController.battleCharacterController.characters[1].character.state; // Make a func scoped state variable
 	let stop = rand(6); // Stop the AI from doing anything. 17% chance of stopping
 	let willWalk = rand(2); // Decides if AI will walk. 50% chance
-	let willJump = rand(9); // Decides if the AI will jump. 11% chance
+	let willJump = rand(6); // Decides if the AI will jump. 17% chance
 	// let willCrouch = rand(4); // NOT READY YET
 	let willAttack = rand(3); // Decides if AI will attack. 33% chance
-	let willBlock = rand(6); // Decides if AI will block. 17% chance
+	let willBlock = rand(8); // Decides if AI will block. 13% chance
 	// let willGrab = rand(10); // NOT READY YET
 
 	if (state.includes('jump')) { // Only make the AI jump once for one button input
@@ -126,7 +126,7 @@ AIController.prototype.makeRandomDecision = function() {
 
 	// 
 	if (this.ai.canDoMove()) {
-		console.log("NEW AI MOVE");
+		// console.log("NEW AI MOVE");
 		if (stop == 0 && !state.includes('idle') && this.ai.getDifficultyFrequency() != HARD) { // Make the AI do nothing if it was doing an action. If on hard mode, never make it stop doing actions
 			// console.log("ai is idle");
 			gamepad.clearButtons();
@@ -146,7 +146,7 @@ AIController.prototype.makeRandomDecision = function() {
 					gamepad.releaseHorizontalAxis(); // Do a verticle jump
 				}
 				else if (doSideJump == 0 && !state.includes('walk')) {
-					console.log("decide to move left or right");
+					// console.log("decide to move left or right");
 					(rand(3) == 0) ? gamepad.right() : gamepad.left(); // Pick to move left more often
 				}
 				gamepad.up();
