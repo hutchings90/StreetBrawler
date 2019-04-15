@@ -344,6 +344,7 @@ deletes all objects related to the battle?
 */
 BattleController.prototype.clearBattleObjects = function() {
 	// console.log('clearBattleObjects');
+	this.battleCharacterController.clearProjectiles();
 	this.view.clearBattleObjects(this.battleObjects);
 };
 
