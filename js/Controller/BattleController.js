@@ -247,11 +247,11 @@ BattleController.prototype.endRound = function(pi, params) {
 	case 0:
 		if (this.characters[1].pi == 2) prefix = 'AI';
 		else prefix += 2;
-		if (this.wins[0]++) this.round = 3;
+		if (this.wins[1]++) this.round = 3;
 		break;
 	case 1:
 		prefix += this.characters[0].pi + 1;
-		if (this.wins[1]++) this.round = 3;
+		if (this.wins[0]++) this.round = 3;
 		break;
 	default: win = false; break;
 	}
